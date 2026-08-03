@@ -1,4 +1,5 @@
-CREATE TABLE public.cursos (
+    --Creamos tabla de Cursos
+CREATE TABLE cursos (
     id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     titulo varchar(100) NOT NULL,
     descripcion_corta text,
@@ -11,10 +12,10 @@ CREATE TABLE public.cursos (
     cupos_disponibles integer,
     esta_activo boolean DEFAULT true
 );
-
-ALTER TABLE public.cursos ENABLE ROW LEVEL SECURITY;
-
+    --Activamos RLS 
+ALTER TABLE cursos ENABLE ROW LEVEL SECURITY;
+    --Permisos de lectura
 CREATE POLICY "Todos pueden ver cursos"
-ON public.cursos
+ON cursos
 FOR SELECT
 USING (true);

@@ -48,3 +48,25 @@ Ejemplos:
 =========================================================================
 =                            BASE DE DATOS                              =
 =========================================================================
+
+## 03/08 - Modificación de migrations
+
+**Responsable:** Maximiliano (Base de datos)
+
+### Tablas creadas:
+- roles
+- modalidades
+- niveles
+- tipos_certificado
+- estados_curso_usuario
+- estados_ruta_usuario
+- tipos_reporte
+- usuarios
+- instituciones
+- categorias
+
+### Tablas modificadas:
+- cursos
+
+### Commit:
+- Git push realizado: 17:15
