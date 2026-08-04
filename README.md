@@ -70,3 +70,27 @@ Ejemplos:
 
 ### Commit:
 - Git push realizado: 17:15
+-----------------------------------------------------------------------
+## 03/08 - Modificación de migrations
+
+**Responsable:** Maximiliano (Base de datos)
+
+### Tablas creadas:
+- rutas_aprendizaje
+- rutas_cursos
+- favoritos
+- valoraciones_comentarios
+- usuarios_cursos_estado
+- usuarios_rutas
+- tests
+- preguntas_test
+- opciones_test
+- resultados_test_usuario
+- reportes
+- promociones
+
+### DETALLES:
+- Faltan implementar los RLS correctos.
+
+### Commit:
+- Git push realizado: 23:05

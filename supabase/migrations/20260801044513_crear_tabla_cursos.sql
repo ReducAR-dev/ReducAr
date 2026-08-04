@@ -12,6 +12,7 @@ CREATE TABLE cursos (
     cupos_disponibles integer,
     esta_activo boolean DEFAULT true
 );
+
     --Activamos RLS 
 ALTER TABLE cursos ENABLE ROW LEVEL SECURITY;
     --Permisos de lectura
