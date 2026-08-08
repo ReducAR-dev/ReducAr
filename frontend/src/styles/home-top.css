@@ -36,8 +36,8 @@
 }
 
 .home-logo {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
 
   display: flex;
   align-items: center;
@@ -45,6 +45,7 @@
 
   flex-shrink: 0;
 
+  background: transparent;
   text-decoration: none;
 }
 
