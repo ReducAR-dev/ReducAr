@@ -1,0 +1,1 @@
+// PromoBar component
