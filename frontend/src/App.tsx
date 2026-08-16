@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import "./App.css";
 import CursosPage from "./pages/Cursospage";
 
