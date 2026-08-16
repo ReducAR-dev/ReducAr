@@ -1,5 +1,6 @@
 import logoReducar from "../assets/logo-reducar.png";
 import { SearchIcon } from "./Icons";
+import "../styles/home-top.css";
 
 const menuItems = [
   "Inicio",

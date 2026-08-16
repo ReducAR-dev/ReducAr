@@ -29,20 +29,46 @@ Ejemplos:
 =                               FRONT END                               =
 =========================================================================
 
-
-
-
-
+16/08 Creación de las páginas de registro e inicio de sesión. 
+Ligera modificación en el archivo Header.tsx para evitar repetición de 
+código al importar el header en futuras páginas.
 
 
 =========================================================================
 =                               BACK END                                =
 =========================================================================
+16/08 - Creacción de carpetas iniciales e Instalación de dependencias y demas
 
+Responsable: Patricio (BackEnd)
+Carpetas
 
+    Hoy creé la estructura general de carpetas
+    Git push 08:50
 
+Instalé 2 paquetes en la carpeta node_modules
 
+-@supabase/supabase-js -dotenv -ejecute: npm install @supabase/supabase-js dotenv
+Instale CLI de Supabase como dependencia de desarrollo
 
+-ejecute: npm install -D
+Creacción de archivo supabase.ts
+
+    Creé el archivo inicial, configure algunas cosas tal y como me había dicho jonathan
+
+Creacción de archivo seed.ts
+
+    agregue la seed con la configuración que me paso jonathan (AUN NO ESTA PROBADO SU FUNCIONAMIENTO)
+
+Modificación del package.json
+
+    Modifique la parte de scripts agregando la seed
+
+NOTA
+
+AUN ME FALTA PROBAR EL SIGUENTE CODIGO QUE ME PASO JONATHAN EN LA TERMINAL: npx supabase gen types typescript --project-id "tu-project-id" > ESO PORQUE AUN NO SE CUAL ES LA ID NI TENGO TANTA IDEA DEL QUE HACE AUN.
+Commit:
+
+    Git push realizado: 04:46
 
 
 =========================================================================

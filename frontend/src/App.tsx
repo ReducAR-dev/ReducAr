@@ -1,8 +1,8 @@
 import "./App.css";
-import Cursospage from "./pages/Cursospage";
+import  Registropage from "./pages/Registropage";
 
 function App() {
-  return <Cursospage />;
+  return <Registropage />;
 }
 
 export default App;
