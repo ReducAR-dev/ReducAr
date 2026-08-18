@@ -119,3 +119,18 @@ ESO PORQUE AUN NO SE CUAL ES LA ID NI TENGO TANTA IDEA DEL QUE HACE AUN.
 
 ### Commit:
 - Git push realizado: 23:05
+-----------------------------------------------------------------------
+## 17/08 - Modificación de migrations
+
+**Responsable:** Maximiliano (Base de datos)
+
+### Tablas modificadas:
+- TODAS
+
+### DETALLES:
+- Tablas actualizadas hasta la fecha, RLS FUNCIONANDO.
+- Faltan indexar para mejorar ms.
+- Faltan triggers
+
+### Commit:
+- Git push realizado: 23:05
