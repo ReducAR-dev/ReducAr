@@ -1,4 +1,4 @@
-CREATE TABLE ruta(
+CREATE TABLE rutas_aprendizaje(
     id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     titulo varchar(50) NOT NULL,
     descripcion text NOT NULL,
@@ -14,12 +14,5 @@ CREATE TABLE ruta(
 
     CONSTRAINT fk_categoria
         FOREIGN KEY (categoria_id)
-        REFERENCES categorias(id)    
+        REFERENCES categorias(id)
 );
-
-ALTER TABLE ruta ENABLE ROW LEVEL SECURITY;
-
-    CREATE POLICY "Usuarios autenticados leen rutas"
-    ON ruta
-    FOR SELECT
-    USING (true);

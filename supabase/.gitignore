@@ -6,3 +6,8 @@
 .env.keys
 .env.local
 .env.*.local
+
+20260809221122_enable_rls.sql
+20260809221144_create_public_read_policies.sql
+20260809221201_create_user_policies.sql
+20260809221207_create_admin_policies.sql
