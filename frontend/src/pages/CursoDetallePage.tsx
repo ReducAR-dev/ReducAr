@@ -1,44 +1,44 @@
-
 import "../styles/curso-detalle.css";
+import type { Curso } from "./Cursospage";
 
 type CursoDetalleProps = {
+  curso: Curso;
   onVolver: () => void;
 };
 
-function CursoDetallePage({ onVolver }: CursoDetalleProps) {
+function CursoDetallePage({
+  curso,
+  onVolver,
+}: CursoDetalleProps) {
   return (
     <div className="detalle-page">
-
       <main className="detalle-container">
 
         <div className="detalle-breadcrumb">
           <button onClick={onVolver}>Inicio</button>
           <span>›</span>
+
           <button onClick={onVolver}>Cursos</button>
           <span>›</span>
-          <span>Desarrollo Web Full Stack</span>
+
+          <span>{curso.titulo}</span>
         </div>
 
         <section className="detalle-principal">
 
           <div className="detalle-imagenes">
-
             <img
               className="detalle-imagen-principal"
-              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80"
-              alt="Desarrollo Web Full Stack"
+              src={curso.imagen}
+              alt={curso.titulo}
             />
 
             <div className="detalle-miniaturas">
-
-              <img
-                src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=400&q=80"
-                alt="Programación"
-              />
+              <img src={curso.imagen} alt={curso.titulo} />
 
               <img
                 src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=400&q=80"
-                alt="Trabajo en equipo"
+                alt="Formación"
               />
 
               <img
@@ -50,21 +50,20 @@ function CursoDetallePage({ onVolver }: CursoDetalleProps) {
                 src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=400&q=80"
                 alt="Tecnología"
               />
-
             </div>
           </div>
 
           <div className="detalle-info">
 
-            <h1>Desarrollo Web Full Stack</h1>
+            <h1>{curso.titulo}</h1>
 
             <p className="detalle-institucion">
-              Fundación Pescar
+              {curso.organizacion}
             </p>
 
             <div className="detalle-valoracion">
               <span className="detalle-verificado">
-                ✓ Fundación Pescar
+                ✓ {curso.organizacion}
               </span>
 
               <span className="detalle-estrellas">
@@ -75,28 +74,33 @@ function CursoDetallePage({ onVolver }: CursoDetalleProps) {
             </div>
 
             <div className="detalle-tags">
-              <span>Virtual</span>
-              <span>6 meses</span>
-              <span>Intermedio</span>
+              <span>{curso.modalidad}</span>
+              <span>{curso.duracion}</span>
+              <span>{curso.nivel}</span>
             </div>
 
             <p className="detalle-resumen">
-              Formate en desarrollo web Full Stack y aprendé a crear
-              aplicaciones web utilizando herramientas y tecnologías de
-              Front-End y Back-End.
+              {curso.descripcion}
             </p>
 
             <div className="detalle-beneficios">
-              <span>✓ Certificado incluido</span>
-              <span>✓ Formación gratuita</span>
+              {curso.certificado && (
+                <span>✓ Certificado incluido</span>
+              )}
+
+              {curso.gratuito && (
+                <span>✓ Formación gratuita</span>
+              )}
             </div>
 
-            <h2 className="detalle-precio">
-              Gratuito
-            </h2>
+            {curso.gratuito && (
+              <h2 className="detalle-precio">
+                Gratuito
+              </h2>
+            )}
 
             <a
-              href="https://www.pescar.org.ar/"
+              href={curso.link}
               target="_blank"
               rel="noreferrer"
               className="detalle-inscribirme"
@@ -119,7 +123,6 @@ function CursoDetallePage({ onVolver }: CursoDetalleProps) {
           <div className="detalle-descripcion">
 
             <div className="detalle-tabs">
-
               <button className="tab-activo">
                 Descripción
               </button>
@@ -135,51 +138,47 @@ function CursoDetallePage({ onVolver }: CursoDetalleProps) {
               <button>
                 Institución
               </button>
-
             </div>
 
             <div className="detalle-texto">
 
-              <p>
-                El programa de Desarrollo Web Full Stack brinda herramientas
-                técnicas y profesionales para iniciarse en el mundo del
-                desarrollo web.
-              </p>
-
-              <p>
-                Durante la formación se trabajan tecnologías de Front-End y
-                Back-End y se desarrollan proyectos para aplicar los
-                conocimientos adquiridos.
-              </p>
+              <p>{curso.descripcionCompleta}</p>
 
               <h3>¿Qué vas a aprender?</h3>
 
               <ul>
-                <li>HTML y estructura de páginas web.</li>
-                <li>CSS y diseño de interfaces.</li>
-                <li>JavaScript.</li>
-                <li>Desarrollo Front-End.</li>
-                <li>React.</li>
-                <li>Conceptos de Back-End.</li>
-                <li>Bases de datos.</li>
-                <li>Git y GitHub.</li>
-                <li>Trabajo mediante proyectos.</li>
+                {curso.contenido.map((item) => (
+                  <li key={item}>
+                    {item}
+                  </li>
+                ))}
               </ul>
+
+              <h3>Requisitos</h3>
+
+              <ul>
+                {curso.requisitos.map((requisito) => (
+                  <li key={requisito}>
+                    {requisito}
+                  </li>
+                ))}
+              </ul>
+
+              <h3>Sobre la institución</h3>
+
+              <p>{curso.institucion}</p>
 
             </div>
           </div>
 
           <aside className="detalle-incluye">
-
             <h3>Incluye</h3>
 
-            <p>✓ Clases en vivo</p>
-            <p>✓ Material de estudio</p>
-            <p>✓ Acompañamiento</p>
-            <p>✓ Actividades prácticas</p>
-            <p>✓ Proyecto final</p>
-            <p>✓ Certificado</p>
-
+            {curso.incluye.map((item) => (
+              <p key={item}>
+                ✓ {item}
+              </p>
+            ))}
           </aside>
 
         </section>
@@ -193,7 +192,6 @@ function CursoDetallePage({ onVolver }: CursoDetalleProps) {
         </button>
 
       </main>
-
     </div>
   );
 }
