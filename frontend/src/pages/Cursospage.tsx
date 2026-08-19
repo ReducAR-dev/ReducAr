@@ -1,4 +1,6 @@
-import logoCursos from "../assets/logo-cursos.png";
+import { useState } from "react";
+import logoCursos from "../assets/Logo-cursos.png";
+import CursoDetallePage from "./CursoDetallePage";
 
 const cursos = [
   {
@@ -71,9 +73,20 @@ const cursos = [
 ];
 
 function Cursospage() {
+  const [cursoSeleccionado, setCursoSeleccionado] = useState<string | null>(
+    null
+  );
+
+  if (cursoSeleccionado === "pescar") {
+    return (
+      <CursoDetallePage
+        onVolver={() => setCursoSeleccionado(null)}
+      />
+    );
+  }
+
   return (
     <div className="explorar-page">
-
       <header className="topbar">
         <div className="brand">
           <img
@@ -84,7 +97,9 @@ function Cursospage() {
         </div>
 
         <nav className="topnav">
-          <a className="active" href="#">Explorar</a>
+          <a className="active" href="#">
+            Explorar
+          </a>
           <a href="#">Organizaciones</a>
           <a href="#">Rutas</a>
           <a href="#">Test</a>
@@ -98,7 +113,6 @@ function Cursospage() {
       </header>
 
       <main className="explorar-container">
-
         <div className="breadcrumb">
           <span>Inicio</span>
           <span>›</span>
@@ -108,9 +122,7 @@ function Cursospage() {
         <h1>Explorar cursos</h1>
 
         <div className="content-layout">
-
           <aside className="sidebar">
-
             <div className="filter-group">
               <div className="filter-title">
                 <strong>Modalidad</strong>
@@ -194,13 +206,10 @@ function Cursospage() {
 
               <button className="ver-mas">Ver más ›</button>
             </div>
-
           </aside>
 
           <section className="courses-area">
-
             <div className="search-row">
-
               <div className="search-box">
                 <span>⌕</span>
 
@@ -214,19 +223,20 @@ function Cursospage() {
                 ☷
                 <span>Filtros</span>
               </button>
-
             </div>
 
             <div className="course-grid">
-
               {cursos.map((curso) => (
                 <article
                   className="course-card"
                   key={curso.titulo}
+                  onClick={() => {
+                    if (curso.organizacion === "Fundación Pescar") {
+                      setCursoSeleccionado("pescar");
+                    }
+                  }}
                 >
-
                   <div className="course-image-wrapper">
-
                     <img
                       src={curso.imagen}
                       alt={curso.titulo}
@@ -238,11 +248,9 @@ function Cursospage() {
                         {curso.etiqueta}
                       </span>
                     )}
-
                   </div>
 
                   <div className="course-content">
-
                     <h3>{curso.titulo}</h3>
 
                     <p className="organization">
@@ -256,7 +264,6 @@ function Cursospage() {
                     </div>
 
                     <div className="course-tags">
-
                       <span>{curso.categoria}</span>
 
                       {curso.gratuito && (
@@ -266,14 +273,10 @@ function Cursospage() {
                       {curso.certificado && (
                         <span>Certificado</span>
                       )}
-
                     </div>
-
                   </div>
-
                 </article>
               ))}
-
             </div>
 
             <div className="pagination">
@@ -284,13 +287,9 @@ function Cursospage() {
               <button>10</button>
               <button>›</button>
             </div>
-
           </section>
-
         </div>
-
       </main>
-
     </div>
   );
 }

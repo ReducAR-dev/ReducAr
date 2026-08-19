@@ -1,0 +1,439 @@
+/* ==========================================
+   PÁGINA DETALLE DE CURSO
+========================================== */
+
+.detalle-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff;
+  color: #101634;
+  text-align: left;
+}
+
+.detalle-page * {
+  box-sizing: border-box;
+}
+
+.detalle-container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 35px 30px 60px;
+}
+
+/* BREADCRUMB */
+
+.detalle-breadcrumb {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 9px;
+  margin-bottom: 32px;
+  font-size: 13px;
+  color: #6f7284;
+}
+
+.detalle-breadcrumb button {
+  appearance: none;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0;
+  color: #6c38d9 !important;
+  font-size: 13px !important;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: none !important;
+}
+
+.detalle-breadcrumb span:last-child {
+  color: #6f7284;
+}
+
+/* ==========================================
+   SECCIÓN PRINCIPAL
+========================================== */
+
+.detalle-principal {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 460px 1fr;
+  gap: 52px;
+  align-items: start;
+}
+
+/* IMAGEN PRINCIPAL */
+
+.detalle-imagenes {
+  width: 100%;
+}
+
+.detalle-imagen-principal {
+  width: 460px !important;
+  height: 355px !important;
+  display: block;
+  object-fit: cover;
+  border-radius: 14px;
+  margin: 0 !important;
+}
+
+/* MINIATURAS */
+
+.detalle-miniaturas {
+  width: 460px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.detalle-miniaturas img {
+  width: 100% !important;
+  height: 72px !important;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+  margin: 0 !important;
+}
+
+/* ==========================================
+   INFORMACIÓN DEL CURSO
+========================================== */
+
+.detalle-info {
+  text-align: left !important;
+  padding-top: 4px;
+}
+
+.detalle-info h1 {
+  color: #111936 !important;
+  font-size: 31px !important;
+  line-height: 1.15;
+  font-weight: 700;
+  text-align: left !important;
+  margin: 0 0 9px !important;
+  padding: 0;
+}
+
+.detalle-institucion {
+  color: #65697a;
+  font-size: 14px;
+  margin: 0 0 17px;
+}
+
+/* VALORACIÓN */
+
+.detalle-valoracion {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+
+.detalle-verificado {
+  color: #5b36d4;
+  font-weight: 600;
+}
+
+.detalle-estrellas {
+  color: #ff9d37;
+  letter-spacing: 2px;
+}
+
+/* ETIQUETAS */
+
+.detalle-tags {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 0 0 20px;
+}
+
+.detalle-tags span {
+  background: #f1edfb;
+  color: #5d3ac6;
+  border-radius: 6px;
+  padding: 7px 11px;
+  font-size: 12px;
+}
+
+/* RESUMEN */
+
+.detalle-resumen {
+  max-width: 570px;
+  color: #5b6070;
+  font-size: 14px;
+  line-height: 1.65;
+  text-align: left;
+  margin: 0 0 20px;
+}
+
+/* BENEFICIOS */
+
+.detalle-beneficios {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin: 20px 0 25px;
+  color: #6944ca;
+  font-size: 13px;
+}
+
+.detalle-precio {
+  color: #161d43 !important;
+  font-size: 21px !important;
+  text-align: left !important;
+  margin: 0 0 14px !important;
+}
+
+/* BOTÓN INSCRIBIRSE */
+
+.detalle-inscribirme {
+  width: 320px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: #5424c9;
+  color: #ffffff !important;
+
+  border: none;
+  border-radius: 7px;
+
+  text-decoration: none !important;
+  font-size: 14px;
+  font-weight: 600;
+
+  margin-bottom: 11px;
+}
+
+.detalle-inscribirme:hover {
+  background: #461ab3;
+}
+
+/* FAVORITOS */
+
+.detalle-favorito {
+  appearance: none;
+  width: 320px !important;
+  height: 50px !important;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: #ffffff !important;
+  color: #5c31cc !important;
+
+  border: 1px solid #754ce0 !important;
+  border-radius: 7px !important;
+
+  font-size: 14px !important;
+  font-weight: 600;
+  cursor: pointer;
+
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ==========================================
+   SECCIÓN INFERIOR
+========================================== */
+
+.detalle-inferior {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 270px;
+  gap: 55px;
+  align-items: start;
+  margin-top: 52px;
+}
+
+/* TABS */
+
+.detalle-descripcion {
+  min-width: 0;
+}
+
+.detalle-tabs {
+  display: flex;
+  justify-content: flex-start;
+  gap: 32px;
+
+  border-bottom: 1px solid #e3e3e8;
+
+  margin-bottom: 25px;
+}
+
+.detalle-tabs button {
+  appearance: none;
+
+  background: transparent !important;
+  color: #343746 !important;
+
+  border: none !important;
+  border-radius: 0 !important;
+
+  padding: 0 0 14px !important;
+
+  font-family: inherit;
+  font-size: 13px !important;
+  font-weight: 600;
+
+  cursor: pointer;
+  box-shadow: none !important;
+}
+
+.detalle-tabs .tab-activo {
+  color: #6032d6 !important;
+  border-bottom: 3px solid #6032d6 !important;
+}
+
+/* TEXTO DESCRIPCIÓN */
+
+.detalle-texto {
+  color: #5b6070;
+  font-size: 14px;
+  line-height: 1.7;
+  text-align: left !important;
+}
+
+.detalle-texto p {
+  text-align: left !important;
+  margin: 0 0 13px;
+}
+
+.detalle-texto h3 {
+  color: #171d3b;
+  font-size: 18px;
+  text-align: left !important;
+  margin: 26px 0 14px;
+}
+
+.detalle-texto ul {
+  display: block;
+  text-align: left !important;
+  padding-left: 20px;
+  margin: 0;
+}
+
+.detalle-texto li {
+  text-align: left !important;
+  margin: 7px 0;
+}
+
+/* ==========================================
+   CAJA INCLUYE
+========================================== */
+
+.detalle-incluye {
+  width: 270px;
+  padding: 23px;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e5eb;
+  border-radius: 11px;
+
+  text-align: left !important;
+}
+
+.detalle-incluye h3 {
+  color: #171d3b;
+  font-size: 16px;
+  text-align: left !important;
+  margin: 0 0 18px;
+}
+
+.detalle-incluye p {
+  color: #5d6170;
+  font-size: 13px;
+  text-align: left !important;
+  margin: 12px 0;
+}
+
+/* BOTÓN VOLVER */
+
+.detalle-volver {
+  appearance: none;
+
+  margin-top: 38px;
+
+  background: transparent !important;
+  color: #6032d6 !important;
+
+  border: none !important;
+  padding: 0 !important;
+
+  font-size: 14px !important;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-shadow: none !important;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 950px) {
+  .detalle-principal {
+    grid-template-columns: 1fr;
+  }
+
+  .detalle-imagen-principal,
+  .detalle-miniaturas {
+    width: 100% !important;
+  }
+
+  .detalle-imagen-principal {
+    height: 380px !important;
+  }
+
+  .detalle-inscribirme,
+  .detalle-favorito {
+    width: 100% !important;
+  }
+
+  .detalle-inferior {
+    grid-template-columns: 1fr;
+  }
+
+  .detalle-incluye {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .detalle-container {
+    padding: 22px 18px 45px;
+  }
+
+  .detalle-imagen-principal {
+    height: 260px !important;
+  }
+
+  .detalle-miniaturas img {
+    height: 60px !important;
+  }
+
+  .detalle-info h1 {
+    font-size: 25px !important;
+  }
+
+  .detalle-tabs {
+    gap: 18px;
+    overflow-x: auto;
+  }
+
+  .detalle-tabs button {
+    white-space: nowrap;
+  }
+}
