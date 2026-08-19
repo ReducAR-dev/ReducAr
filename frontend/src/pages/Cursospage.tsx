@@ -1,60 +1,72 @@
+import logoCursos from "../assets/logo-cursos.png";
+
 const cursos = [
   {
-    titulo: "Python desde Cero",
+    titulo: "Desarrollo Web Full Stack",
     organizacion: "Fundación Pescar",
-    modalidad: "Virtual",
-    duracion: "3 meses",
-    categoria: "Tecnología",
-    etiqueta: "Nuevo",
-    imagen:
-      "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=900&q=80",
-  },
-  {
-    titulo: "Community Manager",
-    organizacion: "Junior Achievement",
-    modalidad: "Virtual",
-    duracion: "4 semanas",
-    categoria: "Marketing",
-    imagen:
-      "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=900&q=80",
-  },
-  {
-    titulo: "Diseño UX/UI",
-    organizacion: "Codo a Codo",
     modalidad: "Virtual",
     duracion: "6 meses",
-    categoria: "Diseño",
-    etiqueta: "Popular",
+    categoria: "Tecnología",
+    etiqueta: "Destacado",
+    gratuito: true,
+    certificado: true,
     imagen:
-      "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
   },
   {
-    titulo: "Inglés Intermedio",
-    organizacion: "Potenciar Argentina",
+    titulo: "Testing Master",
+    organizacion: "Fundación Empujar",
+    modalidad: "Virtual",
+    duracion: "5 meses",
+    categoria: "Tecnología",
+    gratuito: true,
+    certificado: true,
+    imagen:
+      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    titulo: "Programación asistida con IA",
+    organizacion: "Chicas en Tecnología",
+    modalidad: "Híbrida",
+    duracion: "8 semanas",
+    categoria: "Tecnología",
+    gratuito: true,
+    certificado: true,
+    imagen:
+      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    titulo: "Introducción a la programación con Python",
+    organizacion: "Santander Open Academy",
+    modalidad: "Virtual",
+    duracion: "8 horas",
+    categoria: "Tecnología",
+    gratuito: true,
+    certificado: true,
+    imagen:
+      "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    titulo: "Tu Futuro + Tecnología",
+    organizacion: "Fundación Forge",
+    modalidad: "Virtual",
+    duracion: "1 año",
+    categoria: "Tecnología",
+    gratuito: true,
+    certificado: true,
+    imagen:
+      "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    titulo: "Mujeres Programando Futuro",
+    organizacion: "Fundación Media Pila",
     modalidad: "Virtual",
     duracion: "4 meses",
-    categoria: "Idiomas",
-    imagen:
-      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=900&q=80",
-  },
-  {
-    titulo: "Excel Avanzado",
-    organizacion: "Chicas.net",
-    modalidad: "Virtual",
-    duracion: "2 meses",
-    categoria: "Habilidades digitales",
-    imagen:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=80",
-  },
-  {
-    titulo: "Introducción al SQL",
-    organizacion: "Fundación Pescar",
-    modalidad: "Virtual",
-    duracion: "2 meses",
     categoria: "Tecnología",
-    etiqueta: "Nuevo",
+    gratuito: true,
+    certificado: true,
     imagen:
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=900&q=80",
   },
 ];
 
@@ -64,8 +76,11 @@ function Cursospage() {
 
       <header className="topbar">
         <div className="brand">
-          <div className="brand-icon">◆</div>
-          <span>Reduc<span>AR</span></span>
+          <img
+            src={logoCursos}
+            alt="Logo de ReducAR"
+            className="brand-logo"
+          />
         </div>
 
         <nav className="topnav">
@@ -142,6 +157,7 @@ function Cursospage() {
 
             <div className="toggle-row">
               <span>Gratuitos</span>
+
               <label className="switch">
                 <input type="checkbox" />
                 <span className="slider"></span>
@@ -150,6 +166,7 @@ function Cursospage() {
 
             <div className="toggle-row">
               <span>Con certificado</span>
+
               <label className="switch">
                 <input type="checkbox" />
                 <span className="slider"></span>
@@ -183,8 +200,10 @@ function Cursospage() {
           <section className="courses-area">
 
             <div className="search-row">
+
               <div className="search-box">
                 <span>⌕</span>
+
                 <input
                   type="text"
                   placeholder="Buscar cursos..."
@@ -195,13 +214,19 @@ function Cursospage() {
                 ☷
                 <span>Filtros</span>
               </button>
+
             </div>
 
             <div className="course-grid">
+
               {cursos.map((curso) => (
-                <article className="course-card" key={curso.titulo}>
+                <article
+                  className="course-card"
+                  key={curso.titulo}
+                >
 
                   <div className="course-image-wrapper">
+
                     <img
                       src={curso.imagen}
                       alt={curso.titulo}
@@ -213,9 +238,11 @@ function Cursospage() {
                         {curso.etiqueta}
                       </span>
                     )}
+
                   </div>
 
                   <div className="course-content">
+
                     <h3>{curso.titulo}</h3>
 
                     <p className="organization">
@@ -229,17 +256,24 @@ function Cursospage() {
                     </div>
 
                     <div className="course-tags">
+
                       <span>{curso.categoria}</span>
 
-                      {(curso.titulo === "Python desde Cero" ||
-                        curso.titulo === "Community Manager") && (
+                      {curso.gratuito && (
                         <span>Gratuito</span>
                       )}
+
+                      {curso.certificado && (
+                        <span>Certificado</span>
+                      )}
+
                     </div>
+
                   </div>
 
                 </article>
               ))}
+
             </div>
 
             <div className="pagination">
