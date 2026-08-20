@@ -1,7 +1,7 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
+import { Database } from '../types/database.types';
 
-// Carga las variables de entorno desde el archivo .env
 dotenv.config();
 
 // Lee las variables de entorno
@@ -16,6 +16,5 @@ if (!supabaseUrl || !supabaseAnonKey) {
   );
 }
 
-// Crea y exporta una única instancia del cliente de Supabase
-// La anotación de tipo `SupabaseClient` es opcional, pero ayuda con el autocompletado
-export const supabase: SupabaseClient = createClient(supabaseUrl, supabaseAnonKey);
+// ✅ Ahora el cliente conoce la estructura de tu BD
+export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
