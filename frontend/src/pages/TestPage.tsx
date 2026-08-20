@@ -5,6 +5,7 @@ import {
   preguntasMock,
   opcionesMock,
   categoriasMock,
+  rutasMock,
 } from "../mocks/testMock";
 import TestResult from "../components/test/TestResult";
 
@@ -27,6 +28,10 @@ const [resultado, setResultado] = useState<{
   categoria: string;
   puntaje: number;
 } | null>(null);
+
+const [rutaRecomendada, setRutaRecomendada] = useState<
+  (typeof rutasMock)[number] | null
+>(null);
 
   const pregunta = preguntasMock[preguntaActual];
 
@@ -96,6 +101,15 @@ const calcularResultado = () => {
     categoria: categoria.nombre,
     puntaje: Number(categoriaGanadora[1]),
   });
+
+  const ruta = rutasMock.find(
+  (ruta) =>
+    ruta.categoria_id === categoria.id &&
+    ruta.esta_activa
+);
+
+setRutaRecomendada(ruta ?? null);
+
 };
 
 const siguientePregunta = () => {
@@ -118,6 +132,7 @@ if (resultado) {
       <TestResult
         categoria={resultado.categoria}
         puntaje={resultado.puntaje}
+        ruta={rutaRecomendada}
       />
     </main>
   );
