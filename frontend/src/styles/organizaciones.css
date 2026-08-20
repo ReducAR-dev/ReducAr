@@ -1,0 +1,208 @@
+.organizaciones-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff;
+  color: #111936;
+}
+
+.organizaciones-page * {
+  box-sizing: border-box;
+}
+
+.organizaciones-container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 42px 45px 70px;
+}
+
+/* Breadcrumb */
+
+.organizaciones-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-bottom: 25px;
+
+  color: #777b8c;
+  font-size: 14px;
+}
+
+.organizaciones-breadcrumb span:first-child {
+  color: #5c2bd6;
+}
+
+/* Título */
+
+.organizaciones-header {
+  margin-bottom: 32px;
+}
+
+.organizaciones-header h1 {
+  margin: 0 0 8px;
+
+  color: #111936;
+
+  font-size: 31px;
+  font-weight: 700;
+}
+
+.organizaciones-header p {
+  margin: 0;
+
+  color: #696e7f;
+
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Grid */
+
+.organizaciones-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+/* Tarjetas */
+
+.organizacion-card {
+  min-height: 225px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 25px;
+
+  background: #ffffff;
+
+  border: 1px solid #e4e4ea;
+  border-radius: 12px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.organizacion-card:hover {
+  transform: translateY(-3px);
+
+  border-color: #d6cdf5;
+
+  box-shadow: 0 10px 25px rgba(50, 32, 110, 0.08);
+}
+
+/* Parte superior */
+
+.organizacion-card-top {
+  display: grid;
+  grid-template-columns: 135px 1fr;
+  gap: 22px;
+  align-items: center;
+}
+
+.organizacion-logo-container {
+  width: 135px;
+  height: 100px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+}
+
+.organizacion-logo {
+  width: 100%;
+  max-height: 90px;
+
+  object-fit: contain;
+
+  display: block;
+}
+
+/* Información */
+
+.organizacion-info {
+  text-align: left;
+}
+
+.organizacion-info h2 {
+  margin: 0 0 10px;
+
+  color: #151b37;
+
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.organizacion-info p {
+  margin: 0;
+
+  color: #646979;
+
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+/* Botón */
+
+.organizacion-button {
+  width: 120px;
+  min-height: 42px;
+
+  margin-top: 22px;
+
+  background: #ffffff;
+
+  color: #5c2bd6;
+
+  border: 1px solid #d6ccf7;
+  border-radius: 7px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.organizacion-button:hover {
+  background: #5c2bd6;
+  color: #ffffff;
+  border-color: #5c2bd6;
+}
+
+/* Responsive */
+
+@media (max-width: 850px) {
+  .organizaciones-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .organizaciones-container {
+    padding: 28px 18px 50px;
+  }
+
+  .organizacion-card-top {
+    grid-template-columns: 1fr;
+  }
+
+  .organizacion-logo-container {
+    width: 150px;
+    justify-content: flex-start;
+  }
+
+  .organizacion-card {
+    padding: 20px;
+  }
+}
