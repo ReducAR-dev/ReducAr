@@ -1,111 +1,145 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+:root,
+:root[data-theme="light"] {
+  --home-primary: #5e4bff;
+  --home-primary-dark: #4c38f0;
+  --home-primary-light: #f1efff;
+  --home-turquoise: #1bbfae;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --home-background: #ffffff;
+  --home-surface: #ffffff;
+  --home-surface-hover: #f7f6ff;
+  --home-text: #171b36;
+  --home-text-secondary: #596178;
+  --home-nav-text: #4c5269;
+  --home-icon-text: #303852;
+  --home-benefit-text: #505970;
+  --home-border: #e2e5ef;
+  --home-button-border: #cbc5ff;
+  --home-placeholder: #8b91a4;
+  --home-image-fallback: #eeeeee;
+  --home-floating-surface: rgba(255, 255, 255, 0.97);
+  --home-floating-border: rgba(229, 230, 239, 0.95);
+  --home-floating-muted: #7d8498;
+  --home-floating-text: #12182f;
+  --home-purple-soft: #eeebff;
+  --home-green-soft: #ebfffa;
+  --home-stats-surface: #171d3b;
+  --home-stats-muted: #d7dae5;
+  --home-indicator: #d8dbe6;
+  --home-on-accent: #ffffff;
 
-  font: 18px/145% var(--sans);
+  --home-hero-glow-purple: rgba(126, 86, 255, 0.15);
+  --home-hero-glow-turquoise: rgba(31, 202, 181, 0.1);
+  --home-hero-shape-purple: rgba(109, 89, 255, 0.18);
+  --home-hero-shape-turquoise: rgba(31, 202, 181, 0.24);
+  --home-search-shadow: rgba(41, 46, 83, 0.08);
+  --home-floating-shadow: rgba(31, 36, 73, 0.11);
+  --home-section-shadow: rgba(20, 25, 50, 0.09);
+  --home-primary-shadow: rgba(94, 75, 255, 0.25);
+  --home-header-primary-shadow: rgba(94, 75, 255, 0.22);
+  --home-promo-start: #4934f5;
+  --home-promo-middle: #7162ff;
+  --home-promo-end: #18aa97;
+  --home-gradient-start: #5748ff;
+  --home-gradient-middle: #8b5af2;
+  --home-gradient-end: #22bbaa;
+
+  --home-container: 1120px;
+}
+
+:root[data-theme="dark"] {
+  --home-primary: #8b7cff;
+  --home-primary-dark: #7565ff;
+  --home-primary-light: rgba(139, 124, 255, 0.16);
+  --home-turquoise: #35d5c3;
+
+  --home-background: #0f1224;
+  --home-surface: #15192e;
+  --home-surface-hover: #202540;
+  --home-text: #f1f2fb;
+  --home-text-secondary: #aab1c9;
+  --home-nav-text: #c7cbdb;
+  --home-icon-text: #e1e4f0;
+  --home-benefit-text: #b8bed2;
+  --home-border: #303654;
+  --home-button-border: #665db2;
+  --home-placeholder: #858ca5;
+  --home-image-fallback: #262b43;
+  --home-floating-surface: rgba(25, 30, 53, 0.97);
+  --home-floating-border: rgba(78, 85, 119, 0.85);
+  --home-floating-muted: #a6adc3;
+  --home-floating-text: #f1f2fb;
+  --home-purple-soft: rgba(139, 124, 255, 0.17);
+  --home-green-soft: rgba(53, 213, 195, 0.14);
+  --home-stats-surface: #090c1b;
+  --home-stats-muted: #c7cbda;
+  --home-indicator: #444a65;
+  --home-on-accent: #ffffff;
+
+  --home-hero-glow-purple: rgba(126, 86, 255, 0.19);
+  --home-hero-glow-turquoise: rgba(31, 202, 181, 0.12);
+  --home-hero-shape-purple: rgba(126, 106, 255, 0.24);
+  --home-hero-shape-turquoise: rgba(45, 205, 186, 0.22);
+  --home-search-shadow: rgba(0, 0, 0, 0.24);
+  --home-floating-shadow: rgba(0, 0, 0, 0.3);
+  --home-section-shadow: rgba(0, 0, 0, 0.25);
+  --home-primary-shadow: rgba(94, 75, 255, 0.32);
+  --home-header-primary-shadow: rgba(94, 75, 255, 0.3);
+  --home-promo-start: #5f4eff;
+  --home-promo-middle: #8375ff;
+  --home-promo-end: #25bca8;
+  --home-gradient-start: #8576ff;
+  --home-gradient-middle: #a97cf4;
+  --home-gradient-end: #35d5c3;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--home-background);
+  font: 18px/145% system-ui, "Segoe UI", Roboto, sans-serif;
   letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  color: var(--home-text);
+  background: var(--home-background);
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+button,
+input {
+  font: inherit;
+}
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--home-primary);
+  outline-offset: 2px;
 }
 
 #root {
   width: 1126px;
   max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
+  border-inline: 1px solid var(--home-border);
+  text-align: center;
 }
 
-body {
-  margin: 0;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
 p {
   margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
 }

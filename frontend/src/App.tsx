@@ -1,8 +1,20 @@
 import "./App.css";
-import Cursospage from "./pages/Cursospage";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Homepage from "./pages/Homepage";
+import CursosPage from "./pages/Cursospage";
+import TestPage from "./pages/TestPage";
 
 function App() {
-  return <Cursospage />;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/cursos" element={<CursosPage />} />
+        <Route path="/test" element={<TestPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
