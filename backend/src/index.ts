@@ -1,18 +1,30 @@
 import express from 'express';
-import cursoRoutes from './routes/curso.routes'; // Importamos las rutas de cursos
+import cors from 'cors';
+import dotenv from 'dotenv';
+import cursoRoutes from './routes/curso.routes.js'; // Importamos las rutas de cursos
+import testRoutes from './routes/test.routes.js'; // Importamos las rutas de prueba
 
-// Creamos una instancia de la aplicación Express
-// Configuramos el puerto en el que escuchará el servidor
+// Carga las variables de entorno
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-
-// Configuramos el middleware para parsear el cuerpo de las solicitudes como JSON
+// Middlewares básicos
+app.use(cors());
 app.use(express.json());
 
-// Usamos las rutas de cursos para cualquier solicitud que comience con /cursos
+// Ruta de prueba para Supabase
+app.use('/api', testRoutes);
+
+// Ruta de inicio simple
+app.get('/', (req, res) => {
+  res.send('🚀 Servidor Backend de ReducAr funcionando!');
+});
 app.use('/cursos', cursoRoutes);
+
+// Inicia el servidor
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
+  console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`🧪 Prueba la conexión a Supabase en: http://localhost:${PORT}/api/test`);
 });
