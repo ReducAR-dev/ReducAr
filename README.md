@@ -31,7 +31,8 @@ Ejemplos:
 
 - 20/08/2026 - Jonathan Aguilera (Fullstack)
     - 11:32 commit general sobre nueva estructura de front
-
+    - 11:49 commit general TODO EL PROYECTO AFECTADO
+        - Unión "guía" del proyecto (Carpetas Frontend y Backend)
 
 
 
