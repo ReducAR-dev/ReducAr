@@ -1,7 +1,7 @@
-import Header from "../components/Header";
-import PromoBar from "../components/PromoBar";
-import HeroSection from "../components/HeroSection";
-import OpportunitiesSection from "../components/OpportunitiesSection";
+import Header from "../components/common/Header";
+import PromoBar from "../components/features/PromoBar";
+import HeroSection from "../components/features/HeroSection";
+import OpportunitiesSection from "../components/features/OpportunitiesSection";
 
 import "../styles/home-top.css";
 

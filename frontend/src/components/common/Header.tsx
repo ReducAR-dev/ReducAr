@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import logoReducar from "../assets/logo-reducar.png";
-import { SearchIcon } from "./Icons";
+import { SearchIcon } from "../features/Icons";
 
 type Theme = "light" | "dark";
 

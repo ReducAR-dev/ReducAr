@@ -29,8 +29,8 @@ Ejemplos:
 =                               FRONT END                               =
 =========================================================================
 
-
-
+- 20/08/2026 - Jonathan Aguilera (Fullstack)
+    - 11:32 commit general sobre nueva estructura de front
 
 
 
