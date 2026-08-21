@@ -1,7 +1,7 @@
-import cursoRoutes from './routes/curso.routes'; // Importamos las rutas de cursos
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cursoRoutes from './routes/curso.routes.js'; // Importamos las rutas de cursos
 import testRoutes from './routes/test.routes.js'; // Importamos las rutas de prueba
 
 // Carga las variables de entorno
@@ -21,6 +21,7 @@ app.use('/api', testRoutes);
 app.get('/', (req, res) => {
   res.send('🚀 Servidor Backend de ReducAr funcionando!');
 });
+app.use('/cursos', cursoRoutes);
 
 // Inicia el servidor
 app.listen(PORT, () => {
