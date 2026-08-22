@@ -3,8 +3,8 @@ node_modules/
 
 # Variables de entorno (tienen contraseñas)
 .env
-.env.local
-.env.production
+.env.*
+!.env.example
 
 # Archivos compilados
 dist/

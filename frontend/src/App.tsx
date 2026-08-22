@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Homepage from "./pages/Homepage";
 import CursosPage from "./pages/Cursospage";
 import TestPage from "./pages/TestPage";
+import ChatBot from "./components/features/chatbot/ChatBot";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/cursos" element={<CursosPage />} />
         <Route path="/test" element={<TestPage />} />
       </Routes>
+      <ChatBot />
     </BrowserRouter>
   );
 }
