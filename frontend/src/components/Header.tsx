@@ -68,6 +68,7 @@ function Header() {
     }
 
     const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+
     const handleSystemThemeChange = (event: MediaQueryListEvent) => {
       setTheme(event.matches ? "dark" : "light");
     };
@@ -89,12 +90,8 @@ function Header() {
   return (
     <header className="home-header">
       <div className="home-header-container">
-
         <a href="#" className="home-logo" aria-label="Ir al inicio">
-          <img
-            src={logoReducar}
-            alt="Logo de ReducAR"
-          />
+          <img src={logoReducar} alt="Logo de ReducAR" />
         </a>
 
         <nav className="home-nav">
@@ -134,21 +131,14 @@ function Header() {
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
 
-          <button
-            className="home-login-button"
-            type="button"
-          >
+          <button className="home-login-button" type="button">
             Iniciar sesión
           </button>
 
-          <button
-            className="home-register-button"
-            type="button"
-          >
+          <button className="home-register-button" type="button">
             Registrarme
           </button>
         </div>
-
       </div>
     </header>
   );
