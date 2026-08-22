@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { chatErrorHandler } from './middlewares/chat.middleware.js';
+import chatRoutes from './routes/chat.routes.js';
 import cursoRoutes from './routes/curso.routes.js'; // Importamos las rutas de cursos
 import testRoutes from './routes/test.routes.js'; // Importamos las rutas de prueba
 
@@ -9,10 +11,23 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
 
 // Middlewares básicos
-app.use(cors());
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || origin === FRONTEND_ORIGIN) {
+      callback(null, true);
+      return;
+    }
+
+    callback(null, false);
+  },
+}));
 app.use(express.json());
+
+// Chatbot de asistencia
+app.use('/api/chat', chatRoutes);
 
 // Ruta de prueba para Supabase
 app.use('/api', testRoutes);
@@ -22,6 +37,9 @@ app.get('/', (req, res) => {
   res.send('🚀 Servidor Backend de ReducAr funcionando!');
 });
 app.use('/cursos', cursoRoutes);
+
+// Evita que los errores del chatbot expongan respuestas HTML o detalles internos
+app.use(chatErrorHandler);
 
 // Inicia el servidor
 app.listen(PORT, () => {
