@@ -5,9 +5,9 @@
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: #ffffff;
-  color: #16162a;
+  font-family: inherit;
+  background: var(--home-background);
+  color: var(--home-text);
 }
 
 button,
@@ -434,4 +434,4 @@ button {
   height: auto;
   display: block;
   object-fit: contain;
-} 
+}

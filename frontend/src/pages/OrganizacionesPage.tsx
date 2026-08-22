@@ -1,9 +1,9 @@
 import "../styles/organizaciones.css";
 
-import logoPescar from "../assets/fundacion-pescar.png";
-import logoEmpujar from "../assets/fundacion-empujar.png";
-import logoChicas from "../assets/chicas-tecnologia.jpg";
-import logoForge from "../assets/fundacion-forge.webp";
+import logoPescar from "../assets/fundacion-pescar.png.png";
+import logoEmpujar from "../assets/fundacion-empujar.png.png";
+import logoChicas from "../assets/chicas-tecnologia.jpg.jpg";
+import logoForge from "../assets/fundacion-forge.webp.webp";
 
 const organizaciones = [
   {

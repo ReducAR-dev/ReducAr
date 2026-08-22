@@ -1,61 +1,13 @@
-import heroImage from "../assets/hero.png";
-
 import {
   BookIcon,
   CertificateIcon,
-  ChartIcon,
   CheckCircleIcon,
   CompassIcon,
   HeartIcon,
   SearchIcon,
   SparklesIcon,
 } from "./Icons";
-
-function ProgressCard() {
-  return (
-    <div className="hero-floating-card hero-progress-card">
-      <div className="hero-floating-icon hero-purple-icon">
-        <ChartIcon />
-      </div>
-
-      <div>
-        <span>Tu progreso</span>
-        <strong>4 cursos en camino</strong>
-      </div>
-    </div>
-  );
-}
-
-function OpportunityCard() {
-  return (
-    <div className="hero-floating-card hero-opportunity-card">
-      <div className="hero-floating-icon hero-green-icon">
-        <CheckCircleIcon />
-      </div>
-
-      <div>
-        <span>Nueva oportunidad</span>
-        <strong>Beca disponible</strong>
-      </div>
-    </div>
-  );
-}
-
-function StatsCard() {
-  return (
-    <div className="hero-stats-card">
-      <div className="hero-stat">
-        <strong>+12</strong>
-        <span>áreas para explorar</span>
-      </div>
-
-      <div className="hero-stat">
-        <strong>100%</strong>
-        <span>en español</span>
-      </div>
-    </div>
-  );
-}
+import PromotedCoursesCarousel from "./PromotedCoursesCarousel";
 
 function HeroSection() {
   return (
@@ -134,19 +86,7 @@ function HeroSection() {
         </div>
 
         <div className="home-hero-visual">
-          <div className="hero-image-background">
-            <div className="hero-image-container">
-              <img
-                src={heroImage}
-                alt="Personas aprendiendo y trabajando juntas"
-                className="hero-main-image"
-              />
-            </div>
-          </div>
-
-          <ProgressCard />
-          <OpportunityCard />
-          <StatsCard />
+          <PromotedCoursesCarousel />
         </div>
       </div>
     </section>
