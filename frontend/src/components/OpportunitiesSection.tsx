@@ -1,5 +1,5 @@
 import OpportunityCarousel from "./OpportunityCarousel";
-import "../../styles/opportunities.css";
+import "../styles/opportunities.css";
 
 function OpportunitiesSection() {
   return (

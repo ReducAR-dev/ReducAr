@@ -1,96 +1,104 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
 :root,
 :root[data-theme="light"] {
-  --home-primary: #5e4bff;
-  --home-primary-dark: #4c38f0;
+  --home-primary: #6854f5;
+  --home-primary-dark: #5540e7;
   --home-primary-light: #f1efff;
-  --home-turquoise: #1bbfae;
+  --home-turquoise: #18bfae;
+  --home-turquoise-dark: #0f9f91;
 
-  --home-background: #ffffff;
+  --home-background: #fcfcff;
   --home-surface: #ffffff;
-  --home-surface-hover: #f7f6ff;
-  --home-text: #171b36;
-  --home-text-secondary: #596178;
-  --home-nav-text: #4c5269;
-  --home-icon-text: #303852;
-  --home-benefit-text: #505970;
-  --home-border: #e2e5ef;
-  --home-button-border: #cbc5ff;
-  --home-placeholder: #8b91a4;
-  --home-image-fallback: #eeeeee;
-  --home-floating-surface: rgba(255, 255, 255, 0.97);
-  --home-floating-border: rgba(229, 230, 239, 0.95);
-  --home-floating-muted: #7d8498;
-  --home-floating-text: #12182f;
+  --home-surface-soft: #f7f7fc;
+  --home-surface-hover: #f3f1ff;
+  --home-header-surface: rgba(255, 255, 255, 0.88);
+  --home-text: #151a36;
+  --home-text-secondary: #5f667c;
+  --home-nav-text: #4f566c;
+  --home-icon-text: #303750;
+  --home-benefit-text: #596176;
+  --home-border: #e7e8f1;
+  --home-button-border: #d8d3ff;
+  --home-placeholder: #9298aa;
+  --home-image-fallback: #eef0f7;
+  --home-floating-surface: rgba(255, 255, 255, 0.9);
+  --home-floating-border: rgba(255, 255, 255, 0.84);
+  --home-floating-muted: #7c8397;
+  --home-floating-text: #171c35;
   --home-purple-soft: #eeebff;
-  --home-green-soft: #ebfffa;
-  --home-stats-surface: #171d3b;
-  --home-stats-muted: #d7dae5;
-  --home-indicator: #d8dbe6;
+  --home-green-soft: #e9fbf8;
+  --home-stats-surface: #171d3d;
+  --home-stats-muted: #d9dce8;
+  --home-indicator: #d9dce7;
   --home-on-accent: #ffffff;
 
-  --home-hero-glow-purple: rgba(126, 86, 255, 0.15);
-  --home-hero-glow-turquoise: rgba(31, 202, 181, 0.1);
-  --home-hero-shape-purple: rgba(109, 89, 255, 0.18);
-  --home-hero-shape-turquoise: rgba(31, 202, 181, 0.24);
-  --home-search-shadow: rgba(41, 46, 83, 0.08);
-  --home-floating-shadow: rgba(31, 36, 73, 0.11);
-  --home-section-shadow: rgba(20, 25, 50, 0.09);
-  --home-primary-shadow: rgba(94, 75, 255, 0.25);
-  --home-header-primary-shadow: rgba(94, 75, 255, 0.22);
-  --home-promo-start: #4934f5;
-  --home-promo-middle: #7162ff;
-  --home-promo-end: #18aa97;
-  --home-gradient-start: #5748ff;
-  --home-gradient-middle: #8b5af2;
-  --home-gradient-end: #22bbaa;
+  --home-hero-glow-purple: rgba(119, 91, 255, 0.14);
+  --home-hero-glow-turquoise: rgba(23, 191, 174, 0.11);
+  --home-hero-shape-purple: rgba(112, 84, 245, 0.18);
+  --home-hero-shape-turquoise: rgba(24, 191, 174, 0.22);
+  --home-search-shadow: rgba(34, 39, 74, 0.08);
+  --home-floating-shadow: rgba(37, 43, 78, 0.12);
+  --home-section-shadow: rgba(29, 34, 67, 0.12);
+  --home-primary-shadow: rgba(104, 84, 245, 0.24);
+  --home-header-primary-shadow: rgba(104, 84, 245, 0.2);
+  --home-promo-start: #5944eb;
+  --home-promo-middle: #755ff1;
+  --home-promo-end: #16aa9b;
+  --home-gradient-start: #6450ef;
+  --home-gradient-middle: #8d60ec;
+  --home-gradient-end: #18ad9f;
 
-  --home-container: 1120px;
+  --home-container: 1200px;
 }
 
 :root[data-theme="dark"] {
-  --home-primary: #8b7cff;
-  --home-primary-dark: #7565ff;
-  --home-primary-light: rgba(139, 124, 255, 0.16);
-  --home-turquoise: #35d5c3;
+  --home-primary: #9385ff;
+  --home-primary-dark: #7d6dff;
+  --home-primary-light: rgba(147, 133, 255, 0.16);
+  --home-turquoise: #3ad6c4;
+  --home-turquoise-dark: #2abbaa;
 
-  --home-background: #0f1224;
-  --home-surface: #15192e;
-  --home-surface-hover: #202540;
-  --home-text: #f1f2fb;
-  --home-text-secondary: #aab1c9;
-  --home-nav-text: #c7cbdb;
-  --home-icon-text: #e1e4f0;
-  --home-benefit-text: #b8bed2;
-  --home-border: #303654;
-  --home-button-border: #665db2;
-  --home-placeholder: #858ca5;
+  --home-background: #0e1121;
+  --home-surface: #15192d;
+  --home-surface-soft: #12162a;
+  --home-surface-hover: #20253f;
+  --home-header-surface: rgba(14, 17, 33, 0.88);
+  --home-text: #f4f4fb;
+  --home-text-secondary: #aeb4ca;
+  --home-nav-text: #c8ccdc;
+  --home-icon-text: #e2e5f1;
+  --home-benefit-text: #bdc2d5;
+  --home-border: #2e3450;
+  --home-button-border: #6259a8;
+  --home-placeholder: #8c93aa;
   --home-image-fallback: #262b43;
-  --home-floating-surface: rgba(25, 30, 53, 0.97);
-  --home-floating-border: rgba(78, 85, 119, 0.85);
-  --home-floating-muted: #a6adc3;
-  --home-floating-text: #f1f2fb;
-  --home-purple-soft: rgba(139, 124, 255, 0.17);
-  --home-green-soft: rgba(53, 213, 195, 0.14);
-  --home-stats-surface: #090c1b;
-  --home-stats-muted: #c7cbda;
-  --home-indicator: #444a65;
+  --home-floating-surface: rgba(24, 29, 51, 0.9);
+  --home-floating-border: rgba(84, 91, 124, 0.7);
+  --home-floating-muted: #a7aec4;
+  --home-floating-text: #f4f4fb;
+  --home-purple-soft: rgba(147, 133, 255, 0.17);
+  --home-green-soft: rgba(58, 214, 196, 0.14);
+  --home-stats-surface: #080b18;
+  --home-stats-muted: #c9cddd;
+  --home-indicator: #444a64;
   --home-on-accent: #ffffff;
 
-  --home-hero-glow-purple: rgba(126, 86, 255, 0.19);
-  --home-hero-glow-turquoise: rgba(31, 202, 181, 0.12);
-  --home-hero-shape-purple: rgba(126, 106, 255, 0.24);
-  --home-hero-shape-turquoise: rgba(45, 205, 186, 0.22);
-  --home-search-shadow: rgba(0, 0, 0, 0.24);
-  --home-floating-shadow: rgba(0, 0, 0, 0.3);
-  --home-section-shadow: rgba(0, 0, 0, 0.25);
-  --home-primary-shadow: rgba(94, 75, 255, 0.32);
-  --home-header-primary-shadow: rgba(94, 75, 255, 0.3);
-  --home-promo-start: #5f4eff;
-  --home-promo-middle: #8375ff;
-  --home-promo-end: #25bca8;
-  --home-gradient-start: #8576ff;
-  --home-gradient-middle: #a97cf4;
-  --home-gradient-end: #35d5c3;
+  --home-hero-glow-purple: rgba(126, 96, 255, 0.2);
+  --home-hero-glow-turquoise: rgba(38, 201, 183, 0.13);
+  --home-hero-shape-purple: rgba(131, 108, 255, 0.24);
+  --home-hero-shape-turquoise: rgba(48, 209, 190, 0.2);
+  --home-search-shadow: rgba(0, 0, 0, 0.25);
+  --home-floating-shadow: rgba(0, 0, 0, 0.32);
+  --home-section-shadow: rgba(0, 0, 0, 0.28);
+  --home-primary-shadow: rgba(104, 84, 245, 0.34);
+  --home-header-primary-shadow: rgba(104, 84, 245, 0.3);
+  --home-promo-start: #6452f2;
+  --home-promo-middle: #806ff1;
+  --home-promo-end: #24bba9;
+  --home-gradient-start: #978aff;
+  --home-gradient-middle: #b288f1;
+  --home-gradient-end: #3ad6c4;
 }
 
 * {
@@ -100,8 +108,10 @@
 html {
   min-width: 320px;
   background: var(--home-background);
-  font: 18px/145% system-ui, "Segoe UI", Roboto, sans-serif;
-  letter-spacing: 0.18px;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -110,7 +120,7 @@ body {
   margin: 0;
   color: var(--home-text);
   background: var(--home-background);
-  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -125,21 +135,39 @@ input {
 button:focus-visible,
 a:focus-visible,
 input:focus-visible {
-  outline: 2px solid var(--home-primary);
-  outline-offset: 2px;
+  outline: 3px solid color-mix(in srgb, var(--home-primary) 32%, transparent);
+  outline-offset: 3px;
+}
+
+::selection {
+  color: var(--home-text);
+  background: color-mix(in srgb, var(--home-turquoise) 28%, transparent);
 }
 
 #root {
-  width: 1126px;
-  max-width: 100%;
+  width: 100%;
   min-height: 100svh;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  border-inline: 1px solid var(--home-border);
+  overflow: clip;
   text-align: center;
 }
 
 p {
   margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
