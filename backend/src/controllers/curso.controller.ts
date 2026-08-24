@@ -18,7 +18,6 @@ export const getCursos = async (req: Request, res: Response): Promise<void> => {
 };
 
 // Controlador para manejar la solicitud GET a la ruta /cursos/:id
-
 // esqueleto de código - A completar 
 export const getCursoPorId = async (req: Request, res: Response): Promise<void> => {
 
@@ -40,3 +39,17 @@ export const getCursoPorId = async (req: Request, res: Response): Promise<void> 
  
 
 };
+
+
+export const postCurso = async (req: Request, res: Response): Promise<void> => {
+  res.status(501).json({ mensaje: 'No implementado' })
+} 
+
+
+export const patchCurso = async (req: Request, res: Response): Promise<void> => {
+  res.status(501).json({ mensaje: 'No implementado' })
+}
+
+export const deleteCurso = async (req: Request, res: Response): Promise<void> => {
+  res.status(501).json({ mensaje: 'No implementado' })
+}

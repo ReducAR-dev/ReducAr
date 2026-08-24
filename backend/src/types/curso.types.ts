@@ -1,11 +1,9 @@
 export interface CursoResumen {
   id: number;
   titulo: string;
-  institucion: string; 
-  categoria: string; 
-  descripcionCorta: string; 
-  modalidad: string; 
-  precio: number;
+  descripcion_corta: string; 
+  esta_activo: boolean;  
+
 }
 
 export interface Curso {
@@ -21,3 +19,9 @@ export interface Curso {
     cupos_disponibles: number;
     esta_activo: boolean;
 }
+
+
+export type CursoCreacion = Omit<Curso, 'id' | 'fecha_publicacion'>;
+
+// Tipo para actualizar un curso, permite modificar cualquier propiedad excepto 'id'
+export type CursoActualizacion = Partial<Omit<Curso, 'id'>>;

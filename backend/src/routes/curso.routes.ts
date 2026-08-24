@@ -1,14 +1,24 @@
 import { Router } from 'express';
-import { getCursos, getCursoPorId } from '../controllers/curso.controller';
-
+import * as cursoController   from '../controllers/curso.controller';
 // el router de express nos permite definir rutas y asociarlas con controladores
 
 const router = Router();
 
-// conecta la ruta GET /cursos con el controlador getCursos 
 
-router.get('/', getCursos);
-router.get('/:id', getCursoPorId);
+router.get('/', cursoController.getCursos);
+
+// obtener un curso     
+router.get('/:id', cursoController.getCursoPorId);
+
+// crear un curso
+router.post('/', cursoController.postCurso); 
+
+// actualizar un curso 
+router.patch('/:id', cursoController.patchCurso);
+
+// eliminar un curso 
+router.delete('/:id', cursoController.deleteCurso);
 
 // exportamos el router para que pueda ser usado en otros archivos 
 export default router;
+
