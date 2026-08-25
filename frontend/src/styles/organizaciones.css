@@ -1,8 +1,25 @@
+/* =========================================
+   INSTITUCIONES - REDUCAR
+========================================= */
+
 .organizaciones-page {
   width: 100%;
   min-height: 100vh;
-  background: #ffffff;
-  color: #111936;
+
+  background:
+    radial-gradient(
+      circle at 88% 15%,
+      rgba(119, 65, 255, 0.18),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 7% 50%,
+      rgba(33, 203, 210, 0.12),
+      transparent 23%
+    ),
+    var(--home-background);
+
+  color: var(--home-text);
 }
 
 .organizaciones-page * {
@@ -10,199 +27,978 @@
 }
 
 .organizaciones-container {
-  width: 100%;
-  max-width: 1180px;
+  width: min(1100px, calc(100% - 64px));
   margin: 0 auto;
-  padding: 42px 45px 70px;
 }
 
-/* Breadcrumb */
+
+/* =========================================
+   HERO
+========================================= */
+
+.instituciones-hero {
+  padding: 28px 0 35px;
+}
+
+
+/* BREADCRUMB */
 
 .organizaciones-breadcrumb {
+  margin-bottom: 18px;
+
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 
-  margin-bottom: 25px;
+  color: var(--home-text-secondary);
 
-  color: #777b8c;
-  font-size: 14px;
+  font-size: 11px;
+  font-weight: 600;
 }
 
-.organizaciones-breadcrumb span:first-child {
-  color: #5c2bd6;
+.organizaciones-breadcrumb span {
+  color: var(--home-text-secondary);
 }
 
-/* Título */
+.organizaciones-breadcrumb strong {
+  color: var(--home-primary);
+}
+
+
+/* =========================================
+   ENCABEZADO
+========================================= */
 
 .organizaciones-header {
-  margin-bottom: 32px;
-}
+  width: 100%;
+  max-width: 720px;
 
-.organizaciones-header h1 {
-  margin: 0 0 8px;
-
-  color: #111936;
-
-  font-size: 31px;
-  font-weight: 700;
-}
-
-.organizaciones-header p {
-  margin: 0;
-
-  color: #696e7f;
-
-  font-size: 15px;
-  line-height: 1.5;
-}
-
-/* Grid */
-
-.organizaciones-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 22px;
-}
-
-/* Tarjetas */
-
-.organizacion-card {
-  min-height: 225px;
+  margin: 0 auto;
 
   display: flex;
   flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+
+/* ETIQUETA SUPERIOR */
+
+.instituciones-eyebrow {
+  width: fit-content;
+
+  margin-bottom: 18px;
+
+  padding: 7px 15px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px;
+
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--home-primary) 35%,
+      var(--home-border)
+    );
+
+  background:
+    color-mix(
+      in srgb,
+      var(--home-primary) 12%,
+      transparent
+    );
+
+  color: var(--home-primary);
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+
+/* TITULO */
+
+.organizaciones-header h1 {
+  max-width: 680px;
+
+  margin: 0;
+
+  color: var(--home-text);
+
+  font-size: clamp(36px, 4vw, 50px);
+
+  line-height: 1.08;
+
+  letter-spacing: -2px;
+
+  font-weight: 800;
+}
+
+
+/* PARTE DEL TITULO CON GRADIENTE */
+
+.organizaciones-header h1 span {
+  display: inline-block;
+
+  background: linear-gradient(
+    90deg,
+    var(--home-gradient-start),
+    var(--home-gradient-middle),
+    var(--home-gradient-end)
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  color: transparent;
+}
+
+
+/* DESCRIPCION HERO */
+
+.organizaciones-header > p {
+  max-width: 610px;
+
+  margin: 16px auto 0;
+
+  color: var(--home-text-secondary);
+
+  font-size: 13px;
+
+  line-height: 1.65;
+}
+
+
+/* =========================================
+   CONTENIDO
+========================================= */
+
+.instituciones-content {
+  padding: 10px 0 55px;
+}
+
+
+/* =========================================
+   CABECERA DE RESULTADOS
+========================================= */
+
+.instituciones-section-header {
+  margin-bottom: 24px;
+
+  display: flex;
+  align-items: flex-end;
   justify-content: space-between;
 
-  padding: 25px;
+  gap: 25px;
+}
 
-  background: #ffffff;
+.instituciones-label {
+  color: var(--home-primary);
 
-  border: 1px solid #e4e4ea;
+  font-size: 9px;
+  font-weight: 900;
+
+  letter-spacing: 0.1em;
+}
+
+.instituciones-section-header h2 {
+  margin: 5px 0;
+
+  color: var(--home-text);
+
+  font-size: 21px;
+
+  letter-spacing: -0.4px;
+}
+
+.instituciones-section-header p {
+  max-width: 530px;
+
+  margin: 0;
+
+  color: var(--home-text-secondary);
+
+  font-size: 11px;
+
+  line-height: 1.55;
+}
+
+
+/* CONTADOR */
+
+.instituciones-total {
+  min-width: 100px;
+
+  padding: 11px 15px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  border: 1px solid var(--home-border);
+
   border-radius: 12px;
 
+  background: var(--home-surface);
+}
+
+.instituciones-total strong {
+  color: var(--home-primary);
+
+  font-size: 22px;
+  line-height: 1;
+}
+
+.instituciones-total span {
+  margin-top: 5px;
+
+  color: var(--home-text-secondary);
+
+  font-size: 9px;
+}
+
+
+/* =========================================
+   GRID DE INSTITUCIONES
+========================================= */
+
+.organizaciones-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 18px;
+}
+
+
+/* =========================================
+   TARJETAS
+========================================= */
+
+.organizacion-card {
+  min-height: 300px;
+
+  padding: 18px;
+
+  display: flex;
+  flex-direction: column;
+
+  background:
+    color-mix(
+      in srgb,
+      var(--home-surface) 94%,
+      transparent
+    );
+
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--home-primary) 40%,
+      var(--home-border)
+    );
+
+  border-radius: 15px;
+
+  box-shadow:
+    0 10px 30px
+    color-mix(
+      in srgb,
+      var(--home-search-shadow) 45%,
+      transparent
+    );
+
+  overflow: hidden;
+
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .organizacion-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-5px);
 
-  border-color: #d6cdf5;
+  border-color:
+    color-mix(
+      in srgb,
+      var(--home-primary) 75%,
+      var(--home-border)
+    );
 
-  box-shadow: 0 10px 25px rgba(50, 32, 110, 0.08);
+  box-shadow:
+    0 16px 38px
+    color-mix(
+      in srgb,
+      var(--home-primary-shadow) 55%,
+      transparent
+    );
 }
 
-/* Parte superior */
+
+/* =========================================
+   PARTE SUPERIOR DE LA CARD
+========================================= */
 
 .organizacion-card-top {
-  display: grid;
-  grid-template-columns: 135px 1fr;
-  gap: 22px;
-  align-items: center;
+  width: 100%;
+
+  display: block;
+
+  position: relative;
 }
 
+
+/* =========================================
+   LOGO GRANDE Y CENTRADO
+========================================= */
+
 .organizacion-logo-container {
-  width: 135px;
-  height: 100px;
+  width: 100%;
+  height: 140px;
+
+  padding: 18px 30px;
 
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 
   overflow: hidden;
+
+  border-radius: 11px;
+
+  background: #f7f7fa;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.12);
 }
 
 .organizacion-logo {
   width: 100%;
-  max-height: 90px;
+  height: 100%;
 
-  object-fit: contain;
+  max-width: 330px;
+  max-height: 105px;
 
   display: block;
+
+  object-fit: contain;
+  object-position: center;
 }
 
-/* Información */
+
+/* =========================================
+   INSTITUCION DESTACADA
+========================================= */
+
+.institucion-destacada {
+  position: absolute;
+
+  top: 10px;
+  right: 10px;
+
+  padding: 5px 9px;
+
+  border-radius: 999px;
+
+  background: var(--home-primary);
+
+  color: var(--home-on-accent);
+
+  font-size: 8px;
+  font-weight: 800;
+
+  box-shadow:
+    0 5px 14px
+    var(--home-primary-shadow);
+}
+
+
+/* =========================================
+   INFORMACION
+========================================= */
 
 .organizacion-info {
+  margin-top: 14px;
+
   text-align: left;
 }
 
-.organizacion-info h2 {
-  margin: 0 0 10px;
 
-  color: #151b37;
+/* CATEGORIA */
 
-  font-size: 19px;
-  font-weight: 700;
+.institucion-categoria {
+  display: none;
 }
+
+
+/* NOMBRE */
+
+.organizacion-info h2 {
+  margin: 0 0 8px;
+
+  color: var(--home-text);
+
+  font-size: 18px;
+
+  line-height: 1.25;
+
+  letter-spacing: -0.3px;
+
+  font-weight: 800;
+}
+
+
+/* DESCRIPCION */
 
 .organizacion-info p {
   margin: 0;
 
-  color: #646979;
+  color: var(--home-text-secondary);
 
-  font-size: 14px;
-  line-height: 1.55;
+  font-size: 11px;
+
+  line-height: 1.6;
 }
 
-/* Botón */
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.organizacion-card-footer {
+  margin-top: auto;
+
+  padding-top: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  border-top:
+    1px solid var(--home-border);
+}
+
+
+/* CURSOS DISPONIBLES */
+
+.institucion-cursos {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+.institucion-cursos-icon {
+  width: 27px;
+  height: 27px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: var(--home-primary-light);
+
+  color: var(--home-primary);
+
+  font-size: 11px;
+}
+
+.institucion-cursos > div {
+  display: flex;
+  align-items: center;
+
+  gap: 4px;
+
+  color: var(--home-text-secondary);
+
+  font-size: 9px;
+}
+
+.institucion-cursos strong {
+  color: var(--home-text);
+
+  font-size: 10px;
+}
+
+
+/* =========================================
+   BOTON VER CURSOS
+========================================= */
 
 .organizacion-button {
-  width: 120px;
-  min-height: 42px;
+  min-height: 34px;
 
-  margin-top: 22px;
+  padding: 0 13px;
 
-  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  color: #5c2bd6;
+  gap: 7px;
 
-  border: 1px solid #d6ccf7;
-  border-radius: 7px;
+  border: 1px solid var(--home-primary);
 
-  font-size: 14px;
-  font-weight: 600;
+  border-radius: 9px;
+
+  background: transparent;
+
+  color: var(--home-primary);
+
+  font-size: 9px;
+
+  font-weight: 800;
 
   cursor: pointer;
 
   transition:
     background 0.2s ease,
     color 0.2s ease,
-    border-color 0.2s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .organizacion-button:hover {
-  background: #5c2bd6;
-  color: #ffffff;
-  border-color: #5c2bd6;
+  background: linear-gradient(
+    120deg,
+    var(--home-primary),
+    var(--home-turquoise-dark)
+  );
+
+  color: white;
+
+  border-color: transparent;
+
+  transform: translateX(2px);
+
+  box-shadow:
+    0 7px 18px
+    var(--home-primary-shadow);
 }
 
-/* Responsive */
+
+/* =========================================
+   CTA FINAL
+========================================= */
+
+.instituciones-cta-section {
+  padding: 0 0 65px;
+}
+
+.instituciones-cta {
+  padding: 24px 27px;
+
+  display: grid;
+
+  grid-template-columns:
+    auto minmax(0, 1fr) auto;
+
+  align-items: center;
+
+  gap: 20px;
+
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--home-primary) 30%,
+      var(--home-border)
+    );
+
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      120deg,
+      color-mix(
+        in srgb,
+        var(--home-primary) 10%,
+        var(--home-surface)
+      ),
+      color-mix(
+        in srgb,
+        var(--home-turquoise) 6%,
+        var(--home-surface)
+      )
+    );
+}
+
+
+/* ICONO CTA */
+
+.instituciones-cta-icon {
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: linear-gradient(
+    120deg,
+    var(--home-primary),
+    var(--home-turquoise-dark)
+  );
+
+  color: white;
+
+  font-size: 16px;
+}
+
+
+/* TEXTO CTA */
+
+.instituciones-cta-text > span {
+  color: var(--home-primary);
+
+  font-size: 8px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.08em;
+}
+
+.instituciones-cta-text h2 {
+  margin: 5px 0;
+
+  color: var(--home-text);
+
+  font-size: 18px;
+}
+
+.instituciones-cta-text p {
+  max-width: 590px;
+
+  margin: 0;
+
+  color: var(--home-text-secondary);
+
+  font-size: 10px;
+
+  line-height: 1.55;
+}
+
+
+/* BOTON CTA */
+
+.instituciones-cta > button {
+  min-height: 39px;
+
+  padding: 0 15px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: linear-gradient(
+    120deg,
+    var(--home-primary),
+    var(--home-turquoise-dark)
+  );
+
+  color: white;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 7px 18px
+    var(--home-primary-shadow);
+}
+
+
+/* =========================================
+   RESPONSIVE TABLET
+========================================= */
+
+@media (max-width: 850px) {
+
+  .organizaciones-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .instituciones-section-header {
+    align-items: flex-start;
+  }
+
+  .organizacion-logo-container {
+    height: 150px;
+  }
+}
+
+
+/* =========================================
+   RESPONSIVE CELULAR
+========================================= */
+
+@media (max-width: 650px) {
+
+  .organizaciones-container {
+    width: calc(100% - 28px);
+  }
+
+  .instituciones-hero {
+    padding: 25px 0 30px;
+  }
+
+  .organizaciones-header h1 {
+    font-size: 34px;
+
+    letter-spacing: -1.4px;
+  }
+
+  .organizaciones-header > p {
+    font-size: 12px;
+  }
+
+  .instituciones-section-header {
+    flex-direction: column;
+  }
+
+  .instituciones-total {
+    width: 100%;
+  }
+
+  .organizacion-logo-container {
+    height: 125px;
+
+    padding: 15px 22px;
+  }
+
+  .organizacion-info h2 {
+    font-size: 17px;
+  }
+
+  .organizacion-card-footer {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .organizacion-button {
+    width: 100%;
+  }
+
+  .instituciones-cta {
+    grid-template-columns: 1fr;
+
+    text-align: center;
+  }
+
+  .instituciones-cta-icon {
+    margin: 0 auto;
+  }
+
+  .instituciones-cta > button {
+    justify-content: center;
+  }
+}
+
+/* =========================================
+   AJUSTE FINAL TARJETAS INSTITUCIONES
+   Logos grandes y centrados
+========================================= */
+
+.organizaciones-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.organizacion-card {
+  min-height: 0;
+  padding: 18px;
+
+  display: flex;
+  flex-direction: column;
+
+  background: var(--home-surface);
+
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--home-primary) 40%,
+      var(--home-border)
+    );
+
+  border-radius: 16px;
+
+  overflow: hidden;
+}
+
+/* PARTE SUPERIOR */
+
+.organizacion-card-top {
+  width: 100% !important;
+
+  display: block !important;
+
+  position: relative;
+}
+
+/* CONTENEDOR DEL LOGO */
+
+.organizacion-logo-container {
+  width: 100% !important;
+  height: 180px !important;
+
+  max-width: none !important;
+
+  padding: 20px 35px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  background: #f7f7fa;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+}
+
+/* LOGO */
+
+.organizacion-logo {
+  width: 100% !important;
+  height: 100% !important;
+
+  max-width: 380px !important;
+  max-height: 135px !important;
+
+  margin: 0 auto !important;
+
+  display: block !important;
+
+  object-fit: contain !important;
+  object-position: center !important;
+}
+
+/* INFORMACIÓN DEBAJO DEL LOGO */
+
+.organizacion-info {
+  width: 100%;
+
+  margin-top: 16px !important;
+
+  text-align: left !important;
+}
+
+/* OCULTAMOS CATEGORÍA PARA QUE QUEDE COMO LA REFERENCIA */
+
+.institucion-categoria {
+  display: none !important;
+}
+
+/* NOMBRE */
+
+.organizacion-info h2 {
+  margin: 0 0 9px !important;
+
+  color: var(--home-text);
+
+  font-size: 20px !important;
+  font-weight: 800 !important;
+
+  line-height: 1.25;
+}
+
+/* DESCRIPCIÓN */
+
+.organizacion-info p {
+  margin: 0;
+
+  color: var(--home-text-secondary);
+
+  font-size: 12px !important;
+
+  line-height: 1.6;
+}
+
+/* SACAMOS EL FOOTER PARA QUE QUEDE MÁS LIMPIO */
+
+.organizacion-card-footer {
+  display: none !important;
+}
+
+/* ETIQUETA DESTACADA */
+
+.institucion-destacada {
+  position: absolute;
+
+  top: 10px;
+  right: 10px;
+
+  z-index: 2;
+
+  padding: 6px 10px;
+
+  border-radius: 999px;
+
+  background: var(--home-primary);
+
+  color: white;
+
+  font-size: 8px;
+  font-weight: 800;
+}
+
+/* HOVER */
+
+.organizacion-card:hover {
+  transform: translateY(-4px);
+
+  border-color: var(--home-primary);
+
+  box-shadow:
+    0 16px 38px
+    color-mix(
+      in srgb,
+      var(--home-primary-shadow) 45%,
+      transparent
+    );
+}
+
+/* RESPONSIVE */
 
 @media (max-width: 850px) {
   .organizaciones-grid {
     grid-template-columns: 1fr;
   }
+
+  .organizacion-logo-container {
+    height: 170px !important;
+  }
 }
 
 @media (max-width: 600px) {
-  .organizaciones-container {
-    padding: 28px 18px 50px;
-  }
-
-  .organizacion-card-top {
-    grid-template-columns: 1fr;
-  }
-
   .organizacion-logo-container {
-    width: 150px;
-    justify-content: flex-start;
+    height: 140px !important;
+
+    padding: 18px 25px !important;
   }
 
-  .organizacion-card {
-    padding: 20px;
+  .organizacion-logo {
+    max-height: 105px !important;
+  }
+
+  .organizacion-info h2 {
+    font-size: 18px !important;
   }
 }

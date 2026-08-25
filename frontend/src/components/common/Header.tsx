@@ -52,7 +52,7 @@ const menuItems = [
   { label: "Rutas de aprendizaje", path: "#" },
   { label: "Test vocacional", path: "/test" },
   { label: "Novedades", path: "#" },
-  { label: "Instituciones", path: "#" },
+  { label: "Instituciones", path: "/instituciones" },
 ];
 function Header() {
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
