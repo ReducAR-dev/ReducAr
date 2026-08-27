@@ -71,6 +71,8 @@ ESO PORQUE AUN NO SE CUAL ES LA ID NI TENGO TANTA IDEA DEL QUE HACE AUN.
 ### Commit:
 - Git push realizado: 04:46
 
+-----------------------------------------------------------------------
+
 ## 27/08 - Estructura de archivos de la carpeta Models
 
 ## Agregué los types de cada tabla 
@@ -105,7 +107,15 @@ src/
        ├ valoraciones_comentarios.ts
 
 ### Commit:
-- Git push realizado: 04:46
+- Git push realizado: 16:17
+
+-----------------------------------------------------------------------
+
+## 27/08 - Arreglos de nombres y agregue todos los models al index.ts
+
+### Commit:
+- Git push realizado: 16:21
+
 =========================================================================
 =                            BASE DE DATOS                              =
 =========================================================================
