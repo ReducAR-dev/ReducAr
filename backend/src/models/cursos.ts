@@ -1,4 +1,4 @@
-export interface cursos {
+export interface Curso {
     cupos_disponibles: number | null
     descripcion_corta: string | null
     descripcion_larga: string | null

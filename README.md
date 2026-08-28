@@ -116,6 +116,19 @@ src/
 ### Commit:
 - Git push realizado: 16:21
 
+
+-----------------------------------------------------------------------
+
+28/08 - Conexión a Supabase y Servicios
+
+**Responsable:** Jasmin Cantero (BackEnd)
+
+- Reemplacé los servicios mock por consultas reales a Supabase en `cursos.services.ts`
+- Implementé (bases) `obtenerTodosLosCursos()` y `obtenerCursoPorId()` con el cliente de Supabase
+- Actualicé el controlador `getCursoPorId` con validación de ID (`isNaN`, entero positivo)
+- Verifiqué que los endpoints `GET /cursos` y `GET /cursos/:id` funcionan con Postman (respuestas correctas aunque tabla vacía)
+
+
 =========================================================================
 =                            BASE DE DATOS                              =
 =========================================================================

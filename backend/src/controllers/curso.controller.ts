@@ -1,7 +1,7 @@
 
 import { Request, Response } from 'express';
 import { obtenerTodosLosCursos, obtenerCursoPorId } from '../services/cursos.services';
-import { Curso } from '../types/curso.types';
+import { Curso } from '../models/cursos';
 
 // Controlador para manejar la solicitud GET a la ruta /cursos
 
@@ -18,13 +18,19 @@ export const getCursos = async (req: Request, res: Response): Promise<void> => {
 };
 
 // Controlador para manejar la solicitud GET a la ruta /cursos/:id
-// esqueleto de código - A completar 
+
 export const getCursoPorId = async (req: Request, res: Response): Promise<void> => {
 
   try {
       const id = Number(req.params.id);
-      // Validación pendiente de id 
 
+      // Pendiente de implementación : Validación correcta de id 
+      
+      if ( isNaN(id) ||  id <= 0 || !Number.isInteger(id) ) {
+          res.status(400).json({ message: 'ID inválido' });
+          return;
+      }
+      
       const curso : Curso | null = await obtenerCursoPorId(id); 
       
       if (curso) {
@@ -37,8 +43,10 @@ export const getCursoPorId = async (req: Request, res: Response): Promise<void> 
       res.status(500).json({ message: 'Error al obtener el curso'});
   }
  
-
 };
+
+
+
 
 
 export const postCurso = async (req: Request, res: Response): Promise<void> => {
