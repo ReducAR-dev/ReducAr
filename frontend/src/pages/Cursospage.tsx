@@ -1,5 +1,6 @@
 
 import { useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import Header from "../components/common/Header";
 import PromoBar from "../components/features/PromoBar";
@@ -298,24 +299,42 @@ const cursos: Curso[] = [
   },
 ];
 
+const normalizeSearchText = (value: string): string =>
+  value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+
 function Cursospage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const querySearch = searchParams.get("q") ?? "";
   const [cursoSeleccionado, setCursoSeleccionado] =
     useState<Curso | null>(null);
 
-  const [busqueda, setBusqueda] = useState("");
+  const busqueda = querySearch;
   const [modalidad, setModalidad] = useState("");
   const [nivel, setNivel] = useState("");
   const [soloGratuitos, setSoloGratuitos] = useState(false);
   const [conCertificado, setConCertificado] = useState(false);
 
+  const actualizarBusqueda = (value: string): void => {
+    setSearchParams(value ? { q: value } : {}, { replace: true });
+  };
+
   const cursosFiltrados = useMemo(() => {
     return cursos.filter((curso) => {
-      const texto = busqueda.toLowerCase().trim();
+      const texto = normalizeSearchText(busqueda);
 
       const coincideBusqueda =
-        curso.titulo.toLowerCase().includes(texto) ||
-        curso.organizacion.toLowerCase().includes(texto) ||
-        curso.categoria.toLowerCase().includes(texto);
+        normalizeSearchText(curso.titulo).includes(texto) ||
+        normalizeSearchText(curso.organizacion).includes(texto) ||
+        normalizeSearchText(curso.categoria).includes(texto) ||
+        normalizeSearchText(curso.nivel).includes(texto) ||
+        normalizeSearchText(curso.descripcion).includes(texto) ||
+        normalizeSearchText(curso.descripcionCompleta).includes(texto) ||
+        normalizeSearchText(curso.contenido.join(" ")).includes(texto) ||
+        normalizeSearchText(curso.incluye.join(" ")).includes(texto);
 
       const coincideModalidad =
         !modalidad || curso.modalidad === modalidad;
@@ -346,11 +365,16 @@ function Cursospage() {
   ]);
 
   const limpiarFiltros = () => {
-    setBusqueda("");
+    setSearchParams({});
     setModalidad("");
     setNivel("");
     setSoloGratuitos(false);
     setConCertificado(false);
+  };
+
+  const confirmarBusqueda = (): void => {
+    const normalizedSearch = busqueda.trim();
+    setSearchParams(normalizedSearch ? { q: normalizedSearch } : {});
   };
 
   if (cursoSeleccionado) {
@@ -392,7 +416,13 @@ function Cursospage() {
               </p>
             </div>
 
-            <div className="courses-main-search">
+            <form
+              className="courses-main-search"
+              onSubmit={(event) => {
+                event.preventDefault();
+                confirmarBusqueda();
+              }}
+            >
               <span
                 className="courses-search-icon"
                 aria-hidden="true"
@@ -404,14 +434,14 @@ function Cursospage() {
                 type="text"
                 value={busqueda}
                 onChange={(event) =>
-                  setBusqueda(event.target.value)
+                  actualizarBusqueda(event.target.value)
                 }
                 placeholder="Buscar cursos, instituciones o categorías..."
                 aria-label="Buscar cursos"
               />
 
-              <button type="button">Buscar</button>
-            </div>
+              <button type="submit">Buscar</button>
+            </form>
           </div>
         </section>
 

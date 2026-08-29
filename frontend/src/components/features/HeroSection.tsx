@@ -1,3 +1,6 @@
+import { useState, type FormEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
 import {
   BookIcon,
   CertificateIcon,
@@ -10,6 +13,20 @@ import {
 import PromotedCoursesCarousel from "./PromotedCoursesCarousel";
 
 function HeroSection() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = (event: FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+    const normalizedSearch = searchTerm.trim();
+
+    navigate(
+      normalizedSearch
+        ? `/cursos?q=${encodeURIComponent(normalizedSearch)}`
+        : "/cursos",
+    );
+  };
+
   return (
     <section className="home-hero">
       <div className="home-hero-container">
@@ -40,12 +57,14 @@ function HeroSection() {
 
           <form
             className="home-hero-search"
-            onSubmit={(event) => event.preventDefault()}
+            onSubmit={handleSearch}
           >
             <SearchIcon />
 
             <input
               type="search"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
               placeholder="¿Qué querés aprender hoy?"
               aria-label="Buscar oportunidades"
             />
@@ -56,15 +75,15 @@ function HeroSection() {
           </form>
 
           <div className="home-hero-links">
-            <a href="#">
+            <Link to="/test">
               <CompassIcon />
               Hacer test vocacional
-            </a>
+            </Link>
 
-            <a href="#">
+            <Link to="/rutas">
               <BookIcon />
               Ver rutas de aprendizaje
-            </a>
+            </Link>
           </div>
 
           <div className="home-hero-benefits">
