@@ -3,8 +3,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Homepage from "./pages/Homepage";
 import Cursospage from "./pages/Cursospage";
 import TestPage from "./pages/TestPage";
+import ChatBot from "./components/features/chatbot/ChatBot";
 import OrganizacionesPage from "./pages/OrganizacionesPage";
 import NovedadesPage from "./pages/NovedadesPage";
+import RutasPage from "./pages/RutasPage";
 
 function App() {
   return (
@@ -26,6 +28,11 @@ function App() {
         />
 
         <Route
+          path="/rutas"
+          element={<RutasPage />}
+        />
+
+        <Route
           path="/instituciones"
           element={<OrganizacionesPage />}
         />
@@ -35,6 +42,7 @@ function App() {
           element={<NovedadesPage />}
         />
       </Routes>
+      <ChatBot />
     </BrowserRouter>
   );
 }

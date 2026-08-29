@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logoReducar from "../../assets/logo-reducar.png";
 import { SearchIcon } from "../features/Icons";
 
@@ -49,13 +49,14 @@ function MoonIcon() {
 const menuItems = [
   { label: "Inicio", path: "/" },
   { label: "Explorar cursos", path: "/cursos" },
-  { label: "Rutas de aprendizaje", path: "#" },
+  { label: "Rutas de aprendizaje", path: "/rutas" },
   { label: "Test vocacional", path: "/test" },
   { label: "Instituciones", path: "/instituciones" },
   { label: "Novedades", path: "/novedades" },
 ];
 function Header() {
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const navigate = useNavigate();
 
   useLayoutEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -90,9 +91,9 @@ function Header() {
   return (
     <header className="home-header">
       <div className="home-header-container">
-        <a href="#" className="home-logo" aria-label="Ir al inicio">
+        <Link to="/" className="home-logo" aria-label="Ir al inicio">
           <img src={logoReducar} alt="Logo de ReducAR" />
-        </a>
+        </Link>
 
         <nav className="home-nav">
           {menuItems.map((item, index) => (
@@ -113,6 +114,7 @@ function Header() {
             className="home-icon-button"
             type="button"
             aria-label="Buscar"
+            onClick={() => navigate("/cursos")}
           >
             <SearchIcon />
           </button>
