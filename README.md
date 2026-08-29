@@ -71,6 +71,64 @@ ESO PORQUE AUN NO SE CUAL ES LA ID NI TENGO TANTA IDEA DEL QUE HACE AUN.
 ### Commit:
 - Git push realizado: 04:46
 
+-----------------------------------------------------------------------
+
+## 27/08 - Estructura de archivos de la carpeta Models
+
+## Agregué los types de cada tabla 
+
+src/
+└──models/
+  └─────
+       ├ categoria.ts
+       ├ common.types.ts
+       ├ cursos.ts
+       ├ estados_curso_usuario.ts
+       ├ estados_ruta_usuario.ts
+       ├ favorito.ts
+       ├ index.ts
+       ├ instituciones.ts
+       ├ modalidades.ts
+       ├ niveles.ts
+       ├ opcion_test.ts
+       ├ preguntas_test.ts
+       ├ promociones.ts
+       ├ reportes.ts
+       ├ resultados_test_usuario.ts
+       ├ roles.ts
+       ├ rutas_aprendizaje.ts
+       ├ rutas_cursos.ts
+       ├ tests.ts
+       ├ tipos_certificado.ts
+       ├ tipos_reporte.ts
+       ├ usuario.ts
+       ├ usuarios_cursos_estado.ts
+       ├ usuarios_rutas.ts
+       ├ valoraciones_comentarios.ts
+
+### Commit:
+- Git push realizado: 16:17
+
+-----------------------------------------------------------------------
+
+## 27/08 - Arreglos de nombres y agregue todos los models al index.ts
+
+### Commit:
+- Git push realizado: 16:21
+
+
+-----------------------------------------------------------------------
+
+28/08 - Conexión a Supabase y Servicios
+
+**Responsable:** Jasmin Cantero (BackEnd)
+
+- Reemplacé los servicios mock por consultas reales a Supabase en `cursos.services.ts`
+- Implementé (bases) `obtenerTodosLosCursos()` y `obtenerCursoPorId()` con el cliente de Supabase
+- Actualicé el controlador `getCursoPorId` con validación de ID (`isNaN`, entero positivo)
+- Verifiqué que los endpoints `GET /cursos` y `GET /cursos/:id` funcionan con Postman (respuestas correctas aunque tabla vacía)
+
+
 =========================================================================
 =                            BASE DE DATOS                              =
 =========================================================================
