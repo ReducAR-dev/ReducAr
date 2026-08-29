@@ -91,7 +91,11 @@ function Header() {
   return (
     <header className="home-header">
       <div className="home-header-container">
+<<<<<<< HEAD
         <Link to="/" className="home-logo" aria-label="Ir al inicio">
+=======
+        <a href="/" className="home-logo" aria-label="Ir al inicio">
+>>>>>>> 084ca87 (Feat: arreglo de funcionamiento, reconstruccion de log-in y registro con dark mode)
           <img src={logoReducar} alt="Logo de ReducAR" />
         </Link>
 
@@ -133,11 +137,19 @@ function Header() {
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
 
-          <button className="home-login-button" type="button">
+          <button
+            className="home-login-button"
+            type="button"
+            onClick={() => window.location.href = "/login"}
+          >
             Iniciar sesión
           </button>
 
-          <button className="home-register-button" type="button">
+          <button
+            className="home-register-button"
+            type="button"
+            onClick={() => window.location.href = "/registro"}
+          >
             Registrarme
           </button>
         </div>

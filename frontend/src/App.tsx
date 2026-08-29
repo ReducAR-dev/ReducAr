@@ -6,7 +6,12 @@ import TestPage from "./pages/TestPage";
 import ChatBot from "./components/features/chatbot/ChatBot";
 import OrganizacionesPage from "./pages/OrganizacionesPage";
 import NovedadesPage from "./pages/NovedadesPage";
+<<<<<<< HEAD
 import RutasPage from "./pages/RutasPage";
+=======
+import Login from "./pages/Loginpage";
+import Register from "./pages/Registropage";
+>>>>>>> 084ca87 (Feat: arreglo de funcionamiento, reconstruccion de log-in y registro con dark mode)
 
 function App() {
   return (
@@ -40,6 +45,16 @@ function App() {
         <Route
           path="/novedades"
           element={<NovedadesPage />}
+        />
+
+        <Route
+          path="/registro"
+          element={<Register />}
+        />
+
+        <Route
+          path="/login"
+          element={<Login />}
         />
       </Routes>
       <ChatBot />
