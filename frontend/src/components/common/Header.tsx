@@ -91,14 +91,9 @@ function Header() {
   return (
     <header className="home-header">
       <div className="home-header-container">
-<<<<<<< HEAD
-        <Link to="/" className="home-logo" aria-label="Ir al inicio">
-=======
         <a href="/" className="home-logo" aria-label="Ir al inicio">
->>>>>>> 084ca87 (Feat: arreglo de funcionamiento, reconstruccion de log-in y registro con dark mode)
           <img src={logoReducar} alt="Logo de ReducAR" />
-        </Link>
-
+        </a>
         <nav className="home-nav">
           {menuItems.map((item, index) => (
   <Link

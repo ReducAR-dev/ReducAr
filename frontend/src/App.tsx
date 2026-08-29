@@ -6,12 +6,9 @@ import TestPage from "./pages/TestPage";
 import ChatBot from "./components/features/chatbot/ChatBot";
 import OrganizacionesPage from "./pages/OrganizacionesPage";
 import NovedadesPage from "./pages/NovedadesPage";
-<<<<<<< HEAD
-import RutasPage from "./pages/RutasPage";
-=======
 import Login from "./pages/Loginpage";
 import Register from "./pages/Registropage";
->>>>>>> 084ca87 (Feat: arreglo de funcionamiento, reconstruccion de log-in y registro con dark mode)
+import RutasPage from "./pages/RutasPage";
 
 function App() {
   return (
