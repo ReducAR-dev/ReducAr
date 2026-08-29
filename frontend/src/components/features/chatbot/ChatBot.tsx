@@ -19,7 +19,7 @@ function ChatBot() {
   const launcherRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { messages, isLoading, error, sendMessage, clearError } = useChatbot();
+  const { messages, isLoading, isStreaming, error, sendMessage, clearError } = useChatbot();
 
   useEffect(() => {
     if (!isOpen) {
@@ -110,14 +110,14 @@ function ChatBot() {
           <header className="chatbot-header">
             <div className="chatbot-avatar" aria-hidden="true">R</div>
             <div>
-              <h2 id="reduc-ar-chat-title">Asistente ReducAR</h2>
+              <h2 id="reduc-ar-chat-title">RedBot</h2>
               <p><span aria-hidden="true" /> Asistente virtual</p>
             </div>
             <button
               className="chatbot-close"
               type="button"
               onClick={closeChat}
-              aria-label="Cerrar asistente ReducAR"
+              aria-label="Cerrar RedBot"
             >
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -161,8 +161,8 @@ function ChatBot() {
               />
             )}
 
-            {isLoading && (
-              <div className="chatbot-typing" role="status" aria-label="El asistente está escribiendo">
+            {isLoading && !isStreaming && (
+              <div className="chatbot-typing" role="status" aria-label="RedBot está escribiendo">
                 <span />
                 <span />
                 <span />

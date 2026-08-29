@@ -52,7 +52,7 @@ const formatSupportEmail = (request: EscalateRequest): string => {
     date,
     '',
     'Origen:',
-    'Chatbot ReducAR',
+    'RedBot de ReducAR',
   ].join('\n');
 };
 
@@ -85,7 +85,7 @@ export const sendSupportEmail = async (
       body: JSON.stringify({
         from: fromEmail,
         to: [supportEmail],
-        subject: 'Nueva consulta desde el chatbot de ReducAR',
+        subject: 'Nueva consulta enviada desde RedBot',
         text: formatSupportEmail(request),
       }),
       signal: controller.signal,
