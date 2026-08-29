@@ -1,6 +1,11 @@
-import { useState } from "react";
-import logoCursos from "../assets/Logo-cursos.png";
+
+import { useMemo, useState } from "react";
+
+import Header from "../components/common/Header";
+import PromoBar from "../components/features/PromoBar";
 import CursoDetallePage from "./CursoDetallePage";
+
+import "../styles/cursos.css";
 
 export type Curso = {
   titulo: string;
@@ -78,6 +83,7 @@ const cursos: Curso[] = [
     nivel: "Inicial",
     gratuito: true,
     certificado: true,
+    etiqueta: "Recomendado",
     imagen:
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80",
     descripcion:
@@ -122,6 +128,7 @@ const cursos: Curso[] = [
     nivel: "Inicial",
     gratuito: true,
     certificado: true,
+    etiqueta: "Nuevo",
     imagen:
       "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80",
     descripcion:
@@ -295,6 +302,57 @@ function Cursospage() {
   const [cursoSeleccionado, setCursoSeleccionado] =
     useState<Curso | null>(null);
 
+  const [busqueda, setBusqueda] = useState("");
+  const [modalidad, setModalidad] = useState("");
+  const [nivel, setNivel] = useState("");
+  const [soloGratuitos, setSoloGratuitos] = useState(false);
+  const [conCertificado, setConCertificado] = useState(false);
+
+  const cursosFiltrados = useMemo(() => {
+    return cursos.filter((curso) => {
+      const texto = busqueda.toLowerCase().trim();
+
+      const coincideBusqueda =
+        curso.titulo.toLowerCase().includes(texto) ||
+        curso.organizacion.toLowerCase().includes(texto) ||
+        curso.categoria.toLowerCase().includes(texto);
+
+      const coincideModalidad =
+        !modalidad || curso.modalidad === modalidad;
+
+      const coincideNivel =
+        !nivel || curso.nivel === nivel;
+
+      const coincideGratuito =
+        !soloGratuitos || curso.gratuito;
+
+      const coincideCertificado =
+        !conCertificado || curso.certificado;
+
+      return (
+        coincideBusqueda &&
+        coincideModalidad &&
+        coincideNivel &&
+        coincideGratuito &&
+        coincideCertificado
+      );
+    });
+  }, [
+    busqueda,
+    modalidad,
+    nivel,
+    soloGratuitos,
+    conCertificado,
+  ]);
+
+  const limpiarFiltros = () => {
+    setBusqueda("");
+    setModalidad("");
+    setNivel("");
+    setSoloGratuitos(false);
+    setConCertificado(false);
+  };
+
   if (cursoSeleccionado) {
     return (
       <CursoDetallePage
@@ -305,243 +363,308 @@ function Cursospage() {
   }
 
   return (
-    <div className="explorar-page">
-      <header className="topbar">
-        <div className="brand">
-          <img
-            src={logoCursos}
-            alt="Logo de ReducAR"
-            className="brand-logo"
-          />
-        </div>
+    <div className="courses-page">
+      <Header />
+      <PromoBar />
 
-        <nav className="topnav">
-          <a className="active" href="#">
-            Explorar
-          </a>
-          <a href="#">Organizaciones</a>
-          <a href="#">Rutas</a>
-          <a href="#">Test</a>
-          <a href="#">Novedades</a>
-        </nav>
-
-        <div className="auth-actions">
-          <button className="btn-login">
-            Iniciar sesión
-          </button>
-
-          <button className="btn-register">
-            Registrarse
-          </button>
-        </div>
-      </header>
-
-      <main className="explorar-container">
-        <div className="breadcrumb">
-          <span>Inicio</span>
-          <span>›</span>
-          <span>Cursos</span>
-        </div>
-
-        <h1>Explorar cursos</h1>
-
-        <div className="content-layout">
-          <aside className="sidebar">
-            <div className="filter-group">
-              <div className="filter-title">
-                <strong>Modalidad</strong>
-                <span>⌃</span>
-              </div>
-
-              <label>
-                <input
-                  type="radio"
-                  name="modalidad"
-                />
-                Virtual
-              </label>
-
-              <label>
-                <input
-                  type="radio"
-                  name="modalidad"
-                />
-                Presencial
-              </label>
-
-              <label>
-                <input
-                  type="radio"
-                  name="modalidad"
-                />
-                Híbrida
-              </label>
+      <main>
+        <section className="courses-hero">
+          <div className="courses-container">
+            <div className="courses-breadcrumb">
+              <span>Inicio</span>
+              <span>›</span>
+              <strong>Explorar cursos</strong>
             </div>
 
-            <div className="filter-group">
-              <div className="filter-title">
-                <strong>Nivel</strong>
-                <span>⌃</span>
-              </div>
+            <div className="courses-heading">
+              <span className="courses-eyebrow">
+                ✦ Formación para tu futuro
+              </span>
 
-              <label>
-                <input
-                  type="radio"
-                  name="nivel"
-                />
-                Inicial
-              </label>
+              <h1>
+                Explorá cursos y encontrá
+                <span> tu próxima oportunidad</span>
+              </h1>
 
-              <label>
-                <input
-                  type="radio"
-                  name="nivel"
-                />
-                Intermedio
-              </label>
-
-              <label>
-                <input
-                  type="radio"
-                  name="nivel"
-                />
-                Avanzado
-              </label>
+              <p>
+                Descubrí capacitaciones gratuitas y oportunidades de
+                formación ofrecidas por organizaciones e instituciones.
+              </p>
             </div>
 
-            <div className="toggle-row">
-              <span>Gratuitos</span>
+            <div className="courses-main-search">
+              <span
+                className="courses-search-icon"
+                aria-hidden="true"
+              >
+                ⌕
+              </span>
 
-              <label className="switch">
-                <input type="checkbox" />
-                <span className="slider"></span>
-              </label>
+              <input
+                type="text"
+                value={busqueda}
+                onChange={(event) =>
+                  setBusqueda(event.target.value)
+                }
+                placeholder="Buscar cursos, instituciones o categorías..."
+                aria-label="Buscar cursos"
+              />
+
+              <button type="button">Buscar</button>
             </div>
+          </div>
+        </section>
 
-            <div className="toggle-row">
-              <span>Con certificado</span>
+        <section className="courses-content-section">
+          <div className="courses-container courses-layout">
+            <aside className="courses-sidebar">
+              <div className="courses-filter-heading">
+                <div>
+                  <span className="courses-filter-label">
+                    FILTROS
+                  </span>
 
-              <label className="switch">
-                <input type="checkbox" />
-                <span className="slider"></span>
-              </label>
-            </div>
+                  <h2>Filtrá tu búsqueda</h2>
+                </div>
 
-            <div className="filter-group">
-              <div className="filter-title">
-                <strong>Categorías</strong>
-                <span>⌃</span>
-              </div>
-
-              {[
-                "Tecnología",
-                "Marketing",
-                "Idiomas",
-                "Diseño",
-                "Administración",
-              ].map((categoria) => (
-                <label key={categoria}>
-                  <input type="checkbox" />
-                  {categoria}
-                </label>
-              ))}
-
-              <button className="ver-mas">
-                Ver más ›
-              </button>
-            </div>
-          </aside>
-
-          <section className="courses-area">
-            <div className="search-row">
-              <div className="search-box">
-                <span>⌕</span>
-
-                <input
-                  type="text"
-                  placeholder="Buscar cursos..."
-                />
-              </div>
-
-              <button className="filter-button">
-                ☷
-                <span>Filtros</span>
-              </button>
-            </div>
-
-            <div className="course-grid">
-              {cursos.map((curso) => (
-                <article
-                  className="course-card"
-                  key={curso.titulo}
-                  onClick={() =>
-                    setCursoSeleccionado(curso)
-                  }
+                <button
+                  type="button"
+                  className="courses-clear"
+                  onClick={limpiarFiltros}
                 >
-                  <div className="course-image-wrapper">
-                    <img
-                      src={curso.imagen}
-                      alt={curso.titulo}
-                      className="course-image"
-                    />
+                  Limpiar
+                </button>
+              </div>
 
-                    {curso.etiqueta && (
-                      <span className="course-badge">
-                        {curso.etiqueta}
-                      </span>
-                    )}
-                  </div>
+              <div className="courses-filter-group">
+                <h3>Modalidad</h3>
 
-                  <div className="course-content">
-                    <h3>{curso.titulo}</h3>
+                {["Virtual", "Presencial", "Híbrida"].map(
+                  (opcion) => (
+                    <label key={opcion}>
+                      <input
+                        type="radio"
+                        name="modalidad"
+                        checked={modalidad === opcion}
+                        onChange={() =>
+                          setModalidad(opcion)
+                        }
+                      />
 
-                    <p className="organization">
-                      {curso.organizacion}
-                    </p>
+                      <span>{opcion}</span>
+                    </label>
+                  )
+                )}
+              </div>
 
-                    <div className="course-info">
-                      <span>
-                        ◉ {curso.modalidad}
-                      </span>
+              <div className="courses-filter-group">
+                <h3>Nivel</h3>
 
-                      <span>•</span>
+                {["Inicial", "Intermedio", "Avanzado"].map(
+                  (opcion) => (
+                    <label key={opcion}>
+                      <input
+                        type="radio"
+                        name="nivel"
+                        checked={nivel === opcion}
+                        onChange={() =>
+                          setNivel(opcion)
+                        }
+                      />
 
-                      <span>
-                        {curso.duracion}
-                      </span>
-                    </div>
+                      <span>{opcion}</span>
+                    </label>
+                  )
+                )}
+              </div>
 
-                    <div className="course-tags">
-                      <span>
-                        {curso.categoria}
-                      </span>
+              <div className="courses-switch-row">
+                <div>
+                  <strong>Solo gratuitos</strong>
+                  <span>Mostrar cursos sin costo</span>
+                </div>
 
-                      {curso.gratuito && (
-                        <span>Gratuito</span>
-                      )}
+                <label className="courses-switch">
+                  <input
+                    type="checkbox"
+                    checked={soloGratuitos}
+                    onChange={(event) =>
+                      setSoloGratuitos(
+                        event.target.checked
+                      )
+                    }
+                  />
 
-                      {curso.certificado && (
-                        <span>Certificado</span>
-                      )}
-                    </div>
-                  </div>
-                </article>
-              ))}
+                  <span className="courses-slider" />
+                </label>
+              </div>
+
+              <div className="courses-switch-row">
+                <div>
+                  <strong>Con certificado</strong>
+                  <span>Incluyen certificación</span>
+                </div>
+
+                <label className="courses-switch">
+                  <input
+                    type="checkbox"
+                    checked={conCertificado}
+                    onChange={(event) =>
+                      setConCertificado(
+                        event.target.checked
+                      )
+                    }
+                  />
+
+                  <span className="courses-slider" />
+                </label>
+              </div>
+            </aside>
+
+            <div className="courses-results">
+              <div className="courses-results-top">
+                <div>
+                  <span className="courses-results-label">
+                    CURSOS DISPONIBLES
+                  </span>
+
+                  <h2>
+                    Encontrá la formación ideal para vos
+                  </h2>
+
+                  <p>
+                    {cursosFiltrados.length}{" "}
+                    {cursosFiltrados.length === 1
+                      ? "curso encontrado"
+                      : "cursos encontrados"}
+                  </p>
+                </div>
+
+                <select
+                  className="courses-order"
+                  defaultValue="recomendados"
+                  aria-label="Ordenar cursos"
+                >
+                  <option value="recomendados">
+                    Más recomendados
+                  </option>
+
+                  <option value="nombre">
+                    Nombre A-Z
+                  </option>
+
+                  <option value="duracion">
+                    Duración
+                  </option>
+                </select>
+              </div>
+
+              {cursosFiltrados.length > 0 ? (
+                <div className="courses-grid">
+                  {cursosFiltrados.map((curso) => (
+                    <article
+                      className="courses-card"
+                      key={curso.titulo}
+                      onClick={() =>
+                        setCursoSeleccionado(curso)
+                      }
+                    >
+                      <div className="courses-card-image">
+                        <img
+                          src={curso.imagen}
+                          alt={curso.titulo}
+                        />
+
+                        <div className="courses-card-badges">
+                          {curso.etiqueta && (
+                            <span className="courses-badge courses-badge-featured">
+                              {curso.etiqueta}
+                            </span>
+                          )}
+
+                          {curso.gratuito && (
+                            <span className="courses-badge">
+                              Gratuito
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="courses-card-content">
+                        <span className="courses-category">
+                          {curso.categoria}
+                        </span>
+
+                        <h3>{curso.titulo}</h3>
+
+                        <p className="courses-organization">
+                          {curso.organizacion}
+                        </p>
+
+                        <p className="courses-description">
+                          {curso.descripcion}
+                        </p>
+
+                        <div className="courses-card-info">
+                          <span>
+                            ◉ {curso.modalidad}
+                          </span>
+
+                          <span>
+                            ◷ {curso.duracion}
+                          </span>
+                        </div>
+
+                        <div className="courses-card-footer">
+                          <div>
+                            <span className="courses-level">
+                              {curso.nivel}
+                            </span>
+
+                            {curso.certificado && (
+                              <span className="courses-certificate">
+                                ✓ Certificado
+                              </span>
+                            )}
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              setCursoSeleccionado(curso);
+                            }}
+                            aria-label={`Ver ${curso.titulo}`}
+                          >
+                            →
+                          </button>
+                        </div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <div className="courses-empty">
+                  <div aria-hidden="true">⌕</div>
+
+                  <h3>No encontramos cursos</h3>
+
+                  <p>
+                    Probá modificando tu búsqueda o
+                    eliminando algunos filtros.
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={limpiarFiltros}
+                  >
+                    Limpiar filtros
+                  </button>
+                </div>
+              )}
             </div>
-
-            <div className="pagination">
-              <button className="page-active">
-                1
-              </button>
-
-              <button>2</button>
-              <button>3</button>
-              <span>...</span>
-              <button>10</button>
-              <button>›</button>
-            </div>
-          </section>
-        </div>
+          </div>
+        </section>
       </main>
     </div>
   );

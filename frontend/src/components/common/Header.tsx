@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import logoReducar from "../../assets/logo-reducar.png";
 import { SearchIcon } from "../features/Icons";
 
@@ -46,14 +47,13 @@ function MoonIcon() {
 }
 
 const menuItems = [
-  "Inicio",
-  "Explorar cursos",
-  "Rutas de aprendizaje",
-  "Test vocacional",
-  "Novedades",
-  "Instituciones",
+  { label: "Inicio", path: "/" },
+  { label: "Explorar cursos", path: "/cursos" },
+  { label: "Rutas de aprendizaje", path: "#" },
+  { label: "Test vocacional", path: "/test" },
+  { label: "Instituciones", path: "/instituciones" },
+  { label: "Novedades", path: "/novedades" },
 ];
-
 function Header() {
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
 
@@ -96,16 +96,16 @@ function Header() {
 
         <nav className="home-nav">
           {menuItems.map((item, index) => (
-            <a
-              key={item}
-              href="#"
-              className={`home-nav-link ${
-                index === 0 ? "home-nav-link-active" : ""
-              }`}
-            >
-              {item}
-            </a>
-          ))}
+  <Link
+    key={item.label}
+    to={item.path}
+    className={`home-nav-link ${
+      index === 0 ? "home-nav-link-active" : ""
+    }`}
+  >
+    {item.label}
+  </Link>
+))}
         </nav>
 
         <div className="home-header-actions">
