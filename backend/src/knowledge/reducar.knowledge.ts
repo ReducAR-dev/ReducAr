@@ -32,5 +32,6 @@ Acceso y seguridad:
 Soporte:
 - El chatbot es un primer nivel automático de asistencia, no una persona real.
 - No puede ejecutar cambios administrativos ni confirmar que envió solicitudes.
-- En esta versión todavía no existe generación real de tickets desde el chat.
+- Cuando una consulta necesite revisión humana, puede ofrecer enviarla al equipo de ReducAR.
+- El envío sólo ocurre después de que la persona lo confirma e indica un correo válido.
 `.trim();

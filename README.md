@@ -193,3 +193,70 @@ src/
 
 ### Commit:
 - Git push realizado: 23:05
+
+-----------------------------------------------------------------------
+
+## Chatbot
+
+El chatbot de ReducAR es un asistente virtual en español que responde mediante una API de IA
+ejecutada exclusivamente desde el backend. Utiliza el contexto verificado de la plataforma,
+evita inventar oportunidades y marca las consultas que requieren intervención humana.
+
+### Endpoints
+
+- `POST /api/chat`: recibe `message` y, opcionalmente, hasta ocho mensajes de historial. Devuelve
+  la respuesta, su categoría y `requiresHumanSupport`.
+- `POST /api/chat/escalate`: recibe `message`, `email` y un `name` opcional. Sólo se utiliza cuando
+  el usuario confirma que desea enviar la consulta al equipo.
+
+Ambos endpoints validan el contenido y tienen rate limiting. Si Gemini o el servicio de correo
+fallan, el servidor responde de forma controlada y no expone credenciales.
+
+### Variables de entorno
+
+Copiar `backend/.env.example` a `backend/.env` y completar:
+
+```env
+PORT=3000
+FRONTEND_ORIGIN=http://localhost:5173
+CHAT_PROVIDER=gemini
+GEMINI_API_KEY=your_api_key_here
+GEMINI_MODEL=gemini-3.7-flash
+RESEND_API_KEY=your_resend_api_key_here
+RESEND_FROM_EMAIL=ReducAR <soporte@your_verified_domain.com>
+SUPPORT_EMAIL=equipo@your_domain.com
+```
+
+La clave de Gemini se crea en Google AI Studio. La clave de Resend debe tener permiso de envío y
+el remitente debe pertenecer a un dominio verificado. Nunca colocar estas claves en el frontend,
+el README ni archivos versionados. Groq puede conservarse como respaldo opcional configurando
+`CHAT_PROVIDER=groq`, `GROQ_API_KEY` y `GROQ_MODEL`.
+
+Copiar `frontend/.env.example` a `frontend/.env` y configurar la URL pública del backend:
+
+```env
+VITE_API_URL=http://localhost:3000
+```
+
+En producción, `FRONTEND_ORIGIN` debe contener el origen público del frontend y `VITE_API_URL` la
+URL pública del backend.
+
+### Desarrollo local
+
+En dos terminales:
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Abrir el frontend, iniciar el asistente desde el botón flotante y probar una consulta general y
+otra que requiera soporte, por ejemplo: `No puedo entrar a mi cuenta y necesito hablar con alguien`.
+El correo sólo se solicita y envía después de presionar **Enviar consulta** y confirmar el formulario.

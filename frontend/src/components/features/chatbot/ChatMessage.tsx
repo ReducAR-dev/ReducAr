@@ -3,9 +3,16 @@ import type { ChatUiMessage } from "../../../types/chatbot.types";
 interface ChatMessageProps {
   message: ChatUiMessage;
   onRequestHelp: () => void;
+  onDeclineHelp: () => void;
+  helpDismissed: boolean;
 }
 
-function ChatMessage({ message, onRequestHelp }: ChatMessageProps) {
+function ChatMessage({
+  message,
+  onRequestHelp,
+  onDeclineHelp,
+  helpDismissed,
+}: ChatMessageProps) {
   const isAssistant = message.role === "assistant";
 
   return (
@@ -21,12 +28,17 @@ function ChatMessage({ message, onRequestHelp }: ChatMessageProps) {
 
       <p>{message.content}</p>
 
-      {message.requiresAdmin && (
+      {message.requiresHumanSupport && !helpDismissed && (
         <div className="chatbot-admin-notice">
           <strong>Esta consulta necesita revisión del equipo de ReducAR.</strong>
-          <button type="button" onClick={onRequestHelp}>
-            Solicitar ayuda
-          </button>
+          <div className="chatbot-admin-actions">
+            <button type="button" onClick={onRequestHelp}>
+              Enviar consulta
+            </button>
+            <button type="button" onClick={onDeclineHelp}>
+              No, gracias
+            </button>
+          </div>
         </div>
       )}
     </article>

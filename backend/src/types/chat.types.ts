@@ -22,22 +22,40 @@ export interface ChatRequest {
   messages?: ChatConversationMessage[];
 }
 
-export interface ChatResponse {
+export interface ChatDecision {
   message: string;
   category: ChatCategory;
   resolved: boolean;
-  requiresAdmin: boolean;
+  requiresHumanSupport: boolean;
+}
+
+export interface ChatResponse extends ChatDecision {
+  success: true;
+}
+
+export interface EscalateRequest {
+  message: string;
+  email: string;
+  name?: string;
+}
+
+export interface EscalateResponse {
+  success: true;
+  message: string;
 }
 
 export type ChatErrorCode =
   | 'INVALID_MESSAGE'
+  | 'INVALID_ESCALATION'
   | 'CHAT_PROVIDER_UNAVAILABLE'
   | 'CHAT_SERVICE_ERROR'
+  | 'EMAIL_SERVICE_UNAVAILABLE'
   | 'RATE_LIMIT_EXCEEDED'
   | 'METHOD_NOT_ALLOWED'
   | 'CHAT_ROUTE_NOT_FOUND';
 
 export interface ChatErrorResponse {
+  success: false;
   error: ChatErrorCode;
   message: string;
 }

@@ -85,7 +85,8 @@ export const useChatbot = () => {
             content: response.message,
             category: response.category,
             resolved: response.resolved,
-            requiresAdmin: response.requiresAdmin,
+            requiresHumanSupport: response.requiresHumanSupport,
+            escalationMessage: normalizedContent,
           },
         ]);
       } catch (requestError) {
