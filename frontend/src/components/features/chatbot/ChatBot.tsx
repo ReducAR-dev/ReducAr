@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
 import { useChatbot } from "../../../hooks/useChatbot";
+import { escalateChatMessage } from "../../../services/chatbotApi";
+import type { ChatUiMessage } from "../../../types/chatbot.types";
 import "../../../styles/chatbot.css";
+import ChatEscalationForm from "./ChatEscalationForm";
 import ChatInput from "./ChatInput";
 import ChatLauncher from "./ChatLauncher";
 import ChatMessage from "./ChatMessage";
@@ -9,6 +12,10 @@ import ChatMessage from "./ChatMessage";
 function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [helpNotice, setHelpNotice] = useState<string | null>(null);
+  const [escalationTarget, setEscalationTarget] = useState<ChatUiMessage | null>(null);
+  const [dismissedHelp, setDismissedHelp] = useState<Set<string>>(() => new Set());
+  const [isEscalating, setIsEscalating] = useState(false);
+  const [escalationError, setEscalationError] = useState<string | null>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -26,7 +33,7 @@ function ChatBot() {
     if (isOpen) {
       messagesEndRef.current?.scrollIntoView({ block: "nearest" });
     }
-  }, [error, isLoading, isOpen, messages]);
+  }, [error, escalationTarget, helpNotice, isLoading, isOpen, messages]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -47,6 +54,47 @@ function ChatBot() {
   const closeChat = (): void => {
     setIsOpen(false);
     requestAnimationFrame(() => launcherRef.current?.focus());
+  };
+
+  const dismissHelp = (messageId: string): void => {
+    setDismissedHelp((current) => {
+      const next = new Set(current);
+      next.add(messageId);
+      return next;
+    });
+
+    if (escalationTarget?.id === messageId) {
+      setEscalationTarget(null);
+      setEscalationError(null);
+    }
+  };
+
+  const submitEscalation = async (contact: {
+    email: string;
+    name?: string;
+  }): Promise<void> => {
+    const message = escalationTarget?.escalationMessage;
+
+    if (!escalationTarget || !message || isEscalating) {
+      return;
+    }
+
+    setIsEscalating(true);
+    setEscalationError(null);
+
+    try {
+      await escalateChatMessage({ message, ...contact });
+      dismissHelp(escalationTarget.id);
+      setHelpNotice(
+        "¡Listo! Envié tu consulta al equipo de ReducAR. Van a poder revisar tu caso.",
+      );
+    } catch {
+      setEscalationError(
+        "No pude enviar la consulta en este momento. Podés intentar nuevamente más tarde.",
+      );
+    } finally {
+      setIsEscalating(false);
+    }
   };
 
   return (
@@ -91,13 +139,27 @@ function ChatBot() {
               <ChatMessage
                 key={message.id}
                 message={message}
-                onRequestHelp={() =>
-                  setHelpNotice(
-                    "La generación de solicitudes todavía no está disponible. El equipo la incorporará en una próxima etapa.",
-                  )
-                }
+                helpDismissed={dismissedHelp.has(message.id)}
+                onRequestHelp={() => {
+                  setEscalationTarget(message);
+                  setEscalationError(null);
+                  setHelpNotice(null);
+                }}
+                onDeclineHelp={() => dismissHelp(message.id)}
               />
             ))}
+
+            {escalationTarget && (
+              <ChatEscalationForm
+                disabled={isEscalating}
+                error={escalationError}
+                onCancel={() => {
+                  setEscalationTarget(null);
+                  setEscalationError(null);
+                }}
+                onSubmit={submitEscalation}
+              />
+            )}
 
             {isLoading && (
               <div className="chatbot-typing" role="status" aria-label="El asistente está escribiendo">
@@ -126,7 +188,7 @@ function ChatBot() {
 
           <ChatInput
             ref={inputRef}
-            disabled={isLoading}
+            disabled={isLoading || isEscalating}
             onSend={sendMessage}
             onChange={() => {
               clearError();

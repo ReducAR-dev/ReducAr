@@ -2,9 +2,10 @@ import type {
   ChatApiRequest,
   ChatApiResponse,
   ChatCategory,
+  EscalateApiRequest,
+  EscalateApiResponse,
 } from "../types/chatbot.types";
 
-const DEFAULT_API_URL = "http://localhost:3000";
 const CHAT_CATEGORIES: readonly ChatCategory[] = [
   "ACCESO",
   "CAPACITACIONES",
@@ -14,7 +15,7 @@ const CHAT_CATEGORIES: readonly ChatCategory[] = [
 ];
 
 const configuredApiUrl = import.meta.env.VITE_API_URL?.trim();
-const API_URL = (configuredApiUrl || DEFAULT_API_URL).replace(/\/$/, "");
+const API_URL = (configuredApiUrl || "").replace(/\/$/, "");
 
 export class ChatbotApiError extends Error {
   readonly status: number;
@@ -36,12 +37,36 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 
 const isChatApiResponse = (value: unknown): value is ChatApiResponse =>
   isRecord(value) &&
+  value.success === true &&
   typeof value.message === "string" &&
   value.message.trim().length > 0 &&
   typeof value.category === "string" &&
   CHAT_CATEGORIES.includes(value.category as ChatCategory) &&
   typeof value.resolved === "boolean" &&
-  typeof value.requiresAdmin === "boolean";
+  typeof value.requiresHumanSupport === "boolean";
+
+const isEscalateApiResponse = (value: unknown): value is EscalateApiResponse =>
+  isRecord(value) &&
+  value.success === true &&
+  typeof value.message === "string" &&
+  value.message.trim().length > 0;
+
+const readJsonResponse = async (response: Response): Promise<unknown> => {
+  try {
+    return await response.json();
+  } catch {
+    throw new ChatbotApiError(response.status, "INVALID_SERVER_RESPONSE");
+  }
+};
+
+const throwResponseError = (response: Response, payload: unknown): never => {
+  const code =
+    isRecord(payload) && typeof payload.error === "string"
+      ? payload.error
+      : "CHAT_SERVICE_ERROR";
+
+  throw new ChatbotApiError(response.status, code);
+};
 
 export const sendChatMessage = async (
   request: ChatApiRequest,
@@ -66,24 +91,43 @@ export const sendChatMessage = async (
     throw new ChatbotApiError(0, "NETWORK_ERROR");
   }
 
-  let payload: unknown;
-
-  try {
-    payload = await response.json();
-  } catch {
-    throw new ChatbotApiError(response.status, "INVALID_SERVER_RESPONSE");
-  }
+  const payload = await readJsonResponse(response);
 
   if (!response.ok) {
-    const code =
-      isRecord(payload) && typeof payload.error === "string"
-        ? payload.error
-        : "CHAT_SERVICE_ERROR";
-
-    throw new ChatbotApiError(response.status, code);
+    throwResponseError(response, payload);
   }
 
   if (!isChatApiResponse(payload)) {
+    throw new ChatbotApiError(response.status, "INVALID_SERVER_RESPONSE");
+  }
+
+  return payload;
+};
+
+export const escalateChatMessage = async (
+  request: EscalateApiRequest,
+): Promise<EscalateApiResponse> => {
+  let response: Response;
+
+  try {
+    response = await fetch(`${API_URL}/api/chat/escalate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+    });
+  } catch {
+    throw new ChatbotApiError(0, "NETWORK_ERROR");
+  }
+
+  const payload = await readJsonResponse(response);
+
+  if (!response.ok) {
+    throwResponseError(response, payload);
+  }
+
+  if (!isEscalateApiResponse(payload)) {
     throw new ChatbotApiError(response.status, "INVALID_SERVER_RESPONSE");
   }
 

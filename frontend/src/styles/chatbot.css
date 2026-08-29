@@ -211,6 +211,13 @@
   line-height: 1.5;
 }
 
+.chatbot-admin-actions,
+.chatbot-escalation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
 .chatbot-admin-notice button,
 .chatbot-error button,
 .chatbot-help-notice button {
@@ -222,6 +229,85 @@
   border-radius: 9px;
   font-size: 11px;
   font-weight: 800;
+}
+
+.chatbot-admin-actions button:last-child,
+.chatbot-escalation-actions button:last-child {
+  color: var(--home-text-secondary);
+  background: var(--home-surface);
+  border-color: var(--home-border);
+}
+
+.chatbot-escalation-form {
+  margin: 8px 0 14px;
+  padding: 13px;
+  color: var(--home-text);
+  background: var(--home-surface);
+  border: 1px solid var(--home-button-border);
+  border-radius: 14px;
+  box-shadow: 0 5px 16px var(--home-search-shadow);
+}
+
+.chatbot-escalation-form > strong {
+  display: block;
+  font-size: 12.5px;
+}
+
+.chatbot-escalation-form > p {
+  margin: 4px 0 10px;
+  color: var(--home-text-secondary);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.chatbot-escalation-form label {
+  margin: 8px 0 4px;
+  display: block;
+  color: var(--home-text-secondary);
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+.chatbot-escalation-form input {
+  width: 100%;
+  padding: 9px 10px;
+  color: var(--home-text);
+  background: var(--home-surface-soft);
+  border: 1px solid var(--home-border);
+  border-radius: 9px;
+  outline: 0;
+  font: inherit;
+  font-size: 12px;
+}
+
+.chatbot-escalation-form input:focus {
+  border-color: var(--home-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--home-primary) 12%, transparent);
+}
+
+.chatbot-escalation-form .chatbot-escalation-error {
+  margin: 9px 0 0;
+  color: #b42318;
+  font-weight: 700;
+}
+
+.chatbot-escalation-actions {
+  margin-top: 11px;
+}
+
+.chatbot-escalation-actions button {
+  padding: 8px 10px;
+  color: var(--home-on-accent);
+  background: var(--home-primary);
+  border: 1px solid var(--home-primary);
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.chatbot-escalation-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 .chatbot-typing {

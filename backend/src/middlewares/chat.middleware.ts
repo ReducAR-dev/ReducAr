@@ -7,59 +7,73 @@ import type { ChatErrorResponse } from '../types/chat.types.js';
 
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX_REQUESTS = 10;
+const ESCALATION_RATE_LIMIT_WINDOW_MS = 10 * 60_000;
+const ESCALATION_RATE_LIMIT_MAX_REQUESTS = 3;
 
 interface RateLimitEntry {
   count: number;
   resetAt: number;
 }
 
-const requestsByIp = new Map<string, RateLimitEntry>();
+const createRateLimit = (
+  windowMs: number,
+  maxRequests: number,
+  message: string,
+): RequestHandler<unknown, ChatErrorResponse> => {
+  const requestsByIp = new Map<string, RateLimitEntry>();
 
-const removeExpiredEntries = (now: number): void => {
-  if (requestsByIp.size < 1_000) {
-    return;
-  }
+  return (req, res, next): void => {
+    const now = Date.now();
+    const ip = req.ip || req.socket.remoteAddress || 'unknown';
+    const currentEntry = requestsByIp.get(ip);
+    const entry =
+      !currentEntry || currentEntry.resetAt <= now
+        ? { count: 0, resetAt: now + windowMs }
+        : currentEntry;
 
-  for (const [ip, entry] of requestsByIp) {
-    if (entry.resetAt <= now) {
-      requestsByIp.delete(ip);
+    res.setHeader('RateLimit-Limit', maxRequests);
+    res.setHeader(
+      'RateLimit-Reset',
+      Math.ceil((entry.resetAt - now) / 1_000),
+    );
+
+    if (entry.count >= maxRequests) {
+      res.setHeader('Retry-After', Math.ceil((entry.resetAt - now) / 1_000));
+      res.status(429).json({
+        success: false,
+        error: 'RATE_LIMIT_EXCEEDED',
+        message,
+      });
+      return;
     }
-  }
+
+    entry.count += 1;
+    requestsByIp.set(ip, entry);
+    res.setHeader('RateLimit-Remaining', maxRequests - entry.count);
+
+    if (requestsByIp.size >= 1_000) {
+      for (const [storedIp, storedEntry] of requestsByIp) {
+        if (storedEntry.resetAt <= now) {
+          requestsByIp.delete(storedIp);
+        }
+      }
+    }
+
+    next();
+  };
 };
 
-export const chatRateLimit: RequestHandler<
-  unknown,
-  ChatErrorResponse
-> = (req, res, next): void => {
-  const now = Date.now();
-  const ip = req.ip || req.socket.remoteAddress || 'unknown';
-  const currentEntry = requestsByIp.get(ip);
-  const entry =
-    !currentEntry || currentEntry.resetAt <= now
-      ? { count: 0, resetAt: now + RATE_LIMIT_WINDOW_MS }
-      : currentEntry;
+export const chatRateLimit = createRateLimit(
+  RATE_LIMIT_WINDOW_MS,
+  RATE_LIMIT_MAX_REQUESTS,
+  'Realizaste demasiadas consultas. Intentá nuevamente en un minuto.',
+);
 
-  res.setHeader('RateLimit-Limit', RATE_LIMIT_MAX_REQUESTS);
-  res.setHeader(
-    'RateLimit-Reset',
-    Math.ceil((entry.resetAt - now) / 1_000),
-  );
-
-  if (entry.count >= RATE_LIMIT_MAX_REQUESTS) {
-    res.setHeader('Retry-After', Math.ceil((entry.resetAt - now) / 1_000));
-    res.status(429).json({
-      error: 'RATE_LIMIT_EXCEEDED',
-      message: 'Realizaste demasiadas consultas. Intentá nuevamente en un minuto.',
-    });
-    return;
-  }
-
-  entry.count += 1;
-  requestsByIp.set(ip, entry);
-  res.setHeader('RateLimit-Remaining', RATE_LIMIT_MAX_REQUESTS - entry.count);
-  removeExpiredEntries(now);
-  next();
-};
+export const chatEscalationRateLimit = createRateLimit(
+  ESCALATION_RATE_LIMIT_WINDOW_MS,
+  ESCALATION_RATE_LIMIT_MAX_REQUESTS,
+  'Realizaste demasiados envíos. Intentá nuevamente más tarde.',
+);
 
 const isJsonSyntaxError = (error: unknown): boolean =>
   error instanceof SyntaxError &&
@@ -86,6 +100,7 @@ export const chatErrorHandler: ErrorRequestHandler = (
 
   if (isPayloadTooLargeError(error)) {
     res.status(413).json({
+      success: false,
       error: 'INVALID_MESSAGE',
       message: 'El cuerpo de la solicitud es demasiado grande.',
     });
@@ -94,6 +109,7 @@ export const chatErrorHandler: ErrorRequestHandler = (
 
   if (isJsonSyntaxError(error)) {
     res.status(400).json({
+      success: false,
       error: 'INVALID_MESSAGE',
       message: 'El cuerpo de la solicitud debe contener JSON válido.',
     });
@@ -102,6 +118,7 @@ export const chatErrorHandler: ErrorRequestHandler = (
 
   console.error('Error del chatbot: MIDDLEWARE_UNEXPECTED');
   res.status(500).json({
+    success: false,
     error: 'CHAT_SERVICE_ERROR',
     message: 'No pudimos procesar tu consulta.',
   });
