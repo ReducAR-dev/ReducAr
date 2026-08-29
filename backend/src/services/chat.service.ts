@@ -85,9 +85,9 @@ export const createChatResponse = async (
         }
       : {}),
   };
+  const provider = getConfiguredProvider();
 
   try {
-    const provider = getConfiguredProvider();
     const decision =
       provider === 'gemini'
         ? await createGeminiChatResponse(sanitizedRequest)
@@ -104,14 +104,31 @@ export const createChatResponse = async (
         : decision.message,
       resolved: requiresHumanSupport ? false : decision.resolved,
       requiresHumanSupport,
+      provider,
+      providerSucceeded: true,
+      fallbackUsed: false,
     };
   } catch (error) {
     if (error instanceof GeminiServiceError || error instanceof GroqServiceError) {
+      if (error instanceof GeminiServiceError) {
+        console.error('Gemini provider error:', {
+          name: error.name,
+          code: error.code,
+          ...error.details,
+        });
+      }
+
       if (error.code === 'CONFIGURATION') {
         throw new ChatServiceError('PROVIDER_UNAVAILABLE');
       }
 
-      return { success: true, ...PROVIDER_FALLBACK };
+      return {
+        success: true,
+        ...PROVIDER_FALLBACK,
+        provider,
+        providerSucceeded: false,
+        fallbackUsed: true,
+      };
     }
 
     throw error;

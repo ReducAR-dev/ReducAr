@@ -31,6 +31,9 @@ export interface ChatDecision {
 
 export interface ChatResponse extends ChatDecision {
   success: true;
+  provider: 'gemini' | 'groq';
+  providerSucceeded: boolean;
+  fallbackUsed: boolean;
 }
 
 export interface EscalateRequest {

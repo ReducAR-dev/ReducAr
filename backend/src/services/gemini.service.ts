@@ -7,8 +7,12 @@ import {
 
 const GEMINI_API_BASE_URL =
   'https://generativelanguage.googleapis.com/v1beta/models';
-const DEFAULT_GEMINI_MODEL = 'gemini-3.7-flash';
-const DEFAULT_TIMEOUT_MS = 12_000;
+const DEFAULT_GEMINI_MODEL = 'gemini-3.5-flash-lite';
+const DEFAULT_TIMEOUT_MS = 45_000;
+const MIN_TIMEOUT_MS = 5_000;
+const MAX_TIMEOUT_MS = 120_000;
+const DEFAULT_MAX_ATTEMPTS = 3;
+const DEFAULT_RETRY_DELAY_MS = 500;
 const MODEL_NAME_PATTERN = /^[a-zA-Z0-9._-]+$/;
 
 const CHAT_RESPONSE_SCHEMA = {
@@ -22,21 +26,33 @@ const CHAT_RESPONSE_SCHEMA = {
   required: ['message', 'category', 'resolved', 'requiresHumanSupport'],
 } as const;
 
-const INVALID_MODEL_RESPONSE_FALLBACK: ChatDecision = {
-  message:
-    'No pude responder con suficiente seguridad. Si querés, podés enviar tu consulta al equipo de ReducAR.',
-  category: 'GENERAL',
-  resolved: false,
-  requiresHumanSupport: true,
-};
-
 export type GeminiServiceErrorCode =
   | 'CONFIGURATION'
   | 'TIMEOUT'
-  | 'UNAVAILABLE';
+  | 'NETWORK_ERROR'
+  | 'INVALID_API_KEY'
+  | 'PERMISSION_DENIED'
+  | 'QUOTA_EXCEEDED'
+  | 'MODEL_NOT_FOUND'
+  | 'INVALID_REQUEST'
+  | 'PROVIDER_ERROR'
+  | 'INVALID_RESPONSE';
+
+export interface GeminiErrorDetails {
+  httpStatus?: number;
+  providerCode?: number | string;
+  providerStatus?: string;
+  providerMessage?: string;
+  causeName?: string;
+  causeMessage?: string;
+  attempts?: number;
+}
 
 export class GeminiServiceError extends Error {
-  constructor(readonly code: GeminiServiceErrorCode) {
+  constructor(
+    readonly code: GeminiServiceErrorCode,
+    readonly details: GeminiErrorDetails = {},
+  ) {
     super(code);
     this.name = 'GeminiServiceError';
   }
@@ -45,6 +61,8 @@ export class GeminiServiceError extends Error {
 interface GeminiServiceOptions {
   fetchImplementation?: typeof fetch;
   timeoutMs?: number;
+  maxAttempts?: number;
+  retryDelayMs?: number;
 }
 
 interface GeminiGenerateContentResponse {
@@ -57,6 +75,105 @@ interface GeminiGenerateContentResponse {
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
+
+const getConfiguredTimeout = (): number => {
+  const configuredTimeout = Number(process.env.GEMINI_TIMEOUT_MS);
+
+  return Number.isFinite(configuredTimeout) &&
+    configuredTimeout >= MIN_TIMEOUT_MS &&
+    configuredTimeout <= MAX_TIMEOUT_MS
+    ? configuredTimeout
+    : DEFAULT_TIMEOUT_MS;
+};
+
+const getErrorMessage = (error: unknown): string | undefined =>
+  error instanceof Error ? error.message : undefined;
+
+const getCauseDetails = (error: unknown): GeminiErrorDetails => {
+  const causeMessage = getErrorMessage(error);
+
+  return {
+    causeName: error instanceof Error ? error.name : typeof error,
+    ...(causeMessage ? { causeMessage } : {}),
+  };
+};
+
+const parseProviderError = async (
+  response: Response,
+): Promise<GeminiErrorDetails> => {
+  const details: GeminiErrorDetails = { httpStatus: response.status };
+
+  try {
+    const payload: unknown = await response.json();
+
+    if (!isRecord(payload) || !isRecord(payload.error)) {
+      return details;
+    }
+
+    const providerError = payload.error;
+
+    if (typeof providerError.code === 'number' || typeof providerError.code === 'string') {
+      details.providerCode = providerError.code;
+    }
+
+    if (typeof providerError.status === 'string') {
+      details.providerStatus = providerError.status;
+    }
+
+    if (typeof providerError.message === 'string') {
+      details.providerMessage = providerError.message;
+    }
+  } catch {
+    // El status HTTP sigue siendo suficiente si Google no devuelve JSON válido.
+  }
+
+  return details;
+};
+
+const classifyProviderError = (
+  details: GeminiErrorDetails,
+): GeminiServiceErrorCode => {
+  if (/api key not valid|invalid api key/iu.test(details.providerMessage ?? '')) {
+    return 'INVALID_API_KEY';
+  }
+
+  switch (details.httpStatus) {
+    case 400:
+      return 'INVALID_REQUEST';
+    case 401:
+      return 'INVALID_API_KEY';
+    case 403:
+      return 'PERMISSION_DENIED';
+    case 404:
+      return 'MODEL_NOT_FOUND';
+    case 429:
+      return 'QUOTA_EXCEEDED';
+    default:
+      return 'PROVIDER_ERROR';
+  }
+};
+
+const delayWithSignal = (
+  delayMs: number,
+  signal: AbortSignal,
+): Promise<void> =>
+  new Promise((resolve, reject) => {
+    const onAbort = () => {
+      clearTimeout(timer);
+      reject(new Error('Gemini request aborted'));
+    };
+    const timer = setTimeout(() => {
+      signal.removeEventListener('abort', onAbort);
+      resolve();
+    }, delayMs);
+
+    if (signal.aborted) {
+      onAbort();
+      return;
+    }
+
+    signal.addEventListener('abort', onAbort, { once: true });
+  });
 
 const isChatDecision = (value: unknown): value is ChatDecision => {
   if (!isRecord(value)) {
@@ -132,55 +249,105 @@ export const createGeminiChatResponse = async (
   const controller = new AbortController();
   const timeout = setTimeout(
     () => controller.abort(),
-    options.timeoutMs ?? DEFAULT_TIMEOUT_MS,
+    options.timeoutMs ?? getConfiguredTimeout(),
+  );
+  const maxAttempts = Math.max(
+    1,
+    Math.min(options.maxAttempts ?? DEFAULT_MAX_ATTEMPTS, DEFAULT_MAX_ATTEMPTS),
+  );
+  const retryDelayMs = Math.max(
+    0,
+    options.retryDelayMs ?? DEFAULT_RETRY_DELAY_MS,
   );
 
   try {
-    const response = await (options.fetchImplementation ?? fetch)(
-      `${GEMINI_API_BASE_URL}/${encodeURIComponent(model)}:generateContent`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-goog-api-key': apiKey,
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      const response = await (options.fetchImplementation ?? fetch)(
+        `${GEMINI_API_BASE_URL}/${encodeURIComponent(model)}:generateContent`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-goog-api-key': apiKey,
+          },
+          body: JSON.stringify({
+            systemInstruction: {
+              parts: [{ text: CHAT_SYSTEM_PROMPT }],
+            },
+            contents: [
+              ...(request.messages ?? []).map((historyMessage) => ({
+                role: historyMessage.role === 'assistant' ? 'model' : 'user',
+                parts: [{ text: historyMessage.content }],
+              })),
+              { role: 'user', parts: [{ text: request.message }] },
+            ],
+            generationConfig: {
+              maxOutputTokens: 600,
+              thinkingConfig: {
+                thinkingLevel: 'low',
+              },
+              responseMimeType: 'application/json',
+              responseSchema: CHAT_RESPONSE_SCHEMA,
+            },
+          }),
+          signal: controller.signal,
         },
-        body: JSON.stringify({
-          systemInstruction: {
-            parts: [{ text: CHAT_SYSTEM_PROMPT }],
-          },
-          contents: [
-            ...(request.messages ?? []).map((historyMessage) => ({
-              role: historyMessage.role === 'assistant' ? 'model' : 'user',
-              parts: [{ text: historyMessage.content }],
-            })),
-            { role: 'user', parts: [{ text: request.message }] },
-          ],
-          generationConfig: {
-            maxOutputTokens: 600,
-            responseMimeType: 'application/json',
-            responseSchema: CHAT_RESPONSE_SCHEMA,
-          },
-        }),
-        signal: controller.signal,
-      },
-    );
+      );
 
-    if (!response.ok) {
-      throw new GeminiServiceError('UNAVAILABLE');
+      if (!response.ok) {
+        const details = {
+          ...(await parseProviderError(response)),
+          attempts: attempt,
+        };
+
+        if (response.status === 503 && attempt < maxAttempts) {
+          await delayWithSignal(retryDelayMs * attempt, controller.signal);
+          continue;
+        }
+
+        throw new GeminiServiceError(classifyProviderError(details), details);
+      }
+
+      let payload: unknown;
+
+      try {
+        payload = await response.json();
+      } catch (error) {
+        throw new GeminiServiceError('INVALID_RESPONSE', {
+          httpStatus: response.status,
+          attempts: attempt,
+          ...getCauseDetails(error),
+        });
+      }
+
+      const parsedResponse = parseGeminiResponse(payload);
+
+      if (!parsedResponse) {
+        throw new GeminiServiceError('INVALID_RESPONSE', {
+          httpStatus: response.status,
+          attempts: attempt,
+          providerMessage: 'Gemini devolvió una respuesta sin el JSON esperado.',
+        });
+      }
+
+      return parsedResponse;
     }
 
-    const payload: unknown = await response.json();
-    return parseGeminiResponse(payload) ?? INVALID_MODEL_RESPONSE_FALLBACK;
+    throw new GeminiServiceError('PROVIDER_ERROR');
   } catch (error) {
     if (error instanceof GeminiServiceError) {
       throw error;
     }
 
     if (controller.signal.aborted) {
-      throw new GeminiServiceError('TIMEOUT');
+      throw new GeminiServiceError('TIMEOUT', {
+        ...getCauseDetails(error),
+      });
     }
 
-    throw new GeminiServiceError('UNAVAILABLE');
+    throw new GeminiServiceError('NETWORK_ERROR', {
+      ...getCauseDetails(error),
+    });
   } finally {
     clearTimeout(timeout);
   }
