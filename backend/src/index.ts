@@ -11,12 +11,24 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
+const FRONTEND_ORIGINS = new Set(
+  (process.env.FRONTEND_ORIGIN || 'http://localhost:5173')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+);
+const LOCAL_DEVELOPMENT_ORIGIN =
+  /^http:\/\/(?:localhost|127\.0\.0\.1):\d{2,5}$/u;
+
+const isAllowedFrontendOrigin = (origin: string): boolean =>
+  FRONTEND_ORIGINS.has(origin) ||
+  (process.env.NODE_ENV !== 'production' &&
+    LOCAL_DEVELOPMENT_ORIGIN.test(origin));
 
 // Middlewares básicos
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || origin === FRONTEND_ORIGIN) {
+    if (!origin || isAllowedFrontendOrigin(origin)) {
       callback(null, true);
       return;
     }

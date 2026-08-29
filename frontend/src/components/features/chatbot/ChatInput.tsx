@@ -38,7 +38,7 @@ const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(
     return (
       <form className="chatbot-input-area" onSubmit={handleSubmit}>
         <label htmlFor="reduc-ar-chat-input" className="chatbot-sr-only">
-          Escribí tu consulta para el asistente ReducAR
+          Escribí tu consulta para RedBot
         </label>
         <div className="chatbot-input-shell">
           <textarea

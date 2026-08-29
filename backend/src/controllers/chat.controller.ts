@@ -23,11 +23,44 @@ const MAX_TOTAL_CONTENT_LENGTH = 6000;
 const MAX_NAME_LENGTH = 100;
 const MAX_EMAIL_LENGTH = 254;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/u;
+const CHAT_STREAM_CONTENT_TYPE = 'application/x-ndjson; charset=utf-8';
+const CHAT_STREAM_CHUNK_DELAY_MS = 30;
 
 type ChatControllerResponse =
   | ChatResponse
   | EscalateResponse
   | ChatErrorResponse;
+
+const delay = (milliseconds: number): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, milliseconds));
+
+const streamChatResponse = async (
+  res: Response<ChatControllerResponse>,
+  response: ChatResponse,
+): Promise<void> => {
+  const { message, ...metadata } = response;
+  const chunks = message.match(/\S+\s*/gu) ?? [message];
+
+  res.status(200);
+  res.setHeader('Content-Type', CHAT_STREAM_CONTENT_TYPE);
+  res.setHeader('Cache-Control', 'no-cache, no-transform');
+  res.setHeader('X-Accel-Buffering', 'no');
+  res.flushHeaders();
+  res.write(`${JSON.stringify({ type: 'start', response: metadata })}\n`);
+
+  for (const chunk of chunks) {
+    if (res.destroyed || res.writableEnded) {
+      return;
+    }
+
+    res.write(`${JSON.stringify({ type: 'delta', delta: chunk })}\n`);
+    await delay(CHAT_STREAM_CHUNK_DELAY_MS);
+  }
+
+  if (!res.destroyed && !res.writableEnded) {
+    res.end(`${JSON.stringify({ type: 'done' })}\n`);
+  }
+};
 
 const sendValidationError = (
   res: Response<ChatControllerResponse>,
@@ -164,6 +197,12 @@ export const postChatMessage = async (
       message: normalizedMessage,
       ...(messages.length > 0 ? { messages } : {}),
     });
+
+    if (req.headers.accept?.includes('application/x-ndjson')) {
+      await streamChatResponse(res, response);
+      return;
+    }
+
     res.status(200).json(response);
   } catch (error) {
     if (error instanceof ChatServiceError) {

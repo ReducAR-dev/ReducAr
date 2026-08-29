@@ -6,6 +6,7 @@ import TestPage from "./pages/TestPage";
 import ChatBot from "./components/features/chatbot/ChatBot";
 import OrganizacionesPage from "./pages/OrganizacionesPage";
 import NovedadesPage from "./pages/NovedadesPage";
+import RutasPage from "./pages/RutasPage";
 
 function App() {
   return (
@@ -24,6 +25,11 @@ function App() {
         <Route
           path="/test"
           element={<TestPage />}
+        />
+
+        <Route
+          path="/rutas"
+          element={<RutasPage />}
         />
 
         <Route

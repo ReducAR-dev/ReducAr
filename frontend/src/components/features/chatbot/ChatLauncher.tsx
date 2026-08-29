@@ -13,7 +13,7 @@ const ChatLauncher = forwardRef<HTMLButtonElement, ChatLauncherProps>(
       className="chatbot-launcher"
       type="button"
       onClick={onClick}
-      aria-label={isOpen ? "Cerrar asistente ReducAR" : "Abrir asistente ReducAR"}
+      aria-label={isOpen ? "Cerrar RedBot" : "Abrir RedBot"}
       aria-expanded={isOpen}
       aria-controls="reduc-ar-chat-panel"
     >

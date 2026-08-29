@@ -45,6 +45,16 @@ const isChatApiResponse = (value: unknown): value is ChatApiResponse =>
   typeof value.resolved === "boolean" &&
   typeof value.requiresHumanSupport === "boolean";
 
+type ChatStreamMetadata = Omit<ChatApiResponse, "message">;
+
+const isChatStreamMetadata = (value: unknown): value is ChatStreamMetadata =>
+  isRecord(value) &&
+  value.success === true &&
+  typeof value.category === "string" &&
+  CHAT_CATEGORIES.includes(value.category as ChatCategory) &&
+  typeof value.resolved === "boolean" &&
+  typeof value.requiresHumanSupport === "boolean";
+
 const isEscalateApiResponse = (value: unknown): value is EscalateApiResponse =>
   isRecord(value) &&
   value.success === true &&
@@ -102,6 +112,106 @@ export const sendChatMessage = async (
   }
 
   return payload;
+};
+
+export const streamChatMessage = async (
+  request: ChatApiRequest,
+  onDelta: (delta: string) => void,
+  signal?: AbortSignal,
+): Promise<ChatApiResponse> => {
+  let response: Response;
+
+  try {
+    response = await fetch(`${API_URL}/api/chat`, {
+      method: "POST",
+      headers: {
+        Accept: "application/x-ndjson",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+      signal,
+    });
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw error;
+    }
+
+    throw new ChatbotApiError(0, "NETWORK_ERROR");
+  }
+
+  if (!response.ok) {
+    const payload = await readJsonResponse(response);
+    throwResponseError(response, payload);
+  }
+
+  if (!response.body) {
+    throw new ChatbotApiError(response.status, "INVALID_SERVER_RESPONSE");
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let content = "";
+  let metadata: ChatStreamMetadata | null = null;
+  let completed = false;
+
+  const processLine = (line: string): void => {
+    if (!line.trim()) {
+      return;
+    }
+
+    let event: unknown;
+
+    try {
+      event = JSON.parse(line);
+    } catch {
+      throw new ChatbotApiError(response.status, "INVALID_SERVER_RESPONSE");
+    }
+
+    if (!isRecord(event) || typeof event.type !== "string") {
+      throw new ChatbotApiError(response.status, "INVALID_SERVER_RESPONSE");
+    }
+
+    if (event.type === "start" && isChatStreamMetadata(event.response)) {
+      metadata = event.response;
+      return;
+    }
+
+    if (event.type === "delta" && typeof event.delta === "string") {
+      content += event.delta;
+      onDelta(event.delta);
+      return;
+    }
+
+    if (event.type === "done") {
+      completed = true;
+      return;
+    }
+
+    throw new ChatbotApiError(response.status, "INVALID_SERVER_RESPONSE");
+  };
+
+  while (true) {
+    const { done, value } = await reader.read();
+
+    if (done) {
+      buffer += decoder.decode();
+      break;
+    }
+
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split("\n");
+    buffer = lines.pop() ?? "";
+    lines.forEach(processLine);
+  }
+
+  processLine(buffer);
+
+  if (!metadata || !completed || !content.trim()) {
+    throw new ChatbotApiError(response.status, "INVALID_SERVER_RESPONSE");
+  }
+
+  return { ...(metadata as ChatStreamMetadata), message: content };
 };
 
 export const escalateChatMessage = async (

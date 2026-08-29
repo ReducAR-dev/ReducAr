@@ -22,7 +22,7 @@ function ChatMessage({
     >
       {isAssistant && (
         <span className="chatbot-message-author" aria-hidden="true">
-          ReducAR
+          RedBot
         </span>
       )}
 
