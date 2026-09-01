@@ -1,42 +1,55 @@
 /* =========================================================
    TEST VOCACIONAL - REDUCAR
    Estilos alineados con la identidad visual de la página
+   Las variables --test-* ahora apuntan a las --home-* del
+   sistema de temas global (index.css), para respetar el
+   modo claro/oscuro automáticamente.
    ========================================================= */
 
 :root {
   /* Superficies */
-  --test-bg: #fafaff;
-  --test-surface: #ffffff;
+  --test-bg: var(--home-background);
+  --test-surface: var(--home-surface);
 
   /* Paleta de marca */
-  --test-navy: #171b3a;
-  --test-navy-soft: #30345a;
-  --test-purple: #635bff;
-  --test-purple-light: #7c5cff;
+  --test-navy: var(--home-text);
+  --test-navy-soft: var(--home-text-secondary);
+  --test-purple: var(--home-primary);
+  --test-purple-light: var(--home-primary-dark);
   --test-blue: #4d8fd6;
-  --test-cyan: #13b5b2;
+  --test-cyan: var(--home-turquoise);
 
   /* Texto */
-  --test-text: #252a4a;
-  --test-text-soft: #68708f;
-  --test-text-muted: #9299b5;
+  --test-text: var(--home-text);
+  --test-text-soft: var(--home-text-secondary);
+  --test-text-muted: var(--home-placeholder);
 
   /* Bordes */
-  --test-border: #e7e7f2;
-  --test-border-hover: #d4d2ff;
+  --test-border: var(--home-border);
+  --test-border-hover: var(--home-button-border);
 
   /* Sombras (unificadas en 3 niveles) */
-  --test-shadow-sm: 0 8px 20px rgba(47, 45, 100, 0.06);
-  --test-shadow: 0 20px 50px rgba(47, 45, 100, 0.08);
-  --test-shadow-hover: 0 16px 35px rgba(70, 62, 180, 0.12);
-  --test-shadow-accent: 0 10px 22px rgba(99, 91, 255, 0.22);
+  --test-shadow-sm: 0 8px 20px var(--home-section-shadow);
+  --test-shadow: 0 20px 50px var(--home-section-shadow);
+  --test-shadow-hover: 0 16px 35px var(--home-floating-shadow);
+  --test-shadow-accent: 0 10px 22px var(--home-primary-shadow);
 
   /* Radios */
   --test-radius: 24px;
   --test-radius-small: 14px;
 
   /* Gradiente de marca */
-  --test-gradient: linear-gradient(100deg, #635bff 0%, #7160ef 35%, #4d8fd6 70%, #13b5b2 100%);
+  --test-gradient: linear-gradient(100deg, var(--home-gradient-start) 0%, var(--home-gradient-middle) 35%, var(--home-turquoise) 70%, var(--home-turquoise-dark) 100%);
+
+  /* Colores auxiliares que dependían de tonos fijos */
+  --test-hover-surface: var(--home-surface-hover);
+  --test-letter-bg: var(--home-purple-soft);
+  --test-letter-bg-hover: color-mix(in srgb, var(--home-primary) 18%, var(--home-surface));
+  --test-tint-purple: color-mix(in srgb, var(--home-primary) 9%, transparent);
+  --test-tint-purple-soft: color-mix(in srgb, var(--home-primary) 4.5%, transparent);
+  --test-tint-turquoise: color-mix(in srgb, var(--home-turquoise) 9%, transparent);
+  --test-border-tint: color-mix(in srgb, var(--home-primary) 16%, transparent);
+  --test-outline: color-mix(in srgb, var(--home-primary) 30%, transparent);
 
   /* Escala de espaciado */
   --space-1: 8px;
@@ -63,8 +76,8 @@
   font-family: inherit;
 
   background:
-    radial-gradient(circle at 15% 20%, rgba(99, 91, 255, 0.055), transparent 28%),
-    radial-gradient(circle at 85% 70%, rgba(19, 181, 178, 0.045), transparent 28%),
+    radial-gradient(circle at 15% 20%, var(--test-tint-purple), transparent 28%),
+    radial-gradient(circle at 85% 70%, var(--test-tint-turquoise), transparent 28%),
     var(--test-bg);
 }
 
@@ -92,9 +105,9 @@
   width: fit-content;
   margin: 0 auto var(--space-4);
   padding: 9px 17px;
-  border: 1px solid rgba(99, 91, 255, 0.16);
+  border: 1px solid var(--test-border-tint);
   border-radius: 999px;
-  background: rgba(99, 91, 255, 0.045);
+  background: var(--test-tint-purple-soft);
   color: var(--test-text-soft);
   font-size: 0.92rem;
   font-weight: 600;
@@ -188,15 +201,15 @@
 
 .test-option:hover:not(:disabled) {
   border-color: var(--test-border-hover);
-  background: #fdfdff;
+  background: var(--test-hover-surface);
   box-shadow: var(--test-shadow-hover);
   transform: translateY(-2px);
 }
 
 .test-option.selected {
-  border-color: rgba(99, 91, 255, 0.5);
-  background: linear-gradient(100deg, rgba(99, 91, 255, 0.075), rgba(19, 181, 178, 0.035));
-  box-shadow: 0 8px 25px rgba(99, 91, 255, 0.1);
+  border-color: color-mix(in srgb, var(--home-primary) 50%, transparent);
+  background: linear-gradient(100deg, var(--test-tint-purple), var(--test-tint-turquoise));
+  box-shadow: 0 8px 25px var(--test-tint-purple);
 }
 
 .test-option.selected::before {
@@ -211,7 +224,7 @@
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: #f3f2ff;
+  background: var(--test-letter-bg);
   color: var(--test-purple);
   font-size: 0.95rem;
   font-weight: 800;
@@ -219,13 +232,13 @@
 }
 
 .test-option:hover .option-letter {
-  background: #e9e7ff;
+  background: var(--test-letter-bg-hover);
 }
 
 .test-option.selected .option-letter {
   background: var(--test-gradient);
-  color: #ffffff;
-  box-shadow: 0 5px 13px rgba(99, 91, 255, 0.2);
+  color: var(--home-on-accent);
+  box-shadow: 0 5px 13px var(--test-tint-purple);
   transform: scale(1.03);
 }
 
@@ -262,7 +275,7 @@
   border: none;
   border-radius: 14px;
   background: var(--test-gradient);
-  color: #ffffff;
+  color: var(--home-on-accent);
   font-family: inherit;
   font-size: 0.96rem;
   font-weight: 700;
@@ -280,7 +293,7 @@
 
 .test-next-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 14px 28px rgba(99, 91, 255, 0.28);
+  box-shadow: 0 14px 28px var(--test-tint-purple);
 }
 
 .test-next-button:hover:not(:disabled)::after {
@@ -330,7 +343,7 @@
   margin: 0 0 18px;
   padding: 8px 15px;
   border-radius: 999px;
-  background: rgba(19, 181, 178, 0.09);
+  background: var(--test-tint-turquoise);
   color: var(--test-cyan);
   font-size: 0.82rem;
   font-weight: 700;
@@ -395,7 +408,7 @@
 
 .test-option:focus-visible,
 .test-next-button:focus-visible {
-  outline: 3px solid rgba(99, 91, 255, 0.3);
+  outline: 3px solid var(--test-outline);
   outline-offset: 3px;
 }
 
