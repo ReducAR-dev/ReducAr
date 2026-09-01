@@ -1,0 +1,541 @@
+/* =========================================================
+   TEST VOCACIONAL - REDUCAR
+   Estilos alineados con la identidad visual de la página
+   ========================================================= */
+
+:root {
+  /* Superficies */
+  --test-bg: #fafaff;
+  --test-surface: #ffffff;
+
+  /* Paleta de marca */
+  --test-navy: #171b3a;
+  --test-navy-soft: #30345a;
+  --test-purple: #635bff;
+  --test-purple-light: #7c5cff;
+  --test-blue: #4d8fd6;
+  --test-cyan: #13b5b2;
+
+  /* Texto */
+  --test-text: #252a4a;
+  --test-text-soft: #68708f;
+  --test-text-muted: #9299b5;
+
+  /* Bordes */
+  --test-border: #e7e7f2;
+  --test-border-hover: #d4d2ff;
+
+  /* Sombras (unificadas en 3 niveles) */
+  --test-shadow-sm: 0 8px 20px rgba(47, 45, 100, 0.06);
+  --test-shadow: 0 20px 50px rgba(47, 45, 100, 0.08);
+  --test-shadow-hover: 0 16px 35px rgba(70, 62, 180, 0.12);
+  --test-shadow-accent: 0 10px 22px rgba(99, 91, 255, 0.22);
+
+  /* Radios */
+  --test-radius: 24px;
+  --test-radius-small: 14px;
+
+  /* Gradiente de marca */
+  --test-gradient: linear-gradient(100deg, #635bff 0%, #7160ef 35%, #4d8fd6 70%, #13b5b2 100%);
+
+  /* Escala de espaciado */
+  --space-1: 8px;
+  --space-2: 14px;
+  --space-3: 20px;
+  --space-4: 32px;
+  --space-5: 48px;
+
+  /* Transición base */
+  --test-transition: 0.2s ease;
+}
+
+
+/* =========================================================
+   PÁGINA GENERAL
+   ========================================================= */
+
+.test-page {
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 70px 24px 90px;
+  color: var(--test-text);
+  font-family: inherit;
+
+  background:
+    radial-gradient(circle at 15% 20%, rgba(99, 91, 255, 0.055), transparent 28%),
+    radial-gradient(circle at 85% 70%, rgba(19, 181, 178, 0.045), transparent 28%),
+    var(--test-bg);
+}
+
+.test-container {
+  width: min(920px, 100%);
+  margin: 0 auto;
+}
+
+
+/* =========================================================
+   TÍTULO Y PROGRESO
+   ========================================================= */
+
+.test-title {
+  margin: 0 0 var(--space-2);
+  color: var(--test-navy);
+  font-size: clamp(2rem, 4vw, 3.1rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -1.5px;
+  text-align: center;
+}
+
+.test-progress {
+  width: fit-content;
+  margin: 0 auto var(--space-4);
+  padding: 9px 17px;
+  border: 1px solid rgba(99, 91, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(99, 91, 255, 0.045);
+  color: var(--test-text-soft);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   TARJETA DE PREGUNTA
+   ========================================================= */
+
+.test-question {
+  position: relative;
+  overflow: hidden;
+  padding: 42px;
+  background: var(--test-surface);
+  border: 1px solid var(--test-border);
+  border-radius: var(--test-radius);
+  box-shadow: var(--test-shadow);
+}
+
+/* Detalle superior, coherente con .test-result */
+.test-question::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--test-gradient);
+  opacity: 0.85;
+}
+
+.question-title {
+  max-width: 760px;
+  margin: 0 auto var(--space-4);
+  color: var(--test-navy);
+  font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.5px;
+  text-align: center;
+}
+
+
+/* =========================================================
+   OPCIONES
+   ========================================================= */
+
+.test-options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+}
+
+.test-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  min-height: 76px;
+  box-sizing: border-box;
+  padding: 17px var(--space-3);
+  border: 1.5px solid var(--test-border);
+  border-radius: var(--test-radius-small);
+  background: var(--test-surface);
+  color: var(--test-text);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.45;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--test-transition), background var(--test-transition),
+    box-shadow var(--test-transition), transform var(--test-transition);
+}
+
+/* Línea decorativa lateral */
+.test-option::before {
+  content: "";
+  position: absolute;
+  left: -1.5px;
+  top: 15px;
+  bottom: 15px;
+  width: 3px;
+  border-radius: 0 4px 4px 0;
+  background: var(--test-gradient);
+  opacity: 0;
+  transition: opacity var(--test-transition);
+}
+
+.test-option:hover:not(:disabled) {
+  border-color: var(--test-border-hover);
+  background: #fdfdff;
+  box-shadow: var(--test-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.test-option.selected {
+  border-color: rgba(99, 91, 255, 0.5);
+  background: linear-gradient(100deg, rgba(99, 91, 255, 0.075), rgba(19, 181, 178, 0.035));
+  box-shadow: 0 8px 25px rgba(99, 91, 255, 0.1);
+}
+
+.test-option.selected::before {
+  opacity: 1;
+}
+
+.option-letter {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #f3f2ff;
+  color: var(--test-purple);
+  font-size: 0.95rem;
+  font-weight: 800;
+  transition: background var(--test-transition), color var(--test-transition), transform var(--test-transition);
+}
+
+.test-option:hover .option-letter {
+  background: #e9e7ff;
+}
+
+.test-option.selected .option-letter {
+  background: var(--test-gradient);
+  color: #ffffff;
+  box-shadow: 0 5px 13px rgba(99, 91, 255, 0.2);
+  transform: scale(1.03);
+}
+
+.option-text {
+  flex: 1;
+  color: var(--test-text);
+  transition: color var(--test-transition);
+}
+
+.test-option.selected .option-text {
+  color: var(--test-navy);
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   NAVEGACIÓN Y BOTÓN SIGUIENTE
+   ========================================================= */
+
+.test-navigation {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 25px;
+}
+
+.test-next-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  min-height: 52px;
+  padding: 13px 25px;
+  border: none;
+  border-radius: 14px;
+  background: var(--test-gradient);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.96rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--test-shadow-accent);
+  transition: transform var(--test-transition), box-shadow var(--test-transition), opacity var(--test-transition);
+}
+
+.test-next-button::after {
+  content: "→";
+  margin-left: 10px;
+  font-size: 1.1rem;
+  transition: transform var(--test-transition);
+}
+
+.test-next-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(99, 91, 255, 0.28);
+}
+
+.test-next-button:hover:not(:disabled)::after {
+  transform: translateX(4px);
+}
+
+.test-next-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.test-next-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  box-shadow: none;
+}
+
+
+/* =========================================================
+   RESULTADO
+   ========================================================= */
+
+.test-result {
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-5) 48px;
+  background: var(--test-surface);
+  border: 1px solid var(--test-border);
+  border-radius: var(--test-radius);
+  box-shadow: var(--test-shadow);
+  text-align: center;
+}
+
+.test-result::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: var(--test-gradient);
+}
+
+.result-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 18px;
+  padding: 8px 15px;
+  border-radius: 999px;
+  background: rgba(19, 181, 178, 0.09);
+  color: var(--test-cyan);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.result-title {
+  margin: 0;
+  color: var(--test-navy);
+  font-size: clamp(1.8rem, 4vw, 2.7rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -1px;
+}
+
+.result-category {
+  display: inline-block;
+  margin: 18px 0 var(--space-4);
+  background: var(--test-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -1.5px;
+}
+
+.result-score {
+  display: inline-flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: var(--space-4);
+  padding: 12px 18px;
+  border: 1px solid var(--test-border);
+  border-radius: 14px;
+  background: var(--test-bg);
+  color: var(--test-text-soft);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.result-score strong {
+  color: var(--test-purple);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.result-description {
+  max-width: 620px;
+  margin: 0 auto;
+  color: var(--test-text-soft);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   ACCESIBILIDAD - FOCUS
+   ========================================================= */
+
+.test-option:focus-visible,
+.test-next-button:focus-visible {
+  outline: 3px solid rgba(99, 91, 255, 0.3);
+  outline-offset: 3px;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .test-page {
+    padding: 50px 18px 70px;
+  }
+
+  .test-container {
+    width: 100%;
+  }
+
+  .test-title {
+    font-size: 2.25rem;
+  }
+
+  .test-progress {
+    margin-bottom: var(--space-4);
+  }
+
+  .test-question {
+    padding: 30px 22px;
+    border-radius: 20px;
+  }
+
+  .question-title {
+    margin-bottom: 26px;
+    font-size: 1.4rem;
+  }
+
+  .test-option {
+    min-height: 70px;
+    padding: 14px 16px;
+  }
+
+  .option-letter {
+    width: 38px;
+    height: 38px;
+  }
+
+  .test-result {
+    padding: 44px 28px;
+    border-radius: 20px;
+  }
+}
+
+
+/* =========================================================
+   CELULAR
+   ========================================================= */
+
+@media (max-width: 520px) {
+  .test-page {
+    padding: 35px 14px 55px;
+  }
+
+  .test-title {
+    margin-bottom: 12px;
+    font-size: 1.85rem;
+    letter-spacing: -0.8px;
+  }
+
+  .test-progress {
+    margin-bottom: 22px;
+    padding: 8px 13px;
+    font-size: 0.82rem;
+  }
+
+  .test-question {
+    padding: 24px 16px;
+    border-radius: 18px;
+  }
+
+  .question-title {
+    margin-bottom: 22px;
+    font-size: 1.22rem;
+    line-height: 1.4;
+  }
+
+  .test-options {
+    gap: 10px;
+  }
+
+  .test-option {
+    gap: 12px;
+    min-height: 66px;
+    padding: 12px;
+  }
+
+  .option-letter {
+    width: 35px;
+    height: 35px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+  }
+
+  .option-text {
+    font-size: 0.9rem;
+  }
+
+  .test-navigation {
+    margin-top: 18px;
+  }
+
+  .test-next-button {
+    width: 100%;
+  }
+
+  .test-result {
+    padding: 40px 20px;
+  }
+
+  .result-title {
+    font-size: 1.8rem;
+  }
+
+  .result-category {
+    font-size: 2.2rem;
+  }
+
+  .result-description {
+    font-size: 0.92rem;
+  }
+}
+
+
+/* =========================================================
+   REDUCCIÓN DE MOVIMIENTO
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .test-option,
+  .test-next-button,
+  .option-letter,
+  .test-next-button::after {
+    transition: none;
+  }
+}
