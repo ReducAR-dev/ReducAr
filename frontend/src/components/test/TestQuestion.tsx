@@ -28,18 +28,25 @@ function TestQuestion({
   onSeleccionar,
 }: TestQuestionProps) {
   return (
-    <section>
-      <h2>{pregunta.pregunta}</h2>
+    <section className="test-question">
+      <h2 className="question-title">{pregunta.pregunta}</h2>
 
-      <div>
-        {opciones.map((opcion) => (
+      <div className="test-options">
+        {opciones.map((opcion, index) => (
           <button
             key={opcion.id}
             type="button"
+            className={`test-option ${
+              respuestaSeleccionada === opcion.id ? "selected" : ""
+            }`}
             onClick={() => onSeleccionar(opcion)}
             aria-pressed={respuestaSeleccionada === opcion.id}
           >
-            {opcion.texto}
+            <span className="option-letter">
+              {String.fromCharCode(65 + index)}
+            </span>
+
+            <span className="option-text">{opcion.texto}</span>
           </button>
         ))}
       </div>
