@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Header from "../components/common/Header";
+import PromoBar from "../components/features/PromoBar";
 import TestQuestion from "../components/test/TestQuestion";
 import {
   testMock,
@@ -115,47 +117,55 @@ function TestPage() {
 
   if (resultado) {
     return (
-      <main className="test-page">
-        <div className="test-container">
-          <TestResult
-            categoria={resultado.categoria}
-            puntaje={resultado.puntaje}
-          />
-        </div>
-      </main>
+      <>
+        <Header />
+        <PromoBar />
+        <main className="test-page">
+          <div className="test-container">
+            <TestResult
+              categoria={resultado.categoria}
+              puntaje={resultado.puntaje}
+            />
+          </div>
+        </main>
+      </>
     );
   }
 
   return (
-    <main className="test-page">
-      <div className="test-container">
-        <h1 className="test-title">{testMock.nombre}</h1>
+    <>
+      <Header />
+      <PromoBar />
+      <main className="test-page">
+        <div className="test-container">
+          <h1 className="test-title">{testMock.nombre}</h1>
 
-        <div className="test-progress">
-          Pregunta {preguntaActual + 1} de {preguntasMock.length}
+          <div className="test-progress">
+            Pregunta {preguntaActual + 1} de {preguntasMock.length}
+          </div>
+
+          <TestQuestion
+            pregunta={pregunta}
+            opciones={opciones}
+            respuestaSeleccionada={respuestaSeleccionada}
+            onSeleccionar={seleccionarOpcion}
+          />
+
+          <div className="test-navigation">
+            <button
+              type="button"
+              className="test-next-button"
+              onClick={siguientePregunta}
+              disabled={respuestaSeleccionada === null}
+            >
+              {preguntaActual === preguntasMock.length - 1
+                ? "Finalizar test"
+                : "Siguiente"}
+            </button>
+          </div>
         </div>
-
-        <TestQuestion
-          pregunta={pregunta}
-          opciones={opciones}
-          respuestaSeleccionada={respuestaSeleccionada}
-          onSeleccionar={seleccionarOpcion}
-        />
-
-        <div className="test-navigation">
-          <button
-            type="button"
-            className="test-next-button"
-            onClick={siguientePregunta}
-            disabled={respuestaSeleccionada === null}
-          >
-            {preguntaActual === preguntasMock.length - 1
-              ? "Finalizar test"
-              : "Siguiente"}
-          </button>
-        </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }
 
