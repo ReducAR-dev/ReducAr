@@ -15,6 +15,7 @@ type Organizacion = {
   categoria: string;
   cursos: number;
   destacada?: boolean;
+  link: string;
 };
 
 const organizaciones: Organizacion[] = [
@@ -26,6 +27,7 @@ const organizaciones: Organizacion[] = [
     categoria: "Educación y empleabilidad",
     cursos: 1,
     destacada: true,
+    link: "https://www.pescar.org.ar/",
   },
   {
     nombre: "Fundación Empujar",
@@ -34,6 +36,7 @@ const organizaciones: Organizacion[] = [
       "Trabaja para mejorar la empleabilidad de jóvenes de 18 a 24 años y acompañarlos en el acceso a su primer empleo formal.",
     categoria: "Empleabilidad",
     cursos: 1,
+    link: "https://fundacionempujar.org/",
   },
   {
     nombre: "Chicas en Tecnología",
@@ -42,6 +45,7 @@ const organizaciones: Organizacion[] = [
       "Impulsa a jóvenes y mujeres a desarrollarse en tecnología y trabaja para reducir la brecha de género en el sector.",
     categoria: "Tecnología",
     cursos: 1,
+    link: "https://chicasentecnologia.org/es_ar/",
   },
   {
     nombre: "Fundación Forge",
@@ -50,6 +54,7 @@ const organizaciones: Organizacion[] = [
       "Acompaña a jóvenes en su acceso al mundo laboral mediante formación gratuita y herramientas para mejorar sus oportunidades de empleo.",
     categoria: "Formación profesional",
     cursos: 1,
+    link: "https://fforge.org/",
   },
 ];
 
@@ -60,8 +65,6 @@ function OrganizacionesPage() {
       <PromoBar />
 
       <main>
-        {/* HERO */}
-
         <section className="instituciones-hero">
           <div className="organizaciones-container">
             <div className="organizaciones-breadcrumb">
@@ -89,18 +92,22 @@ function OrganizacionesPage() {
           </div>
         </section>
 
-        {/* INSTITUCIONES */}
-
         <section className="instituciones-content">
           <div className="organizaciones-container">
             <div className="organizaciones-grid">
               {organizaciones.map((organizacion) => (
-                <article
+                <a
+                  href={organizacion.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="organizacion-card"
                   key={organizacion.nombre}
+                  style={{
+                    textDecoration: "none",
+                    color: "inherit",
+                    cursor: "pointer",
+                  }}
                 >
-                  {/* LOGO */}
-
                   <div className="organizacion-card-top">
                     <div className="organizacion-logo-container">
                       <img
@@ -117,8 +124,6 @@ function OrganizacionesPage() {
                     )}
                   </div>
 
-                  {/* INFORMACIÓN */}
-
                   <div className="organizacion-info">
                     <span className="institucion-categoria">
                       {organizacion.categoria}
@@ -128,8 +133,6 @@ function OrganizacionesPage() {
 
                     <p>{organizacion.descripcion}</p>
                   </div>
-
-                  {/* FOOTER */}
 
                   <div className="organizacion-card-footer">
                     <div className="institucion-cursos">
@@ -147,22 +150,12 @@ function OrganizacionesPage() {
                         </span>
                       </div>
                     </div>
-
-                    <button
-                      type="button"
-                      className="organizacion-button"
-                    >
-                      Ver cursos
-                      <span>→</span>
-                    </button>
                   </div>
-                </article>
+                </a>
               ))}
             </div>
           </div>
         </section>
-
-        {/* CTA FINAL */}
 
         <section className="instituciones-cta-section">
           <div className="organizaciones-container">
@@ -172,9 +165,7 @@ function OrganizacionesPage() {
               </div>
 
               <div className="instituciones-cta-text">
-                <span>
-                  ¿SOS PARTE DE UNA INSTITUCIÓN?
-                </span>
+                <span>¿SOS PARTE DE UNA INSTITUCIÓN?</span>
 
                 <h2>Sumate a la comunidad ReducAR</h2>
 
