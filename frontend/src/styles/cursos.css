@@ -1301,3 +1301,64 @@
     padding-top: 18px !important;
   }
 }
+.courses-hero {
+  padding: 16px 0 20px;
+}
+
+.courses-breadcrumb {
+  margin-bottom: 12px;
+}
+
+.courses-eyebrow {
+  margin-bottom: 10px;
+  padding: 5px 12px;
+  font-size: 10px;
+}
+
+.courses-heading h1 {
+  max-width: 720px;
+  font-size: clamp(32px, 3.2vw, 44px);
+  line-height: 1.03;
+}
+
+.courses-heading p {
+  margin-top: 9px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.courses-main-search {
+  min-height: 48px;
+  margin-top: 15px;
+  padding: 4px 5px 4px 15px;
+}
+
+.courses-main-search button {
+  height: 40px;
+  min-width: 95px;
+}
+
+.courses-content-section {
+  padding: 18px 0 65px;
+}
+
+.courses-sidebar {
+  padding: 18px;
+}
+
+.courses-results {
+  padding: 18px;
+}
+
+.courses-results-top {
+  margin-bottom: 14px;
+}
+
+.courses-results-top h2 {
+  margin: 3px 0;
+  font-size: 19px;
+}
+
+.courses-card-image {
+  height: 130px;
+}
