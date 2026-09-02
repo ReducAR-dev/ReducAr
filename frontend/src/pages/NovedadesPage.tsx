@@ -3,73 +3,78 @@ import PromoBar from "../components/features/PromoBar";
 
 import "../styles/novedades.css";
 
-const eventosDestacados = [
-  {
-    modalidad: "Virtual",
-    tipo: "Curso online",
-    titulo: "Introducción a React.js",
-    descripcion:
-      "Aprendé los conceptos fundamentales de React y comenzá a crear tus propias aplicaciones.",
-    fecha: "12 de noviembre",
-    horario: "19:00 - 21:30 hs",
-    imagen:
-      "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    modalidad: "Presencial",
-    tipo: "Taller presencial",
-    titulo: "Python para principiantes",
-    descripcion:
-      "Aprendé Python desde cero y desarrollá tus primeros programas.",
-    fecha: "18 de noviembre",
-    horario: "10:00 - 13:00 hs",
-    imagen:
-      "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&w=1200&q=80",
-  },
-];
-
 const proximosEventos = [
   {
-    dia: "05",
-    mes: "NOV",
-    modalidad: "Virtual",
-    titulo: "Marketing Digital desde Cero",
-    tipo: "Curso online",
-  },
-  {
-    dia: "12",
-    mes: "NOV",
+    dia: "02",
+    mes: "SEP",
     modalidad: "Presencial",
-    titulo: "Excel Básico para el Trabajo",
-    tipo: "Taller presencial",
-  },
-  {
-    dia: "19",
-    mes: "NOV",
-    modalidad: "Virtual",
-    titulo: "JavaScript Intermedio",
-    tipo: "Curso online",
-  },
-  {
-    dia: "26",
-    mes: "NOV",
-    modalidad: "Presencial",
-    titulo: "Diseño UI/UX con Figma",
-    tipo: "Taller presencial",
+    titulo: "Oracle Community Tour 2026 - Argentina",
+    detalle: "Oracle Argentina · CABA",
+    link: "https://www.eventbrite.com.ar/e/oracle-community-tour-2026-argentina-tickets-1996091167415",
   },
   {
     dia: "03",
-    mes: "DIC",
-    modalidad: "Virtual",
-    titulo: "Base de Datos con MySQL",
-    tipo: "Curso online",
+    mes: "SEP",
+    modalidad: "Presencial",
+    titulo: "Data Saturday LATAM Argentina 2026",
+    detalle: "UTN Facultad Regional Buenos Aires · CABA",
+    link: "https://datasaturdaylatam.com/",
   },
   {
     dia: "10",
-    mes: "DIC",
+    mes: "SEP",
     modalidad: "Presencial",
-    titulo: "Comunicación Efectiva",
-    tipo: "Taller presencial",
+    titulo: "La Plataforma para la Era Agéntica es OpenShift",
+    detalle: "Red Hat User Group Argentina · Buenos Aires",
+    link: "https://www.meetup.com/red-hat-user-argentina/",
+  },
+  {
+    dia: "11",
+    mes: "SEP",
+    modalidad: "Presencial",
+    titulo: "Más allá del código: comunidad y cultura Tech",
+    detalle: "Oficinas de AWS · Buenos Aires",
+    link: "https://www.meetup.com/aws-girls-argentina/",
+  },
+  {
+    dia: "12",
+    mes: "SEP",
+    modalidad: "Presencial",
+    titulo: "AWS Community Day Argentina 2026",
+    detalle: "UAI Anexo Cisneros · CABA",
+    link: "https://www.awsarg.org/",
+  },
+  {
+    dia: "22",
+    mes: "SEP",
+    modalidad: "Híbrido",
+    titulo: "Nerdearla Argentina 2026",
+    detalle: "Ciudad Cultural Konex + streaming",
+    link: "https://nerdearla.com/argentina/",
+  },
+  {
+    dia: "01",
+    mes: "OCT",
+    modalidad: "Presencial",
+    titulo: "AI IN LATAM Argentina 2026",
+    detalle: "CEC · Buenos Aires",
+    link: "https://www.aiinlatam.com/",
+  },
+  {
+    dia: "07",
+    mes: "OCT",
+    modalidad: "Presencial",
+    titulo: "Ekoparty Buenos Aires 2026",
+    detalle: "CEC · Buenos Aires",
+    link: "https://ekoparty.org/ekoparty-buenos-aires-2026/",
+  },
+  {
+    dia: "19",
+    mes: "OCT",
+    modalidad: "Presencial",
+    titulo: "Rosario TechWeek 2026",
+    detalle: "Rosario · Santa Fe",
+    link: "https://rosariotechweek.com/",
   },
 ];
 
@@ -92,91 +97,39 @@ function NovedadesPage() {
             </h1>
 
             <p>
-              Sumate a cursos, talleres y charlas pensadas para vos.
-              Aprendé, conectate y seguí creciendo.
+              Descubrí eventos, encuentros y conferencias de tecnología
+              para aprender, conectar con la comunidad y seguir creciendo.
             </p>
 
-            <div className="novedades-filtros">
-              <button className="activo">
-                Todos
-              </button>
+            <div className="novedades-estadisticas">
+              <div className="novedades-estadistica">
+                <strong>9</strong>
+                <span>EVENTOS</span>
+              </div>
 
-              <button>
-                Virtuales
-              </button>
+              <div className="novedades-estadistica">
+                <strong>2</strong>
+                <span>MODALIDADES</span>
+              </div>
 
-              <button>
-                Presenciales
-              </button>
-
-              <button>
-                Talleres
-              </button>
+              <div className="novedades-estadistica">
+                <strong>SEP — OCT</strong>
+                <span>PRÓXIMOS MESES</span>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="novedades-contenido">
-          <div className="novedades-container novedades-layout">
-            <div className="novedades-destacados">
-              {eventosDestacados.map((evento) => (
-                <article
-                  className="novedad-card"
-                  key={evento.titulo}
-                >
-                  <div className="novedad-card-imagen">
-                    <img
-                      src={evento.imagen}
-                      alt={evento.titulo}
-                    />
-
-                    <span className="novedad-modalidad">
-                      {evento.modalidad}
-                    </span>
-                  </div>
-
-                  <div className="novedad-card-body">
-                    <div className="novedad-meta">
-                      <span>
-                        ◷ {evento.horario}
-                      </span>
-
-                      <span>
-                        ♙ Cupos limitados
-                      </span>
-                    </div>
-
-                    <span className="novedad-tipo">
-                      {evento.tipo}
-                    </span>
-
-                    <h2>
-                      {evento.titulo}
-                    </h2>
-
-                    <p>
-                      {evento.descripcion}
-                    </p>
-
-                    <div className="novedad-card-footer">
-                      <span>
-                        ▣ Inicio: {evento.fecha}
-                      </span>
-
-                      <button type="button">
-                        Ver más →
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-
-            <aside className="novedades-listado">
+        <section
+          className="novedades-contenido"
+          id="eventos"
+        >
+          <div className="novedades-container">
+            <div className="novedades-listado novedades-listado-completo">
               {proximosEventos.map((evento) => (
                 <article
                   className="novedad-item"
-                  key={`${evento.dia}-${evento.titulo}`}
+                  key={`${evento.dia}-${evento.mes}-${evento.titulo}`}
                 >
                   <div className="novedad-fecha">
                     <strong>
@@ -198,23 +151,22 @@ function NovedadesPage() {
                     </h3>
 
                     <p>
-                      {evento.tipo}
+                      {evento.detalle}
                     </p>
                   </div>
 
-                  <button type="button">
-                    ›
-                  </button>
+                  <a
+                    href={evento.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="novedad-ver-evento"
+                  >
+                    Ver evento
+                    <span>→</span>
+                  </a>
                 </article>
               ))}
-
-              <button
-                type="button"
-                className="novedades-ver-todos"
-              >
-                Ver todos los eventos →
-              </button>
-            </aside>
+            </div>
           </div>
         </section>
 
@@ -228,19 +180,22 @@ function NovedadesPage() {
 
                 <div>
                   <h3>
-                    No te quedes afuera
+                    Seguí descubriendo oportunidades
                   </h3>
 
                   <p>
-                    Los cupos son limitados. Reservá tu lugar y seguí
-                    impulsando tu futuro.
+                    Participá de eventos de tecnología, conectá con
+                    comunidades y conocé nuevas experiencias.
                   </p>
                 </div>
               </div>
 
-              <button type="button">
-                Ver todos los eventos →
-              </button>
+              <a
+                href="#eventos"
+                className="novedades-cta-link"
+              >
+                Ver agenda ↑
+              </a>
             </div>
           </div>
         </section>
