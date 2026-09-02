@@ -30,7 +30,7 @@ export type Curso = {
 
 const cursos: Curso[] = [
   {
-    titulo: "Desarrollo Web Full Stack",
+    titulo: "Desarrollo Web Full Stack y desarrollo de producto",
     organizacion: "Fundación Pescar",
     modalidad: "Virtual",
     duracion: "6 meses",
@@ -72,11 +72,11 @@ const cursos: Curso[] = [
       "Proyecto final",
       "Certificado",
     ],
-    link: "https://www.pescar.org.ar/",
+    link: "https://forms.pescar.org.ar/preinscripcion/ff05401f-bfd4-4476-b0d9-8e0511c99c79",
   },
 
   {
-    titulo: "Testing Master",
+    titulo: "Programa IT",
     organizacion: "Fundación Empujar",
     modalidad: "Virtual",
     duracion: "5 meses",
@@ -117,7 +117,7 @@ const cursos: Curso[] = [
       "Acompañamiento",
       "Certificado",
     ],
-    link: "https://fundacionempujar.org/empujar-it/",
+    link:    "https://www.tfaforms.com/5232921?tfa_211=atemporal_2027_IT_C1_IG",
   },
 
   {
@@ -162,7 +162,7 @@ const cursos: Curso[] = [
       "Proyecto tecnológico",
       "Acompañamiento",
     ],
-    link: "https://chicasentecnologia.org/",
+    link:  "https://chicasentecnologia.org/es_ar/curso-programacion/",
   },
 
   {
@@ -207,7 +207,7 @@ const cursos: Curso[] = [
       "Certificado",
     ],
     link:
-      "https://www.santanderopenacademy.com/es/courses/introduction_to_python_programming.html",
+        "https://app.santanderopenacademy.com/es/course/introduction_to_python_programming",
   },
 
   {
@@ -295,7 +295,7 @@ const cursos: Curso[] = [
       "Formación laboral",
       "Acompañamiento",
     ],
-    link: "https://mediapila.org.ar/",
+    link:   "https://mediapila.org.ar/cursos/cursos-mujeres-programando/",
   },
 ];
 

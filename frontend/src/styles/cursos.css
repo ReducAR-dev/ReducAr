@@ -1154,3 +1154,150 @@
     padding: 16px;
   }
 }
+
+.cursos-hero,
+.explorar-hero,
+.hero-cursos,
+.courses-hero {
+  min-height: auto !important;
+  height: auto !important;
+  padding-top: 28px !important;
+  padding-bottom: 28px !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.cursos-hero h1,
+.explorar-hero h1,
+.hero-cursos h1,
+.courses-hero h1 {
+  max-width: 650px;
+  margin-top: 0 !important;
+  margin-bottom: 8px !important;
+  font-size: clamp(28px, 3vw, 40px) !important;
+  line-height: 1.05 !important;
+  text-align: center;
+}
+
+.cursos-hero .badge,
+.cursos-hero .hero-badge,
+.explorar-hero .badge,
+.explorar-hero .hero-badge,
+.hero-cursos .badge {
+  margin-bottom: 8px !important;
+}
+
+.cursos-hero p,
+.explorar-hero p,
+.hero-cursos p,
+.courses-hero p {
+  max-width: 650px;
+  margin-top: 0 !important;
+  margin-bottom: 15px !important;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.cursos-hero .search-box,
+.cursos-hero .search-container,
+.cursos-hero .search-bar,
+.explorar-hero .search-box,
+.explorar-hero .search-container,
+.explorar-hero .search-bar,
+.hero-cursos .search-box,
+.hero-cursos .search-container,
+.courses-hero .search-box {
+  width: 100%;
+  max-width: 580px;
+  margin: 0 auto !important;
+}
+
+.cursos-hero input,
+.explorar-hero input,
+.hero-cursos input,
+.courses-hero input {
+  min-height: 40px !important;
+}
+
+.cursos-hero button,
+.explorar-hero button,
+.hero-cursos button,
+.courses-hero button {
+  min-height: 38px;
+}
+
+.explorar-container,
+.cursos-container,
+.courses-container {
+  padding-top: 22px !important;
+}
+
+.content-layout {
+  margin-top: 15px !important;
+  padding-top: 0 !important;
+}
+
+.courses-area {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.courses-area h2,
+.cursos-listado h2,
+.course-results h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.sidebar {
+  align-self: flex-start;
+}
+
+.filter-group {
+  margin-bottom: 20px !important;
+}
+
+.filter-title {
+  margin-bottom: 10px !important;
+}
+
+.course-grid {
+  margin-top: 10px !important;
+}
+
+@media (max-width: 768px) {
+  .cursos-hero,
+  .explorar-hero,
+  .hero-cursos,
+  .courses-hero {
+    padding-top: 22px !important;
+    padding-bottom: 22px !important;
+  }
+
+  .cursos-hero h1,
+  .explorar-hero h1,
+  .hero-cursos h1,
+  .courses-hero h1 {
+    font-size: 28px !important;
+    max-width: 500px;
+  }
+
+  .cursos-hero p,
+  .explorar-hero p,
+  .hero-cursos p,
+  .courses-hero p {
+    font-size: 13px;
+  }
+
+  .explorar-container,
+  .cursos-container,
+  .courses-container {
+    padding-top: 18px !important;
+  }
+}
