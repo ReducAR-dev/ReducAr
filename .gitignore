@@ -1,18 +1,27 @@
-# Dependencias (pesan muchísimo)
-node_modules/
+# Dependencias
+**/node_modules/
+**/dist/
+**/build/
+**/.vite/
 
-# Variables de entorno (tienen contraseñas)
-.env
-.env.*
-!.env.example
+# Variables de entorno (¡NUNCA subir!)
+**/.env
+**/.env.local
+**/.env.*.local
 
-# Archivos compilados
-dist/
-build/
-backend/dist/
-frontend/dist/
-
-# Archivos del sistema
+# Archivos de sistema
 .DS_Store
 Thumbs.db
-*.log
+desktop.ini
+
+# Logs
+**/logs
+**/*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

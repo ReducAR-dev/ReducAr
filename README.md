@@ -35,6 +35,31 @@ Ejemplos:
         - Unión "guía" del proyecto (Carpetas Frontend y Backend)
 
 
+-  [10/09/2026] — Refactor estructural del Frontend
+  Autor: Jonathan Aguilera (Fullstack)
+
+  Resumen: Reorganización profunda del Frontend para mejorar la mantenibilidad, reutilización de componentes y consistencia visual. Se separaron responsabilidades, se eliminaron archivos obsoletos y se creó una arquitectura basada en mocks y componentes reutilizables.
+
+  Cambios principales:
+
+  Mocks reorganizados: Se eliminó testMock.ts y se dividió en archivos por dominio (test.ts, rutas.ts, eventos.ts, organizaciones.ts) con un index.ts como punto de entrada único. Ahora cada mock tiene una responsabilidad clara.
+
+  Componentes de tarjeta reutilizables: Se crearon EventoCard, OrganizacionCard y RouteCard para eliminar la duplicación de HTML/CSS en las vistas y facilitar su reutilización.
+
+  Footer rediseñado: Nuevo componente Footer.tsx con estilos propios (footer.css), paleta oscura fija independiente del tema, decoración SVG de red y CTA para organizaciones.
+
+  Header y Navbar refactorizados: El Header ahora incluye el nombre "ReducAR" junto al logo (SVG nuevo), y el Navbar soporta menú responsivo con cierre al hacer clic.
+
+  Nuevo AuthLayout: Layout dedicado para las vistas de autenticación (Login/Registro), separado del MainLayout principal.
+
+  Íconos y assets: Se añadieron logo-reducar.svg y logoFondo.svg; se actualizó Icons.tsx con nuevos íconos reutilizables.
+
+  Actualización de páginas: Todas las vistas (Homepage, Cursospage, CursoDetallePage, NovedadesPage, OrganizacionesPage, RutasPage, TestPage, Loginpage, Registropage) fueron ajustadas para consumir los nuevos mocks y componentes.
+
+  Test vocacional con rutas recomendadas: Al finalizar el test, ahora se muestran tarjetas de rutas sugeridas según la categoría obtenida.
+
+  Limpieza: Eliminados archivos obsoletos (.env.example, supabase/.gitignore) y actualizado .gitignore, index.html y package.json.
+
 
 =========================================================================
 =                               BACK END                                =
