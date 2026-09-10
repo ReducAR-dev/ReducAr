@@ -1,14 +1,9 @@
 import { useState } from "react";
-import Header from "../components/common/Header";
 import PromoBar from "../components/features/PromoBar";
 import TestQuestion from "../components/test/TestQuestion";
-import {
-  testMock,
-  preguntasMock,
-  opcionesMock,
-  categoriasMock,
-} from "../mocks/testMock";
+import { testMock, preguntasMock, opcionesMock, categoriasMock } from "../mocks/test";
 import TestResult from "../components/test/TestResult";
+
 import "../styles/testPage.css";
 
 function TestPage() {
@@ -118,7 +113,6 @@ function TestPage() {
   if (resultado) {
     return (
       <>
-        <Header />
         <PromoBar />
         <main className="test-page">
           <div className="test-container">
@@ -134,11 +128,13 @@ function TestPage() {
 
   return (
     <>
-      <Header />
       <PromoBar />
       <main className="test-page">
         <div className="test-container">
           <h1 className="test-title">{testMock.nombre}</h1>
+
+          <p className="test-description">{testMock.descripcion}</p><br /> {/* Descripción insertada pero no usada antes */}
+
 
           <div className="test-progress">
             Pregunta {preguntaActual + 1} de {preguntasMock.length}

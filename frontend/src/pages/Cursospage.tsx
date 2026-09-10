@@ -1,8 +1,5 @@
-
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-
-import Header from "../components/common/Header";
 import PromoBar from "../components/features/PromoBar";
 import CursoDetallePage from "./CursoDetallePage";
 
@@ -388,7 +385,6 @@ function Cursospage() {
 
   return (
     <div className="courses-page">
-      <Header />
       <PromoBar />
 
       <main>

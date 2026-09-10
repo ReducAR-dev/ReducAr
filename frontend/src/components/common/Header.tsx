@@ -1,7 +1,9 @@
+// components/common/Header.tsx
 import { useEffect, useLayoutEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import logoReducar from "../../assets/logo-reducar.png";
 import { SearchIcon } from "../features/Icons";
+import Navbar from "./Navbar";
 
 type Theme = "light" | "dark";
 
@@ -54,60 +56,55 @@ const menuItems = [
   { label: "Instituciones", path: "/instituciones" },
   { label: "Novedades", path: "/novedades" },
 ];
-function Header() {
+
+export const Header = () => {
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
   const navigate = useNavigate();
 
+  // Aplicar el tema al HTML
   useLayoutEffect(() => {
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme;
   }, [theme]);
 
+  // Escuchar cambios del sistema
   useEffect(() => {
-    if (localStorage.getItem(THEME_STORAGE_KEY)) {
-      return;
-    }
-
     const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
-
-    const handleSystemThemeChange = (event: MediaQueryListEvent) => {
-      setTheme(event.matches ? "dark" : "light");
+    const handleChange = (e: MediaQueryListEvent) => {
+      if (!localStorage.getItem(THEME_STORAGE_KEY)) {
+        setTheme(e.matches ? "dark" : "light");
+      }
     };
-
-    systemTheme.addEventListener("change", handleSystemThemeChange);
-
-    return () => {
-      systemTheme.removeEventListener("change", handleSystemThemeChange);
-    };
+    systemTheme.addEventListener("change", handleChange);
+    return () => systemTheme.removeEventListener("change", handleChange);
   }, []);
 
   const toggleTheme = () => {
-    const nextTheme = theme === "dark" ? "light" : "dark";
-
-    localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
-    setTheme(nextTheme);
+    const next = theme === "dark" ? "light" : "dark";
+    localStorage.setItem(THEME_STORAGE_KEY, next);
+    setTheme(next);
   };
 
   return (
     <header className="home-header">
       <div className="home-header-container">
-        <a href="/" className="home-logo" aria-label="Ir al inicio">
-          <img src={logoReducar} alt="Logo de ReducAR" />
+        {/* Logo + Nombre */}
+        <a href="/" className="home-logo" aria-label="Ir al inicio de ReducAR">
+          <img
+            src={logoReducar}
+            alt=""
+            className="home-logo-image"
+            aria-hidden="true"
+          />
+          <span className="home-logo-text">
+            Reduc<span>AR</span>
+          </span>
         </a>
-        <nav className="home-nav">
-          {menuItems.map((item, index) => (
-  <Link
-    key={item.label}
-    to={item.path}
-    className={`home-nav-link ${
-      index === 0 ? "home-nav-link-active" : ""
-    }`}
-  >
-    {item.label}
-  </Link>
-))}
-        </nav>
 
+        {/* Navbar de escritorio */}
+        <Navbar items={menuItems} className="desktop-nav" />
+
+        {/* Acciones del header */}
         <div className="home-header-actions">
           <button
             className="home-icon-button"
@@ -125,25 +122,22 @@ function Header() {
             aria-label={
               theme === "dark" ? "Activar modo claro" : "Activar modo oscuro"
             }
-            title={
-              theme === "dark" ? "Activar modo claro" : "Activar modo oscuro"
-            }
           >
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
 
           <button
-            className="home-login-button"
+            className="home-login-button desktop-only"
             type="button"
-            onClick={() => window.location.href = "/login"}
+            onClick={() => navigate("/login")}
           >
             Iniciar sesión
           </button>
 
           <button
-            className="home-register-button"
+            className="home-register-button desktop-only"
             type="button"
-            onClick={() => window.location.href = "/registro"}
+            onClick={() => navigate("/registro")}
           >
             Registrarme
           </button>
@@ -151,6 +145,6 @@ function Header() {
       </div>
     </header>
   );
-}
+};
 
 export default Header;

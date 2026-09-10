@@ -11,7 +11,6 @@ export default function LoginPage() {
 
   return (
     <div className="login-page">
-      <Header />
 
       <div className="container">
         <section className="intro">

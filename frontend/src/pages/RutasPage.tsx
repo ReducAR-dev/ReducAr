@@ -1,8 +1,8 @@
+// pages/RutasPage.tsx
 import { Link } from "react-router-dom";
-
-import Header from "../components/common/Header";
 import PromoBar from "../components/features/PromoBar";
-import { rutasMock } from "../mocks/testMock";
+import RouteCard from "../components/features/RouteCard";
+import { rutasMock } from "../mocks/rutas";
 
 import "../styles/home-top.css";
 import "../styles/rutas.css";
@@ -17,9 +17,7 @@ const routeSearchTerms: Record<number, string> = {
 function RutasPage() {
   return (
     <div className="routes-page">
-      <Header />
       <PromoBar />
-
       <main>
         <section className="routes-hero">
           <div className="routes-container">
@@ -41,20 +39,14 @@ function RutasPage() {
               {rutasMock
                 .filter((route) => route.esta_activa)
                 .map((route, index) => (
-                  <article className="route-card" key={route.id}>
-                    <span className="route-card-number">
-                      Ruta {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <h2>{route.titulo}</h2>
-                    <p>{route.descripcion}</p>
-                    <Link
-                      to={`/cursos?q=${encodeURIComponent(
-                        routeSearchTerms[route.id] ?? route.titulo,
-                      )}`}
-                    >
-                      Explorar cursos <span aria-hidden="true">→</span>
-                    </Link>
-                  </article>
+                  <RouteCard
+                    key={route.id}
+                    id={route.id}
+                    titulo={route.titulo}
+                    descripcion={route.descripcion}
+                    numero={index + 1}
+                    searchTerm={routeSearchTerms[route.id] ?? route.titulo}
+                  />
                 ))}
             </div>
 

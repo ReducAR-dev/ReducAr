@@ -15,6 +15,7 @@ export type PromotedCourse = {
   };
 };
 
+// Carrusel de vista Home
 // Las imágenes se mantienen como strings para poder reemplazar cada URL remota
 // por un import de src/assets sin cambiar la lógica del carrusel.
 export const promotedCoursesMock: readonly PromotedCourse[] = [

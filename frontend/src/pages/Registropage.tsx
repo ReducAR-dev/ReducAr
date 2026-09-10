@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import Header from "../components/common/Header";
 import PromoBar from "../components/features/PromoBar";
 
 import "../styles/registro-page.css";
@@ -24,7 +23,6 @@ export default function RegistroPage() {
 
   return (
     <div className="registro-page">
-      <Header />
       <PromoBar />
 
       <div className="container">

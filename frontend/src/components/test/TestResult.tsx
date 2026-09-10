@@ -10,7 +10,7 @@ function TestResult({ categoria, puntaje }: TestResultProps) {
 
       <h2 className="result-title">Tu área recomendada</h2>
 
-      <p className="result-category">{categoria}</p>
+      <p className="result-category">{categoria}</p> <br />
 
       <div className="result-score">
         <span>Puntaje obtenido</span>

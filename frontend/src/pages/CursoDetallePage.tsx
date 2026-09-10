@@ -1,11 +1,8 @@
 import { useState } from "react";
-
-import Header from "../components/common/Header";
 import PromoBar from "../components/features/PromoBar";
+import type { Curso } from "./Cursospage";
 
 import "../styles/curso-detalle.css";
-
-import type { Curso } from "./Cursospage";
 
 type CursoDetalleProps = {
   curso: Curso;
@@ -27,7 +24,6 @@ function CursoDetallePage({
 
   return (
     <div className="detalle-page">
-      <Header />
       <PromoBar />
 
       <main className="detalle-container">
