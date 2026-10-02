@@ -1,6 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
-import { Database } from '../types/database.types';
 
 dotenv.config();
 
@@ -16,5 +15,4 @@ if (!supabaseUrl || !supabaseAnonKey) {
   );
 }
 
-// ✅ Ahora el cliente conoce la estructura de tu BD
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);

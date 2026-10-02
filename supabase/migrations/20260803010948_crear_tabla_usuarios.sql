@@ -17,12 +17,3 @@ CREATE TABLE usuarios(
         FOREIGN KEY (rol_id)
         REFERENCES roles(id)
 );
-
-    --Activamos RLS 
-    ALTER TABLE usuarios ENABLE ROW LEVEL SECURITY;
-    --Permisos de lectura
-    CREATE POLICY "Todos pueden leer usuarios"
-    ON usuarios
-    FOR SELECT
-    USING(true);
-    

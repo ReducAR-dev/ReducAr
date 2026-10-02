@@ -8,12 +8,3 @@ CREATE TABLE instituciones(
     email_contacto varchar(100),
     telefono_contacto varchar(100)
 );
-
-
-    --Activamos RLS 
-    ALTER TABLE instituciones ENABLE ROW LEVEL SECURITY;
-    --Permisos de lectura
-    CREATE POLICY "Todos pueden leer instituciones"
-    ON instituciones
-    FOR SELECT
-    USING(true);

@@ -1,0 +1,519 @@
+.opportunities-section {
+  padding: 112px 0 132px;
+  background: linear-gradient(
+    180deg,
+    var(--home-background) 0%,
+    var(--home-surface-soft) 100%
+  );
+}
+
+.opportunities-container {
+  width: min(var(--home-container), calc(100% - 64px));
+  margin: 0 auto;
+}
+
+/* HEADER DE LA SECCIÓN */
+
+.opportunities-heading {
+  max-width: 780px;
+  margin: 0 auto 46px;
+  text-align: center;
+}
+
+.opportunities-eyebrow {
+  width: fit-content;
+  display: inline-flex;
+
+  margin: 0 auto 13px;
+  padding: 7px 11px;
+
+  color: var(--home-primary);
+  background: var(--home-primary-light);
+  border: 1px solid color-mix(in srgb, var(--home-primary) 14%, transparent);
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+}
+
+.opportunities-title {
+  margin: 0;
+
+  color: var(--home-text);
+
+  font-size: clamp(34px, 4vw, 48px);
+
+  font-weight: 700;
+
+  letter-spacing: -2px;
+
+  line-height: 1.08;
+}
+
+.opportunities-subtitle {
+  margin: 16px auto 0;
+
+  color: var(--home-text-secondary);
+
+  font-size: 16.5px;
+
+  line-height: 1.65;
+}
+
+/* CARRUSEL */
+
+.opportunity-carousel {
+  width: 100%;
+}
+
+.opportunity-slide {
+  position: relative;
+  isolation: isolate;
+
+  min-height: 440px;
+
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+
+  padding: 56px;
+
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 32px;
+
+  background-size: cover;
+  background-position: center;
+
+  box-shadow: 0 24px 64px var(--home-section-shadow);
+
+  transition:
+    background-image 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+.opportunity-slide::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: inherit;
+
+  pointer-events: none;
+}
+
+.opportunity-slide:hover {
+  box-shadow: 0 30px 72px var(--home-section-shadow);
+  transform: translateY(-3px);
+}
+
+.opportunity-slide-content {
+  position: relative;
+
+  z-index: 2;
+
+  max-width: 650px;
+
+  color: var(--home-on-accent);
+
+  text-align: left;
+}
+
+/* STATUS */
+
+.opportunity-status {
+  width: fit-content;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  padding: 8px 14px;
+
+  margin-bottom: 21px;
+
+  border-radius: 999px;
+
+  background: rgba(236, 255, 249, 0.94);
+
+  color: #078d78;
+
+  font-size: 11.5px;
+
+  font-weight: 800;
+
+  box-shadow: 0 8px 24px rgba(8, 52, 46, 0.12);
+  backdrop-filter: blur(8px);
+}
+
+/* TEXTO */
+
+.opportunity-institution {
+  display: block;
+
+  margin-bottom: 9px;
+
+  color: rgba(255, 255, 255, 0.9);
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+.opportunity-name {
+  margin: 0 0 24px;
+
+  color: var(--home-on-accent);
+
+  font-size: clamp(34px, 4vw, 46px);
+
+  font-weight: 700;
+
+  line-height: 1.08;
+
+  letter-spacing: -1.7px;
+}
+
+/* META */
+
+.opportunity-meta {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-bottom: 31px;
+}
+
+.opportunity-meta span {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 8px 11px;
+
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 999px;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  backdrop-filter: blur(8px);
+}
+
+.opportunity-meta svg {
+  width: 17px;
+  height: 17px;
+
+  flex-shrink: 0;
+}
+
+/* BOTONES */
+
+.opportunity-actions {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 12px;
+}
+
+.opportunity-primary-button,
+.opportunity-secondary-button {
+  min-height: 48px;
+
+  padding: 0 20px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  border-radius: 14px;
+
+  font-size: 14px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.opportunity-primary-button {
+  border: 1px solid transparent;
+
+  background: linear-gradient(120deg, var(--home-primary), var(--home-turquoise-dark));
+
+  color: var(--home-on-accent);
+
+  box-shadow: 0 8px 20px var(--home-primary-shadow);
+}
+
+.opportunity-primary-button:hover {
+  box-shadow: 0 11px 25px var(--home-primary-shadow);
+  transform: translateY(-2px);
+}
+
+.opportunity-secondary-button {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+
+  background: rgba(255, 255, 255, 0.1);
+
+  color: var(--home-on-accent);
+
+  backdrop-filter: blur(10px);
+}
+
+.opportunity-secondary-button:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.65);
+  transform: translateY(-2px);
+}
+
+.opportunity-secondary-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* CONTROLES */
+
+.opportunity-carousel-controls {
+  position: absolute;
+
+  right: 28px;
+  bottom: 28px;
+
+  z-index: 3;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+}
+
+.opportunity-arrow-button {
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.45);
+
+  border-radius: 50%;
+
+  background: rgba(18, 23, 45, 0.55);
+
+  color: var(--home-on-accent);
+
+  cursor: pointer;
+
+  backdrop-filter: blur(8px);
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.opportunity-arrow-button:hover {
+  background: rgba(104, 84, 245, 0.96);
+
+  transform: scale(1.05);
+}
+
+.opportunity-arrow-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+.opportunity-counter {
+  color: var(--home-on-accent);
+
+  min-width: 36px;
+
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+/* INDICADORES */
+
+.opportunity-indicators {
+  margin-top: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+}
+
+.opportunity-indicator {
+  width: 9px;
+  height: 9px;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 999px;
+
+  background: var(--home-indicator);
+
+  cursor: pointer;
+
+  transition:
+    width 0.25s ease,
+    background 0.25s ease;
+}
+
+.opportunity-indicator-active {
+  width: 30px;
+
+  background: var(--home-primary);
+}
+
+/* TABLET */
+
+@media (max-width: 980px) {
+  .opportunities-section {
+    padding: 88px 0 106px;
+  }
+
+  .opportunity-slide {
+    min-height: 420px;
+
+    padding: 46px;
+  }
+
+  .opportunity-slide-content {
+    max-width: 520px;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 720px) {
+  .opportunities-section {
+    padding: 76px 0 86px;
+  }
+
+  .opportunities-container {
+    width: calc(100% - 32px);
+  }
+
+.opportunities-heading {
+    margin-bottom: 34px;
+  }
+
+.opportunities-title {
+    font-size: clamp(32px, 8vw, 40px);
+
+    letter-spacing: -1.4px;
+  }
+
+.opportunities-subtitle {
+    font-size: 15.5px;
+  }
+
+.opportunity-slide {
+    min-height: 540px;
+
+    padding: 34px 28px 98px;
+
+    align-items: flex-end;
+
+    border-radius: 26px;
+
+    background-position: center;
+  }
+
+.opportunity-name {
+    font-size: clamp(30px, 8vw, 38px);
+  }
+
+.opportunity-meta {
+    gap: 8px;
+  }
+
+  .opportunity-meta span {
+    padding: 7px 10px;
+  }
+
+  .opportunity-actions {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .opportunity-primary-button,
+  .opportunity-secondary-button {
+    width: 100%;
+  }
+
+.opportunity-carousel-controls {
+    right: 24px;
+    bottom: 24px;
+  }
+}
+
+@media (max-width: 520px) {
+  .opportunities-container {
+    width: calc(100% - 28px);
+  }
+
+  .opportunities-eyebrow {
+    font-size: 10px;
+  }
+
+  .opportunity-slide {
+    min-height: 570px;
+    padding: 30px 20px 94px;
+    border-radius: 22px;
+  }
+
+  .opportunity-status {
+    margin-bottom: 17px;
+  }
+
+  .opportunity-name {
+    margin-bottom: 20px;
+  }
+
+  .opportunity-meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .opportunity-actions {
+    width: 100%;
+  }
+
+  .opportunity-carousel-controls {
+    right: 20px;
+    bottom: 20px;
+  }
+
+  .opportunity-arrow-button {
+    width: 42px;
+    height: 42px;
+  }
+}
