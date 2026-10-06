@@ -1,99 +1,54 @@
-// components/features/OrganizacionCard.tsx
-import React from "react";
-
+// src/components/features/OrganizacionCard.tsx
 interface OrganizacionCardProps {
-  /** Nombre de la organización */
   nombre: string;
-  /** URL o ruta de la imagen del logo */
   logo: string;
-  /** Texto descriptivo breve */
   descripcion: string;
-  /** Categoría (ej: "Tecnología", "Empleabilidad") - se muestra oculta por defecto en el CSS actual */
   categoria?: string;
-  /** Número de cursos disponibles (para mostrar contador) */
   cursos: number;
-  /** URL de enlace externo (opcional, si no se pasa, no se envuelve en <a>) */
   link?: string;
-  /** Si es destacada, muestra el badge */
   destacada?: boolean;
-  /** Clases adicionales para personalización */
   className?: string;
 }
 
-export const OrganizacionCard: React.FC<OrganizacionCardProps> = ({
-  nombre,
-  logo,
-  descripcion,
-  categoria,
-  cursos,
-  link,
-  destacada = false,
-  className = "",
-}) => {
-  // Contenido interno de la tarjeta (sin el <a>)
-  const cardContent = (
+export const OrganizacionCard = ({ nombre, logo, descripcion, cursos, link, destacada = false, className = "" }: OrganizacionCardProps) => {
+  const content = (
     <>
-      {/* Parte superior: contenedor del logo + badge */}
-      <div className="organizacion-card-top">
-        <div className="organizacion-logo-container">
-          <img
-            src={logo}
-            alt={`Logo de ${nombre}`}
-            className="organizacion-logo"
-            loading="lazy"
-          />
+      <div className="relative w-full">
+        <div className="w-full h-[180px] flex items-center justify-center px-8 py-5 bg-[#f7f7fa] rounded-xl overflow-hidden">
+          <img src={logo} alt={`Logo de ${nombre}`} className="max-w-[380px] max-h-[135px] w-full h-full object-contain" loading="lazy" />
         </div>
         {destacada && (
-          <span className="institucion-destacada">Destacada</span>
+          <span className="absolute top-2.5 right-2.5 z-10 px-2.5 py-1.5 text-[10px] font-extrabold text-white bg-reducar-primary rounded-full">Destacada</span>
         )}
       </div>
 
-      {/* Información principal */}
-      <div className="organizacion-info">
-        {categoria && (
-          <span className="institucion-categoria">{categoria}</span>
-        )}
-        <h2>{nombre}</h2>
-        <p>{descripcion}</p>
+      <div className="w-full mt-4 text-left">
+        <h2 className="mb-2 text-xl font-extrabold text-white leading-snug">{nombre}</h2>
+        <p className="m-0 text-xs text-reducar-text-secondary leading-relaxed">{descripcion}</p>
       </div>
 
-      {/* Footer: contador de cursos */}
-      <div className="organizacion-card-footer">
-        <div className="institucion-cursos">
-          <span className="institucion-cursos-icon">▣</span>
-          <div>
-            <strong>{cursos}</strong>
-            <span>
-              {cursos === 1
-                ? " curso disponible"
-                : " cursos disponibles"}
-            </span>
+      <div className="mt-4 pt-3 flex items-center justify-between gap-3 border-t border-reducar-border">
+        <div className="flex items-center gap-2">
+          <span className="w-7 h-7 grid place-items-center rounded-lg bg-reducar-primary-light text-reducar-primary text-xs">▣</span>
+          <div className="flex items-center gap-1 text-[10px] text-reducar-text-secondary">
+            <strong className="text-xs text-white">{cursos}</strong>
+            <span>{cursos === 1 ? " curso disponible" : " cursos disponibles"}</span>
           </div>
         </div>
       </div>
     </>
   );
 
-  // Si hay link, envuelve en <a>; si no, solo el div con las mismas clases
+  const baseClasses = `flex flex-col p-5 bg-reducar-surface border border-reducar-primary/40 rounded-2xl overflow-hidden hover:-translate-y-1 hover:border-reducar-primary hover:shadow-2xl transition-all ${className}`;
+
   if (link) {
     return (
-      <a
-        href={link}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`organizacion-card ${className}`}
-        style={{ textDecoration: "none", color: "inherit", cursor: "pointer" }}
-      >
-        {cardContent}
+      <a href={link} target="_blank" rel="noopener noreferrer" className={baseClasses} style={{ textDecoration: "none", color: "inherit", cursor: "pointer" }}>
+        {content}
       </a>
     );
   }
-
-  return (
-    <div className={`organizacion-card ${className}`}>
-      {cardContent}
-    </div>
-  );
+  return <div className={baseClasses}>{content}</div>;
 };
 
 export default OrganizacionCard;

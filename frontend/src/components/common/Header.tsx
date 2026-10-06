@@ -1,4 +1,3 @@
-// components/common/Header.tsx
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logoReducar from "../../assets/logo-reducar.png";
@@ -6,16 +5,11 @@ import { SearchIcon } from "../features/Icons";
 import Navbar from "./Navbar";
 
 type Theme = "light" | "dark";
-
 const THEME_STORAGE_KEY = "theme";
 
 function getInitialTheme(): Theme {
   const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-
-  if (savedTheme === "light" || savedTheme === "dark") {
-    return savedTheme;
-  }
-
+  if (savedTheme === "light" || savedTheme === "dark") return savedTheme;
   return window.matchMedia("(prefers-color-scheme: dark)").matches
     ? "dark"
     : "light";
@@ -86,48 +80,46 @@ export const Header = () => {
   };
 
   return (
-    <header className="home-header">
-      <div className="home-header-container">
+    <header className="h-21 bg-reducar-surface/80 backdrop-blur-md border-b border-reducar-border flex items-center sticky top-0 z-50">
+      <div className="w-full max-w-7xl mx-auto px-4 flex items-center gap-8">
         {/* Logo + Nombre */}
-        <a href="/" className="home-logo" aria-label="Ir al inicio de ReducAR">
+        <a href="/" className="flex items-center gap-2 shrink-0" aria-label="Ir al inicio de ReducAR">
           <img
             src={logoReducar}
             alt=""
-            className="home-logo-image"
+            className="h-12 w-auto"
             aria-hidden="true"
           />
-          <span className="home-logo-text">
-            Reduc<span>AR</span>
+          <span className="text-2xl font-extrabold text-white">
+            Reduc<span className="text-reducar-turquoise">AR</span>
           </span>
         </a>
 
         {/* Navbar de escritorio */}
-        <Navbar items={menuItems} className="desktop-nav" />
+        <Navbar items={menuItems} className="hidden lg:flex flex-1" />
 
         {/* Acciones del header */}
-        <div className="home-header-actions">
+        <div className="flex items-center gap-2 ml-auto">
           <button
-            className="home-icon-button"
+            className="p-2.5 rounded-xl bg-reducar-surface border border-reducar-border text-reducar-text hover:bg-reducar-primary-light hover:border-reducar-primary transition-colors"
             type="button"
             aria-label="Buscar"
             onClick={() => navigate("/cursos")}
           >
-            <SearchIcon />
+            <SearchIcon className="w-5 h-5" />
           </button>
 
           <button
-            className="home-theme-button"
+            className="p-2.5 rounded-xl bg-reducar-surface border border-reducar-border text-reducar-text hover:bg-reducar-primary-light hover:border-reducar-primary transition-colors"
             type="button"
             onClick={toggleTheme}
-            aria-label={
-              theme === "dark" ? "Activar modo claro" : "Activar modo oscuro"
-            }
+            aria-label={theme === "dark" ? "Activar modo claro" : "Activar modo oscuro"}
           >
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
 
           <button
-            className="home-login-button desktop-only"
+            className="hidden lg:inline-flex items-center justify-center h-11 px-5 rounded-xl border border-reducar-primary text-reducar-primary font-bold hover:bg-reducar-primary-light transition-colors"
             type="button"
             onClick={() => navigate("/login")}
           >
@@ -135,7 +127,7 @@ export const Header = () => {
           </button>
 
           <button
-            className="home-register-button desktop-only"
+            className="hidden lg:inline-flex items-center justify-center h-11 px-5 rounded-xl bg-linear-to-r from-reducar-primary to-reducar-turquoise-dark text-white font-bold hover:shadow-lg transition-shadow"
             type="button"
             onClick={() => navigate("/registro")}
           >
