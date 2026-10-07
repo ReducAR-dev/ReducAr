@@ -10,7 +10,7 @@ function TestResult({ categoria, puntaje }: TestResultProps) {
         Test completado
       </p>
 
-      <h2 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
+      <h2 className="text-3xl md:text-4xl font-extrabold text-reducar-text tracking-tight">
         Tu área recomendada
       </h2>
 

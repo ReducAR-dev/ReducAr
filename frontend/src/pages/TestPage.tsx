@@ -65,7 +65,7 @@ function TestPage() {
       <PromoBar />
       <main className="min-h-screen bg-reducar-bg text-reducar-text py-16 px-4">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white text-center tracking-tight mb-4">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-reducar-text text-center tracking-tight mb-4">
             {testMock.nombre}
           </h1>
           <p className="text-center text-sm text-reducar-text-secondary mb-8">{testMock.descripcion}</p>

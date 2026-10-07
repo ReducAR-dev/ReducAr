@@ -14,7 +14,7 @@ function TestQuestion({ pregunta, opciones, respuestaSeleccionada, onSeleccionar
     <section className="relative overflow-hidden p-8 md:p-11 bg-reducar-surface border border-reducar-border rounded-3xl shadow-2xl">
       <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-reducar-primary via-reducar-gradient-middle to-reducar-turquoise opacity-85" aria-hidden="true" />
 
-      <h2 className="max-w-3xl mx-auto mb-8 text-2xl font-bold text-white text-center leading-snug tracking-tight">
+      <h2 className="max-w-3xl mx-auto mb-8 text-2xl font-bold text-reducar-text text-center leading-snug tracking-tight">
         {pregunta.pregunta}
       </h2>
 
@@ -40,7 +40,7 @@ function TestQuestion({ pregunta, opciones, respuestaSeleccionada, onSeleccionar
               }`}>
                 {String.fromCharCode(65 + index)}
               </span>
-              <span className={`flex-1 text-base ${selected ? "text-white font-semibold" : "text-reducar-text"}`}>
+              <span className={`flex-1 text-base ${selected ? "text-reducar-text font-semibold" : "text-reducar-text"}`}>
                 {opcion.texto}
               </span>
             </button>

@@ -39,7 +39,7 @@ function HeroSection() {
             <span>Cursos, becas y oportunidades para crecer</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-extrabold leading-[1.05] tracking-tight text-white">
+          <h1 className="text-5xl md:text-7xl font-extrabold leading-[1.05] tracking-tight text-reducar-text">
             Descubrí tu próxima
             <span className="block bg-linear-to-r from-reducar-primary via-[#8a7bf6] to-reducar-turquoise bg-clip-text text-transparent">
               oportunidad de<br />aprendizaje

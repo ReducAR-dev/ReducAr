@@ -19,7 +19,7 @@ export const EventoCard = ({ dia, mes, modalidad, titulo, detalle, link, classNa
 
       <div className="min-w-0 flex flex-col items-start text-left">
         <span className="mb-2 text-[10px] font-black uppercase text-reducar-primary">{modalidad}</span>
-        <h3 className="mb-2 text-lg font-extrabold text-white leading-snug">{titulo}</h3>
+        <h3 className="mb-2 text-lg font-extrabold text-reducar-text leading-snug">{titulo}</h3>
         <p className="m-0 text-sm text-reducar-text-secondary leading-normal">{detalle}</p>
       </div>
 

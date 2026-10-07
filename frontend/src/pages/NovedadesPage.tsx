@@ -14,7 +14,7 @@ function NovedadesPage() {
             <span className="inline-flex items-center justify-center mb-4 px-4 py-2 text-xs font-extrabold text-reducar-primary bg-reducar-primary-light border border-reducar-primary/30 rounded-full">
               ✦ Novedades
             </span>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight max-w-3xl leading-tight">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-reducar-text tracking-tight max-w-3xl leading-tight">
               Enterate de los próximos
               <span className="bg-gradient-to-r from-reducar-gradient-start via-reducar-gradient-middle to-reducar-gradient-end bg-clip-text text-transparent"> eventos</span>
             </h1>
@@ -24,15 +24,15 @@ function NovedadesPage() {
 
             <div className="w-full max-w-3xl mt-8 py-5 grid grid-cols-3 border-y border-white/10">
               <div className="flex flex-col items-center">
-                <strong className="text-2xl font-extrabold text-white">9</strong>
+                <strong className="text-2xl font-extrabold text-reducar-text">9</strong>
                 <span className="mt-2 text-[8px] font-extrabold tracking-widest text-reducar-text-secondary">EVENTOS</span>
               </div>
               <div className="flex flex-col items-center">
-                <strong className="text-2xl font-extrabold text-white">2</strong>
+                <strong className="text-2xl font-extrabold text-reducar-text">2</strong>
                 <span className="mt-2 text-[8px] font-extrabold tracking-widest text-reducar-text-secondary">MODALIDADES</span>
               </div>
               <div className="flex flex-col items-center">
-                <strong className="text-2xl font-extrabold text-white">SEP — OCT</strong>
+                <strong className="text-2xl font-extrabold text-reducar-text">SEP — OCT</strong>
                 <span className="mt-2 text-[8px] font-extrabold tracking-widest text-reducar-text-secondary">PRÓXIMOS MESES</span>
               </div>
             </div>
@@ -63,7 +63,7 @@ function NovedadesPage() {
               <div className="flex items-center gap-4">
                 <span className="w-11 h-11 shrink-0 grid place-items-center rounded-xl bg-reducar-primary-light text-reducar-primary text-lg">▣</span>
                 <div>
-                  <h3 className="text-lg font-extrabold text-white">Seguí descubriendo oportunidades</h3>
+                  <h3 className="text-lg font-extrabold text-reducar-text">Seguí descubriendo oportunidades</h3>
                   <p className="mt-1 max-w-2xl text-xs text-reducar-text-secondary leading-relaxed">
                     Participá de eventos de tecnología, conectá con comunidades y conocé nuevas experiencias.
                   </p>

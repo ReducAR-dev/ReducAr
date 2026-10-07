@@ -1,26 +1,109 @@
 /* src/index.css */
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
+/* ============================================
+   COLORES DE MARCA (no cambian con el tema)
+============================================ */
 @theme {
-  /* Colores principales */
-  --color-reducar-bg: #0b1024;
-  --color-reducar-surface: #111936;
-  --color-reducar-surface-soft: #0f1730;
-  --color-reducar-surface-hover: rgba(255, 255, 255, 0.05);
   --color-reducar-primary: #7b6cf6;
-  --color-reducar-primary-light: rgba(123, 108, 246, 0.15);
   --color-reducar-primary-dark: #5b3af0;
   --color-reducar-turquoise: #3fd9c9;
   --color-reducar-turquoise-dark: #24cccd;
-  --color-reducar-text: #e6e8f2;
-  --color-reducar-text-secondary: #9aa3c0;
-  --color-reducar-border: rgba(255, 255, 255, 0.1);
-  --color-reducar-placeholder: #6b7280;
-
-  /* Gradientes de marca */
   --color-reducar-gradient-start: #7b6cf6;
   --color-reducar-gradient-middle: #8a7bf6;
   --color-reducar-gradient-end: #3fd9c9;
+
+  /* ============================================
+     SHELL: Header, Navbar y Footer
+     Colores FIJOS, no cambian con el tema
+  ============================================ */
+  --color-reducar-shell-bg: #0b1024;
+  --color-reducar-shell-surface: #111936;
+  --color-reducar-shell-surface-soft: #0f1730;
+  --color-reducar-shell-hover: rgba(255, 255, 255, 0.05);
+  --color-reducar-shell-text: #e6e8f2;
+  --color-reducar-shell-text-secondary: #9aa3c0;
+  --color-reducar-shell-border: rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   COLORES POR TEMA (solo para las vistas)
+============================================ */
+:root {
+  --surface-bg: #f8f9fc;
+  --surface-card: #ffffff;
+  --surface-soft: #f0f1f7;
+  --surface-hover: rgba(0, 0, 0, 0.04);
+  --surface-primary-light: rgba(123, 108, 246, 0.12);
+  --text-primary: #0b1024;
+  --text-secondary: #5a6280;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --placeholder-color: #9aa3c0;
+}
+
+[data-theme="dark"] {
+  --surface-bg: #0b1024;
+  --surface-card: #111936;
+  --surface-soft: #0f1730;
+  --surface-hover: rgba(255, 255, 255, 0.05);
+  --surface-primary-light: rgba(123, 108, 246, 0.15);
+  --text-primary: #e6e8f2;
+  --text-secondary: #9aa3c0;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --placeholder-color: #6b7280;
+}
+
+@theme inline {
+  --color-reducar-bg: var(--surface-bg);
+  --color-reducar-surface: var(--surface-card);
+  --color-reducar-surface-soft: var(--surface-soft);
+  --color-reducar-surface-hover: var(--surface-hover);
+  --color-reducar-primary-light: var(--surface-primary-light);
+  --color-reducar-text: var(--text-primary);
+  --color-reducar-text-secondary: var(--text-secondary);
+  --color-reducar-border: var(--border-color);
+  --color-reducar-placeholder: var(--placeholder-color);
+}
+
+/* ============================================
+   REGLAS BASE
+============================================ */
+@layer base {
+  html {
+    scrollbar-gutter: stable;
+    overflow-x: clip;
+  }
+  body {
+    overflow-x: clip;
+    max-width: 100%;
+    background-color: var(--surface-bg);
+    color: var(--text-primary);
+    font-family: inherit;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  *, *::before, *::after {
+    box-sizing: border-box;
+    min-width: 0;
+  }
+  img, svg, video {
+    max-width: 100%;
+    height: auto;
+  }
+  button, input { font: inherit; }
+  button { cursor: pointer; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes dropdownIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
 }

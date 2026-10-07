@@ -14,7 +14,7 @@ export default function RegistroPage() {
 
       <div className="max-w-6xl mx-auto px-6 py-10">
         <section className="text-center max-w-xl mx-auto mb-10">
-          <h1 className="text-4xl font-extrabold text-white tracking-tight mb-3">
+          <h1 className="text-4xl font-extrabold text-reducar-text tracking-tight mb-3">
             Sumate a <span className="text-reducar-primary">ReducAR</span>
           </h1>
           <p className="text-base text-reducar-text-secondary leading-relaxed">
@@ -31,31 +31,31 @@ export default function RegistroPage() {
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#7b6cf6" strokeWidth="1.8"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" stroke="#7b6cf6" strokeWidth="1.8" strokeLinecap="round"/></svg>
             </div>
             <div className="text-sm font-bold tracking-wider uppercase text-reducar-primary mb-2">Para personas</div>
-            <h2 className="text-2xl font-extrabold text-white mb-2">Registrate como usuario</h2>
+            <h2 className="text-2xl font-extrabold text-reducar-text mb-2">Registrate como usuario</h2>
             <p className="text-sm text-reducar-text-secondary leading-relaxed mb-6">
               Explorá cursos, guardá tus favoritos y postulate a programas de formación gratuita.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="mb-1">
-                <label htmlFor="uNombre" className="block mb-1.5 text-sm font-bold text-white">Nombre</label>
+                <label htmlFor="uNombre" className="block mb-1.5 text-sm font-bold text-reducar-text">Nombre</label>
                 <input id="uNombre" type="text" placeholder="Tu nombre" required className="w-full px-4 py-3 rounded-xl bg-reducar-surface-soft border-[1.5px] border-reducar-border text-white outline-none focus:border-reducar-primary transition-all" />
               </div>
               <div className="mb-1">
-                <label htmlFor="uApellido" className="block mb-1.5 text-sm font-bold text-white">Apellido</label>
+                <label htmlFor="uApellido" className="block mb-1.5 text-sm font-bold text-reducar-text">Apellido</label>
                 <input id="uApellido" type="text" placeholder="Tu apellido" required className="w-full px-4 py-3 rounded-xl bg-reducar-surface-soft border-[1.5px] border-reducar-border text-white outline-none focus:border-reducar-primary transition-all" />
               </div>
             </div>
             <div className="mb-4">
-              <label htmlFor="uFechaNacimiento" className="block mb-1.5 text-sm font-bold text-white">Fecha de nacimiento</label>
+              <label htmlFor="uFechaNacimiento" className="block mb-1.5 text-sm font-bold text-reducar-text">Fecha de nacimiento</label>
               <input id="uFechaNacimiento" type="date" required className="w-full px-4 py-3 rounded-xl bg-reducar-surface-soft border-[1.5px] border-reducar-border text-white outline-none focus:border-reducar-primary transition-all" />
             </div>
             <div className="mb-4">
-              <label htmlFor="uEmail" className="block mb-1.5 text-sm font-bold text-white">Correo electrónico</label>
+              <label htmlFor="uEmail" className="block mb-1.5 text-sm font-bold text-reducar-text">Correo electrónico</label>
               <input id="uEmail" type="email" placeholder="tu@email.com" required className="w-full px-4 py-3 rounded-xl bg-reducar-surface-soft border-[1.5px] border-reducar-border text-white outline-none focus:border-reducar-primary transition-all" />
             </div>
             <div className="mb-4">
-              <label htmlFor="uPass" className="block mb-1.5 text-sm font-bold text-white">Contraseña</label>
+              <label htmlFor="uPass" className="block mb-1.5 text-sm font-bold text-reducar-text">Contraseña</label>
               <input id="uPass" type="password" placeholder="••••••••" required className="w-full px-4 py-3 rounded-xl bg-reducar-surface-soft border-[1.5px] border-reducar-border text-white outline-none focus:border-reducar-primary transition-all" />
             </div>
 
@@ -72,25 +72,25 @@ export default function RegistroPage() {
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 21V9l8-5 8 5v12" stroke="white" strokeWidth="1.8"/><path d="M9 21v-6h6v6" stroke="white" strokeWidth="1.8"/></svg>
             </div>
             <div className="text-sm font-bold tracking-wider uppercase text-reducar-primary mb-2">Para organizaciones</div>
-            <h2 className="text-2xl font-extrabold text-white mb-2">Registrá tu institución</h2>
+            <h2 className="text-2xl font-extrabold text-reducar-text mb-2">Registrá tu institución</h2>
             <p className="text-sm text-reducar-text-secondary leading-relaxed mb-6">
               Publicá tus cursos y programas, y llegá a miles de personas buscando formarse.
             </p>
 
             <div className="mb-4">
-              <label htmlFor="iNombre" className="block mb-1.5 text-sm font-bold text-white">Nombre de la organización</label>
+              <label htmlFor="iNombre" className="block mb-1.5 text-sm font-bold text-reducar-text">Nombre de la organización</label>
               <input id="iNombre" type="text" placeholder="Ej: Fundación Pescar" required className="w-full px-4 py-3 rounded-xl bg-reducar-surface-soft border-[1.5px] border-reducar-border text-white outline-none focus:border-reducar-primary transition-all" />
             </div>
             <div className="mb-4">
-              <label htmlFor="iWeb" className="block mb-1.5 text-sm font-bold text-white">Sitio web de la organización</label>
+              <label htmlFor="iWeb" className="block mb-1.5 text-sm font-bold text-reducar-text">Sitio web de la organización</label>
               <input id="iWeb" type="url" placeholder="www.sitioweb.org" required className="w-full px-4 py-3 rounded-xl bg-reducar-surface-soft border-[1.5px] border-reducar-border text-white outline-none focus:border-reducar-primary transition-all" />
             </div>
             <div className="mb-4">
-              <label htmlFor="iEmail" className="block mb-1.5 text-sm font-bold text-white">Correo institucional</label>
+              <label htmlFor="iEmail" className="block mb-1.5 text-sm font-bold text-reducar-text">Correo institucional</label>
               <input id="iEmail" type="email" placeholder="contacto@organizacion.org" required className="w-full px-4 py-3 rounded-xl bg-reducar-surface-soft border-[1.5px] border-reducar-border text-white outline-none focus:border-reducar-primary transition-all" />
             </div>
             <div className="mb-4">
-              <label htmlFor="iPass" className="block mb-1.5 text-sm font-bold text-white">Contraseña</label>
+              <label htmlFor="iPass" className="block mb-1.5 text-sm font-bold text-reducar-text">Contraseña</label>
               <input id="iPass" type="password" placeholder="••••••••" required className="w-full px-4 py-3 rounded-xl bg-reducar-surface-soft border-[1.5px] border-reducar-border text-white outline-none focus:border-reducar-primary transition-all" />
             </div>
 

@@ -18,7 +18,7 @@ function RutasPage() {
             <span className="inline-block mb-4 text-sm font-extrabold tracking-widest text-reducar-primary uppercase">
               ✦ Aprendizaje paso a paso
             </span>
-            <h1 className="max-w-3xl mx-auto mb-5 text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-[1.08]">
+            <h1 className="max-w-3xl mx-auto mb-5 text-4xl md:text-6xl font-extrabold text-reducar-text tracking-tight leading-[1.08]">
               Elegí una ruta y empezá a construir
               <span className="text-reducar-primary"> tu futuro digital</span>
             </h1>
@@ -46,7 +46,7 @@ function RutasPage() {
             <div className="mt-8 p-8 flex flex-wrap items-center justify-between gap-8 bg-reducar-surface-soft border border-reducar-border rounded-3xl">
               <div>
                 <span className="text-xs font-extrabold tracking-widest text-reducar-primary uppercase">¿No sabés por dónde empezar?</span>
-                <h2 className="mt-2 mb-2 text-2xl font-extrabold text-white">Descubrí el área que mejor se adapta a vos</h2>
+                <h2 className="mt-2 mb-2 text-2xl font-extrabold text-reducar-text">Descubrí el área que mejor se adapta a vos</h2>
                 <p className="m-0 text-reducar-text-secondary text-sm">Respondé cinco preguntas y obtené una orientación para elegir tu primera ruta de aprendizaje.</p>
               </div>
               <Link to="/test" className="shrink-0 px-5 py-3 rounded-xl bg-reducar-primary text-white text-sm font-extrabold hover:bg-reducar-primary-dark transition-colors">

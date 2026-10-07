@@ -20,7 +20,7 @@ function OrganizacionesPage() {
               <span className="inline-flex items-center justify-center mb-4 px-4 py-2 text-[10px] font-extrabold text-reducar-primary bg-reducar-primary-light border border-reducar-primary/35 rounded-full">
                 ✦ Nuestra comunidad
               </span>
-              <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight max-w-2xl">
+              <h1 className="text-4xl md:text-5xl font-extrabold text-reducar-text tracking-tight leading-tight max-w-2xl">
                 Instituciones que impulsan
                 <span className="bg-gradient-to-r from-reducar-gradient-start via-reducar-gradient-middle to-reducar-gradient-end bg-clip-text text-transparent"> tu futuro</span>
               </h1>
@@ -56,7 +56,7 @@ function OrganizacionesPage() {
               <div className="w-11 h-11 grid place-items-center rounded-xl bg-gradient-to-br from-reducar-primary to-reducar-turquoise-dark text-white text-lg">✦</div>
               <div>
                 <span className="text-[8px] font-black tracking-widest text-reducar-primary">¿SOS PARTE DE UNA INSTITUCIÓN?</span>
-                <h2 className="mt-1.5 text-lg font-extrabold text-white">Sumate a la comunidad ReducAR</h2>
+                <h2 className="mt-1.5 text-lg font-extrabold text-reducar-text">Sumate a la comunidad ReducAR</h2>
                 <p className="mt-1 max-w-2xl text-[10px] text-reducar-text-secondary leading-relaxed">
                   Compartí tus oportunidades de formación y conectá con personas que buscan seguir aprendiendo.
                 </p>

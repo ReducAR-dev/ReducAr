@@ -92,7 +92,7 @@ function CursoDetallePage({ curso, onVolver }: CursoDetalleProps) {
                 {curso.categoria}
               </span>
 
-              <h1 className="mt-4 mb-2 text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-[1.05] max-w-xl">
+              <h1 className="mt-4 mb-2 text-4xl md:text-5xl font-extrabold text-reducar-text tracking-tight leading-[1.05] max-w-xl">
                 {curso.titulo}
               </h1>
 
@@ -133,7 +133,7 @@ function CursoDetallePage({ curso, onVolver }: CursoDetalleProps) {
                       ✓
                     </span>
                     <div className="flex flex-col gap-0.5">
-                      <strong className="text-[11px] font-bold text-white">Formación gratuita</strong>
+                      <strong className="text-[11px] font-bold text-reducar-text">Formación gratuita</strong>
                       <small className="text-[9px] text-reducar-text-secondary">Sin costo de inscripción</small>
                     </div>
                   </div>
@@ -144,7 +144,7 @@ function CursoDetallePage({ curso, onVolver }: CursoDetalleProps) {
                       ✓
                     </span>
                     <div className="flex flex-col gap-0.5">
-                      <strong className="text-[11px] font-bold text-white">Certificado incluido</strong>
+                      <strong className="text-[11px] font-bold text-reducar-text">Certificado incluido</strong>
                       <small className="text-[9px] text-reducar-text-secondary">Al completar la formación</small>
                     </div>
                   </div>
@@ -221,7 +221,7 @@ function CursoDetallePage({ curso, onVolver }: CursoDetalleProps) {
                     <span className="text-[8px] font-black tracking-widest text-reducar-primary uppercase">
                       SOBRE EL CURSO
                     </span>
-                    <h2 className="mt-2 mb-4 text-2xl font-bold text-white tracking-tight">
+                    <h2 className="mt-2 mb-4 text-2xl font-bold text-reducar-text tracking-tight">
                       Conocé esta oportunidad
                     </h2>
                     <p className="m-0 text-sm text-reducar-text-secondary leading-loose">
@@ -250,7 +250,7 @@ function CursoDetallePage({ curso, onVolver }: CursoDetalleProps) {
                     <span className="text-[8px] font-black tracking-widest text-reducar-primary uppercase">
                       CONTENIDO
                     </span>
-                    <h2 className="mt-2 mb-4 text-2xl font-bold text-white tracking-tight">
+                    <h2 className="mt-2 mb-4 text-2xl font-bold text-reducar-text tracking-tight">
                       ¿Qué vas a aprender?
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -262,7 +262,7 @@ function CursoDetallePage({ curso, onVolver }: CursoDetalleProps) {
                           <span className="text-[10px] font-black text-reducar-primary">
                             {String(index + 1).padStart(2, "0")}
                           </span>
-                          <p className="m-0 text-[11px] font-semibold text-white">{item}</p>
+                          <p className="m-0 text-[11px] font-semibold text-reducar-text">{item}</p>
                         </div>
                       ))}
                     </div>
@@ -274,7 +274,7 @@ function CursoDetallePage({ curso, onVolver }: CursoDetalleProps) {
                     <span className="text-[8px] font-black tracking-widest text-reducar-primary uppercase">
                       REQUISITOS
                     </span>
-                    <h2 className="mt-2 mb-4 text-2xl font-bold text-white tracking-tight">
+                    <h2 className="mt-2 mb-4 text-2xl font-bold text-reducar-text tracking-tight">
                       ¿Qué necesitás?
                     </h2>
                     <div className="flex flex-col gap-2.5">
@@ -286,7 +286,7 @@ function CursoDetallePage({ curso, onVolver }: CursoDetalleProps) {
                           <span className="w-5 h-5 shrink-0 grid place-items-center rounded-full bg-reducar-primary text-white text-[10px] font-bold">
                             ✓
                           </span>
-                          <p className="m-0 text-[11px] text-white">{requisito}</p>
+                          <p className="m-0 text-[11px] text-reducar-text">{requisito}</p>
                         </div>
                       ))}
                     </div>
@@ -298,7 +298,7 @@ function CursoDetallePage({ curso, onVolver }: CursoDetalleProps) {
                     <span className="text-[8px] font-black tracking-widest text-reducar-primary uppercase">
                       INSTITUCIÓN
                     </span>
-                    <h2 className="mt-2 mb-4 text-2xl font-bold text-white tracking-tight">
+                    <h2 className="mt-2 mb-4 text-2xl font-bold text-reducar-text tracking-tight">
                       Sobre {curso.organizacion}
                     </h2>
                     <p className="m-0 text-sm text-reducar-text-secondary leading-loose">
@@ -322,7 +322,7 @@ function CursoDetallePage({ curso, onVolver }: CursoDetalleProps) {
               <span className="text-[8px] font-black tracking-widest text-reducar-primary uppercase">
                 BENEFICIOS
               </span>
-              <h3 className="mt-2 mb-5 text-lg font-bold text-white">
+              <h3 className="mt-2 mb-5 text-lg font-bold text-reducar-text">
                 Este curso incluye
               </h3>
 

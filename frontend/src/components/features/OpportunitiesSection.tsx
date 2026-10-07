@@ -21,7 +21,7 @@ function OpportunitiesSection() {
           <span className="inline-block text-xs font-extrabold tracking-widest text-reducar-primary uppercase mb-3">
             Encontrá tu próximo desafío
           </span>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-reducar-text tracking-tight mb-4">
             Explorá por categorías
           </h2>
           <p className="text-reducar-text-secondary text-base leading-relaxed">

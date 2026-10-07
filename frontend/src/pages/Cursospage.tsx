@@ -365,9 +365,9 @@ function Cursospage() {
               <span className="inline-flex items-center px-3.5 py-2 mb-4 text-xs font-extrabold text-reducar-primary bg-reducar-primary-light border border-reducar-primary/20 rounded-full">
                 ✦ Formación para tu futuro
               </span>
-              <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight max-w-2xl">
+              <h1 className="text-4xl md:text-5xl font-extrabold text-reducar-text tracking-tight leading-tight max-w-2xl">
                 Explorá cursos y encontrá
-                <span className="bg-linear-to-r from-reducar-gradient-start via-reducar-gradient-middle to-reducar-gradient-end bg-clip-text text-transparent"> tu próxima oportunidad</span>
+                <span className="bg-gradient-to-r from-reducar-gradient-start via-reducar-gradient-middle to-reducar-gradient-end bg-clip-text text-transparent"> tu próxima oportunidad</span>
               </h1>
               <p className="mt-4 text-sm text-reducar-text-secondary leading-relaxed max-w-xl">
                 Descubrí capacitaciones gratuitas y oportunidades de formación ofrecidas por organizaciones e instituciones.
@@ -403,13 +403,13 @@ function Cursospage() {
               <div className="pb-5 flex items-start justify-between gap-3 border-b border-reducar-border">
                 <div>
                   <span className="text-[9px] font-black tracking-widest text-reducar-primary">FILTROS</span>
-                  <h2 className="mt-1.5 text-base font-extrabold text-white">Filtrá tu búsqueda</h2>
+                  <h2 className="mt-1.5 text-base font-extrabold text-reducar-text">Filtrá tu búsqueda</h2>
                 </div>
                 <button type="button" onClick={limpiarFiltros} className="text-xs font-bold text-reducar-primary hover:text-reducar-turquoise">Limpiar</button>
               </div>
 
               <div className="py-5 border-b border-reducar-border">
-                <h3 className="mb-3.5 text-xs font-extrabold text-white">Modalidad</h3>
+                <h3 className="mb-3.5 text-xs font-extrabold text-reducar-text">Modalidad</h3>
                 {["Virtual", "Presencial", "Híbrida"].map((opcion) => (
                   <label key={opcion} className="flex items-center gap-2.5 mt-3 text-xs text-reducar-text-secondary cursor-pointer">
                     <input type="radio" name="modalidad" checked={modalidad === opcion} onChange={() => setModalidad(opcion)} className="w-4 h-4 accent-reducar-primary" />
@@ -419,7 +419,7 @@ function Cursospage() {
               </div>
 
               <div className="py-5 border-b border-reducar-border">
-                <h3 className="mb-3.5 text-xs font-extrabold text-white">Nivel</h3>
+                <h3 className="mb-3.5 text-xs font-extrabold text-reducar-text">Nivel</h3>
                 {["Inicial", "Intermedio", "Avanzado"].map((opcion) => (
                   <label key={opcion} className="flex items-center gap-2.5 mt-3 text-xs text-reducar-text-secondary cursor-pointer">
                     <input type="radio" name="nivel" checked={nivel === opcion} onChange={() => setNivel(opcion)} className="w-4 h-4 accent-reducar-primary" />
@@ -430,7 +430,7 @@ function Cursospage() {
 
               <div className="py-5 flex items-center justify-between gap-3 border-b border-reducar-border">
                 <div>
-                  <strong className="block text-xs text-white">Solo gratuitos</strong>
+                  <strong className="block text-xs text-reducar-text">Solo gratuitos</strong>
                   <span className="block mt-1 text-[10px] text-reducar-text-secondary">Mostrar cursos sin costo</span>
                 </div>
                 <label className="relative w-9 h-5 shrink-0">
@@ -443,7 +443,7 @@ function Cursospage() {
 
               <div className="py-5 flex items-center justify-between gap-3">
                 <div>
-                  <strong className="block text-xs text-white">Con certificado</strong>
+                  <strong className="block text-xs text-reducar-text">Con certificado</strong>
                   <span className="block mt-1 text-[10px] text-reducar-text-secondary">Incluyen certificación</span>
                 </div>
                 <label className="relative w-9 h-5 shrink-0">
@@ -459,7 +459,7 @@ function Cursospage() {
               <div className="flex items-end justify-between gap-5 mb-5 flex-wrap">
                 <div>
                   <span className="text-[9px] font-black tracking-widest text-reducar-primary">CURSOS DISPONIBLES</span>
-                  <h2 className="mt-1.5 mb-1 text-2xl font-extrabold text-white tracking-tight">Encontrá la formación ideal para vos</h2>
+                  <h2 className="mt-1.5 mb-1 text-2xl font-extrabold text-reducar-text tracking-tight">Encontrá la formación ideal para vos</h2>
                   <p className="text-xs text-reducar-text-secondary">
                     {cursosFiltrados.length} {cursosFiltrados.length === 1 ? "curso encontrado" : "cursos encontrados"}
                   </p>
@@ -488,7 +488,7 @@ function Cursospage() {
                       </div>
                       <div className="flex-1 p-4 flex flex-col">
                         <span className="w-fit text-[10px] font-extrabold text-reducar-primary">{curso.categoria}</span>
-                        <h3 className="mt-2 mb-1 text-base font-bold text-white leading-snug">{curso.titulo}</h3>
+                        <h3 className="mt-2 mb-1 text-base font-bold text-reducar-text leading-snug">{curso.titulo}</h3>
                         <p className="m-0 text-xs font-semibold text-reducar-primary underline">{curso.organizacion}</p>
                         <div className="flex gap-2.5 mt-3 pb-3 text-[10px] font-semibold text-reducar-text-secondary">
                           <span>◉ {curso.modalidad}</span>
@@ -508,7 +508,7 @@ function Cursospage() {
               ) : (
                 <div className="min-h-75 flex flex-col items-center justify-center text-center">
                   <div className="text-4xl text-reducar-primary" aria-hidden="true">⌕</div>
-                  <h3 className="mt-3 mb-1 text-lg font-bold text-white">No encontramos cursos</h3>
+                  <h3 className="mt-3 mb-1 text-lg font-bold text-reducar-text">No encontramos cursos</h3>
                   <p className="max-w-sm text-xs text-reducar-text-secondary">Probá modificando tu búsqueda o eliminando algunos filtros.</p>
                   <button type="button" onClick={limpiarFiltros} className="mt-4 px-4 py-2.5 rounded-lg bg-reducar-primary text-white text-xs font-bold">Limpiar filtros</button>
                 </div>
