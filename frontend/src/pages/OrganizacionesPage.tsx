@@ -61,9 +61,15 @@ function OrganizacionesPage() {
                   Compartí tus oportunidades de formación y conectá con personas que buscan seguir aprendiendo.
                 </p>
               </div>
-              <button type="button" className="min-h-[39px] px-4 inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-reducar-primary to-reducar-turquoise-dark text-white text-[10px] font-extrabold hover:-translate-y-0.5 transition-all">
-                Conocer más <span>→</span>
-              </button>
+                    <a
+  href="https://forms.gle/KKiQ9ru67bkdqEwR7"
+  target="_blank"
+  rel="noopener noreferrer"
+   className="inline-flex items-center gap-2 rounded-lg bg-[#4e0db8] px-5 py-3 font-medium text-white transition hover:bg-[#3d0a91]"
+>
+  Conocer más
+  <span>→</span>
+</a>  
             </div>
           </div>
         </section>
@@ -72,4 +78,4 @@ function OrganizacionesPage() {
   );
 }
 
-export default OrganizacionesPage;
+export default OrganizacionesPage; 
