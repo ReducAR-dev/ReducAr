@@ -26,12 +26,12 @@ const ROL_ADMIN = 1;
 const esAdmin = async (usuarioId: UUID): Promise<boolean> => {
   const { data, error } = await supabaseAdmin
     .from("usuario")
-    .select("rolId")
+    .select("rol_id")  // ← antes decía "rolId"
     .eq("id", usuarioId)
     .single();
 
   if (error || !data) return false;
-  return data.rolId === ROL_ADMIN;
+  return data.rol_id === ROL_ADMIN;
 };
 
 // ============================================
@@ -41,10 +41,11 @@ const esAdmin = async (usuarioId: UUID): Promise<boolean> => {
 /**
  * Crea la fila en `public.usuario`.
  *
- * ⚠️ Uso interno. Normalmente lo llama el trigger `handle_new_user`
- *    directamente en la base de datos, no el backend. Este método
- *    existe para casos excepcionales (por ejemplo, reparar un perfil
- *    faltante desde un script de mantenimiento).
+ * ⚠️ MÉTODO DE MANTENIMIENTO, NO ES LA RUTA PRINCIPAL.
+ *    En el flujo normal de registro, el trigger `handle_new_user`
+ *    de la base de datos crea la fila automáticamente. Este método
+ *    existe solo para reparar casos excepcionales (perfiles
+ *    faltantes detectados por auditoría o scripts manuales).
  */
 export const crearPerfil = async (
   payload: CrearPerfilPayload,

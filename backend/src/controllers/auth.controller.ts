@@ -12,13 +12,19 @@ import type { AuthenticatedRequest } from "../types/auth.types.js";
 // POST /auth/signup — Público
 // ============================================
 
+/**
+ * Registra un usuario en Supabase Auth.
+ *
+ * El perfil en `public.usuario` lo crea automáticamente el trigger
+ * `handle_new_user` de la base de datos. Este controlador no toca
+ * la tabla `usuario`.
+ */
 export const signUpHandler = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
   const { email, password, nombre, apellido, fecha_nacimiento } = req.body ?? {};
 
-  // Validación básica de entrada
   if (typeof email !== "string" || !email.trim()) {
     res.status(400).json({ success: false, error: "El email es obligatorio." });
     return;
@@ -35,7 +41,9 @@ export const signUpHandler = async (
     return;
   }
 
-  const resultado = await signUp({
+  // Crear usuario en Supabase Auth.
+  // Los metadatos son los que el trigger usará para poblar public.usuario.
+  const authResultado = await signUp({
     email: email.trim().toLowerCase(),
     password,
     metadata: {
@@ -45,15 +53,18 @@ export const signUpHandler = async (
     },
   });
 
-  if (!resultado.success) {
-    res.status(400).json({ success: false, error: resultado.error });
+  if (!authResultado.success) {
+    res.status(400).json({ success: false, error: authResultado.error });
     return;
   }
 
   res.status(201).json({
     success: true,
     message: "Usuario registrado exitosamente.",
-    data: resultado.data,
+    data: {
+      id: authResultado.data.id,
+      email: authResultado.data.email,
+    },
   });
 };
 
@@ -82,7 +93,6 @@ export const signInHandler = async (
   });
 
   if (!resultado.success) {
-    // 401 porque el fallo es de credenciales, no de datos mal formados.
     res.status(401).json({ success: false, error: resultado.error });
     return;
   }
@@ -102,7 +112,6 @@ export const signOutHandler = async (
   req: AuthenticatedRequest,
   res: Response,
 ): Promise<void> => {
-  // El middleware ya validó el JWT y rellenó req.user
   if (!req.user) {
     res.status(401).json({ success: false, error: "No autenticado." });
     return;
@@ -122,10 +131,6 @@ export const signOutHandler = async (
 // GET /auth/me — Requiere JWT
 // ============================================
 
-/**
- * Devuelve la identidad del usuario a partir del JWT.
- * Útil para que el frontend sepa si su token sigue siendo válido.
- */
 export const meHandler = async (
   req: AuthenticatedRequest,
   res: Response,

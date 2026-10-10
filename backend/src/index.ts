@@ -1,60 +1,112 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import { chatErrorHandler } from './middlewares/chat.middleware.js';
-import chatRoutes from './routes/chat.routes.js';
-import cursoRoutes from './routes/curso.routes.js'; // Importamos las rutas de cursos
-import testRoutes from './routes/test.routes.js'; // Importamos las rutas de prueba
+// src/index.ts
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
 
-// Carga las variables de entorno
+import { verificarConexion } from "./config/supabase.js";
+
+// Middlewares globales
+import {
+  loggingMiddleware,
+  securityHeaders,
+  globalRateLimit,
+  errorHandler,
+  notFoundHandler,
+  chatErrorHandler,
+} from "./middlewares/index.js";
+
+// Rutas (barrel)
+import {
+  authRoutes,
+  usuarioRoutes,
+  chatRoutes,
+  cursoRoutes,
+  testRoutes,
+} from "./routes/index.js";
+
+// Cargar variables de entorno ANTES que cualquier otra cosa
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// ============================================
+// CORS
+// ============================================
+
 const FRONTEND_ORIGINS = new Set(
-  (process.env.FRONTEND_ORIGIN || 'http://localhost:5173')
-    .split(',')
+  (process.env.FRONTEND_ORIGIN || "http://localhost:5173")
+    .split(",")
     .map((origin) => origin.trim())
     .filter(Boolean),
 );
+
 const LOCAL_DEVELOPMENT_ORIGIN =
   /^http:\/\/(?:localhost|127\.0\.0\.1):\d{2,5}$/u;
 
 const isAllowedFrontendOrigin = (origin: string): boolean =>
   FRONTEND_ORIGINS.has(origin) ||
-  (process.env.NODE_ENV !== 'production' &&
+  (process.env.NODE_ENV !== "production" &&
     LOCAL_DEVELOPMENT_ORIGIN.test(origin));
 
-// Middlewares básicos
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || isAllowedFrontendOrigin(origin)) {
-      callback(null, true);
-      return;
-    }
+// ============================================
+// Middlewares globales (orden importa)
+// ============================================
 
-    callback(null, false);
-  },
-}));
-app.use(express.json());
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || isAllowedFrontendOrigin(origin)) {
+        callback(null, true);
+        return;
+      }
+      callback(null, false);
+    },
+  }),
+);
 
-// Chatbot de asistencia
-app.use('/api/chat', chatRoutes);
+app.use(express.json({ limit: "1mb" }));
+app.use(securityHeaders);
+app.use(loggingMiddleware);
+app.use(globalRateLimit);
 
-// Ruta de prueba para Supabase
-app.use('/api', testRoutes);
+// ============================================
+// Rutas
+// ============================================
 
-// Ruta de inicio simple
-app.get('/', (req, res) => {
-  res.send('🚀 Servidor Backend de ReducAr funcionando!');
+app.use("/api/auth", authRoutes);
+app.use("/api/usuarios", usuarioRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/cursos", cursoRoutes);
+app.use("/api", testRoutes);
+
+// Ruta de salud
+app.get("/", (_req, res) => {
+  res.send("🚀 Servidor Backend de ReducAR funcionando!");
 });
-app.use('/cursos', cursoRoutes);
 
-// Evita que los errores del chatbot expongan respuestas HTML o detalles internos
+// ============================================
+// Manejo de errores y 404
+// ============================================
+//
+// Orden:
+//   1. chatErrorHandler  → maneja errores específicos de /api/chat
+//   2. notFoundHandler   → cualquier ruta no registrada
+//   3. errorHandler      → cualquier otro error que llegue con next(err)
+
 app.use(chatErrorHandler);
+app.use(notFoundHandler);
+app.use(errorHandler);
 
-// Inicia el servidor
-app.listen(PORT, () => {
+// ============================================
+// Arranque
+// ============================================
+
+app.listen(PORT, async () => {
   console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
-  console.log(`🧪 Prueba la conexión a Supabase en: http://localhost:${PORT}/api/test`);
+
+  // Verificar conexión a Supabase solo en desarrollo
+  if (process.env.NODE_ENV !== "production") {
+    await verificarConexion();
+  }
 });
