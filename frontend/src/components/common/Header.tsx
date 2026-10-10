@@ -3,6 +3,9 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logoReducar from "../../assets/logo-reducar.png";
 import Navbar from "./Navbar";
+import { useAuthStore } from "../../stores/auth.store";
+import { UserMenu } from "./UserMenu";
+import { authService } from "../../services/auth.service";
 
 type Theme = "light" | "dark";
 const THEME_STORAGE_KEY = "theme";
@@ -53,6 +56,10 @@ export const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
+  const accessToken = useAuthStore((s) => s.accessToken);
+  const logout = useAuthStore((s) => s.logout);
+  const estaLogueado = !!accessToken;
+
   useLayoutEffect(() => {
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme;
@@ -81,6 +88,12 @@ export const Header = () => {
     closeMobileMenu();
   };
 
+  const handleLogoutMobile = async () => {
+    await authService.logout();
+    logout();
+    handleNavigate("/");
+  };
+
   return (
     <header className="bg-reducar-shell-bg/95 backdrop-blur-md border-b border-reducar-shell-border sticky top-0 z-50 text-reducar-shell-text">
       <div className="w-full max-w-7xl mx-auto px-4 flex items-center gap-6 h-21">
@@ -103,39 +116,65 @@ export const Header = () => {
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
 
-          <button
-            className="hidden lg:inline-flex items-center justify-center h-11 px-5 rounded-xl border border-reducar-primary text-reducar-primary font-bold hover:bg-reducar-primary/10 transition-colors whitespace-nowrap"
-            type="button"
-            onClick={() => navigate("/login")}
-          >
-            Iniciar sesión
-          </button>
+          {estaLogueado ? (
+            <>
+              <UserMenu />
 
-          <button
-            className="hidden lg:inline-flex items-center justify-center h-11 px-5 rounded-xl bg-linear-to-r from-reducar-primary to-reducar-turquoise-dark text-white font-bold hover:shadow-lg transition-shadow whitespace-nowrap"
-            type="button"
-            onClick={() => navigate("/registro")}
-          >
-            Registrarme
-          </button>
+              <button
+                type="button"
+                className="lg:hidden p-2.5 rounded-xl bg-reducar-shell-surface border border-reducar-shell-border text-reducar-shell-text hover:bg-reducar-shell-hover transition-colors"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label={isMobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
+                aria-expanded={isMobileMenuOpen}
+              >
+                {isMobileMenuOpen ? (
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                    <path d="M6 6L18 18M18 6L6 18" strokeLinecap="round" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                    <path d="M3 6h18M3 12h18M3 18h18" strokeLinecap="round" />
+                  </svg>
+                )}
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                className="hidden lg:inline-flex items-center justify-center h-11 px-5 rounded-xl border border-reducar-primary text-reducar-primary font-bold hover:bg-reducar-primary/10 transition-colors whitespace-nowrap"
+                type="button"
+                onClick={() => navigate("/login")}
+              >
+                Iniciar sesión
+              </button>
 
-          <button
-            type="button"
-            className="lg:hidden p-2.5 rounded-xl bg-reducar-shell-surface border border-reducar-shell-border text-reducar-shell-text hover:bg-reducar-shell-hover transition-colors"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label={isMobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
-            aria-expanded={isMobileMenuOpen}
-          >
-            {isMobileMenuOpen ? (
-              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                <path d="M6 6L18 18M18 6L6 18" strokeLinecap="round" />
-              </svg>
-            ) : (
-              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                <path d="M3 6h18M3 12h18M3 18h18" strokeLinecap="round" />
-              </svg>
-            )}
-          </button>
+              <button
+                className="hidden lg:inline-flex items-center justify-center h-11 px-5 rounded-xl bg-linear-to-r from-reducar-primary to-reducar-turquoise-dark text-white font-bold hover:shadow-lg transition-shadow whitespace-nowrap"
+                type="button"
+                onClick={() => navigate("/registro")}
+              >
+                Registrarme
+              </button>
+
+              <button
+                type="button"
+                className="lg:hidden p-2.5 rounded-xl bg-reducar-shell-surface border border-reducar-shell-border text-reducar-shell-text hover:bg-reducar-shell-hover transition-colors"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label={isMobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
+                aria-expanded={isMobileMenuOpen}
+              >
+                {isMobileMenuOpen ? (
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                    <path d="M6 6L18 18M18 6L6 18" strokeLinecap="round" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                    <path d="M3 6h18M3 12h18M3 18h18" strokeLinecap="round" />
+                  </svg>
+                )}
+              </button>
+            </>
+          )}
         </div>
       </div>
 
@@ -145,20 +184,48 @@ export const Header = () => {
             <Navbar items={menuItems} dropdownItems={dropdownItems} isMobile onItemClick={closeMobileMenu} />
 
             <div className="mt-4 pt-4 border-t border-reducar-shell-border flex flex-col gap-2">
-              <button
-                type="button"
-                onClick={() => handleNavigate("/login")}
-                className="w-full h-11 inline-flex items-center justify-center rounded-xl border border-reducar-primary text-reducar-primary font-bold hover:bg-reducar-primary/10 transition-colors"
-              >
-                Iniciar sesión
-              </button>
-              <button
-                type="button"
-                onClick={() => handleNavigate("/registro")}
-                className="w-full h-11 inline-flex items-center justify-center rounded-xl bg-linear-to-r from-reducar-primary to-reducar-turquoise-dark text-white font-bold hover:shadow-lg transition-shadow"
-              >
-                Registrarme
-              </button>
+              {estaLogueado ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => handleNavigate("/novedades")}
+                    className="w-full h-11 inline-flex items-center justify-center rounded-xl border border-reducar-primary text-reducar-primary font-bold hover:bg-reducar-primary/10 transition-colors"
+                  >
+                    Ver perfil
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleNavigate("/cursos")}
+                    className="w-full h-11 inline-flex items-center justify-center rounded-xl border border-reducar-shell-border text-reducar-shell-text font-bold hover:bg-reducar-shell-hover transition-colors"
+                  >
+                    Configuración
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleLogoutMobile}
+                    className="w-full h-11 inline-flex items-center justify-center rounded-xl bg-red-500/10 text-red-400 font-bold hover:bg-red-500/20 transition-colors"
+                  >
+                    Cerrar sesión
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => handleNavigate("/login")}
+                    className="w-full h-11 inline-flex items-center justify-center rounded-xl border border-reducar-primary text-reducar-primary font-bold hover:bg-reducar-primary/10 transition-colors"
+                  >
+                    Iniciar sesión
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleNavigate("/registro")}
+                    className="w-full h-11 inline-flex items-center justify-center rounded-xl bg-linear-to-r from-reducar-primary to-reducar-turquoise-dark text-white font-bold hover:shadow-lg transition-shadow"
+                  >
+                    Registrarme
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
