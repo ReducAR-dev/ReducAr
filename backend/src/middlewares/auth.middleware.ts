@@ -1,74 +1,137 @@
-import { Request, Response, NextFunction } from 'express';
-import { supabase } from '../config/supabase';
-import { userService } from '../services/user.service';
+// src/middlewares/auth.middleware.ts
+import type { Response, NextFunction } from "express";
+import { getUserFromToken } from "../services/auth.service.js";
+import { supabaseAdmin } from "../config/supabase-admin.js";
+import type { AuthenticatedRequest } from "../types/auth.types.js";
 
-// Extender la interfaz de Request de Express para incluir 'user'
-export interface AuthenticatedRequest extends Request {
-  user?: any;
-}
+export const ROL_ADMIN = 1;
+
+// ============================================
+// requireAuth
+// ============================================
 
 /**
- * Middleware para requerir autenticación vía Token Bearer (Supabase JWT)
- * Desconfía siempre y valida directamente con Supabase Auth
+ * Valida el JWT, comprueba que la cuenta siga activa y adjunta
+ * `req.user = { id, email }` a la petición.
+ *
+ * Si algo falla, corta la petición con el código adecuado.
  */
-export async function requireAuth(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+export const requireAuth = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'Acceso denegado. Token no proporcionado o inválido.' });
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      res.status(401).json({
+        success: false,
+        error: "Token de acceso no proporcionado o con formato incorrecto.",
+      });
+      return;
     }
 
-    const token = authHeader.split(' ')[1];
+    const token = authHeader.slice("Bearer ".length).trim();
     if (!token) {
-      return res.status(401).json({ error: 'Acceso denegado. Token malformado.' });
+      res.status(401).json({
+        success: false,
+        error: "Token de acceso vacío.",
+      });
+      return;
     }
 
-    // Verificar firma y autenticidad del token directamente con Supabase
-    const { data: { user }, error } = await supabase.auth.getUser(token);
-
-    if (error || !user) {
-      return res.status(401).json({ error: 'Token inválido o sesión expirada.' });
+    const resultado = await getUserFromToken(token);
+    if (!resultado.success) {
+      res.status(401).json({
+        success: false,
+        error: "Token inválido o expirado.",
+      });
+      return;
     }
 
-    // Verificar estado activo en nuestra base de datos
-    const dbUser = await userService.getUserById(user.id);
-    if (!dbUser || !dbUser.estaActivo) {
-      return res.status(403).json({ error: 'Cuenta de usuario inactiva o no registrada.' });
+    // Verificar que la cuenta exista en nuestra tabla y siga activa.
+    // Usamos supabaseAdmin para que RLS no oculte la fila por error.
+    const { data: dbUser, error } = await supabaseAdmin
+      .from("usuario")
+      .select("esta_activo")
+      .eq("id", resultado.data.id)
+      .single();
+
+    if (error || !dbUser) {
+      res.status(403).json({
+        success: false,
+        error: "Usuario no registrado en el sistema.",
+      });
+      return;
     }
 
-    // Adjuntar usuario verificado a la request
-    req.user = dbUser;
+    if (!dbUser.esta_activo) {
+      res.status(403).json({
+        success: false,
+        error: "La cuenta está desactivada. Contactá al equipo de ReducAR.",
+      });
+      return;
+    }
+
+    req.user = {
+      id: resultado.data.id,
+      email: resultado.data.email,
+    };
+
     next();
-  } catch (err: any) {
-    return res.status(500).json({ error: `Error de autenticación: ${err.message}` });
+  } catch (err) {
+    const mensaje = err instanceof Error ? err.message : String(err);
+    console.error("❌ requireAuth:", mensaje);
+    res.status(500).json({
+      success: false,
+      error: "Error inesperado en la autenticación.",
+    });
   }
-}
+};
+
+// ============================================
+// requireAdmin
+// ============================================
 
 /**
- * Middleware para exigir que el usuario sea exclusivamente Administrador (rolId === 1)
+ * Exige que el usuario autenticado tenga rol admin (rolId === 1).
+ *
+ * ⚠️ DEBE usarse DESPUÉS de requireAuth. Si `req.user` no existe,
+ *    algo está mal en el orden de los middlewares.
  */
-export function requireAdmin(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+export const requireAdmin = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   if (!req.user) {
-    return res.status(401).json({ error: 'Usuario no autenticado.' });
+    res.status(401).json({ success: false, error: "No autenticado." });
+    return;
   }
 
-  if (req.user.rolId !== 1) {
-    return res.status(403).json({ error: 'Acceso denegado. Se requieren permisos de administrador.' });
-  }
+  try {
+    const { data, error } = await supabaseAdmin
+      .from("usuario")
+      .select("rolId")
+      .eq("id", req.user.id)
+      .single();
 
-  next();
-}
-
-/**
- * Middleware de Seguridad Anti-Escalación de Privilegios:
- * Evita que cualquier usuario intente asignarse o modificar un rolId a 1 (Admin)
- */
-export function preventAdminEscalation(req: Request, res: Response, next: NextFunction) {
-  if (req.body && typeof req.body === 'object') {
-    if (req.body.rolId === 1) {
-      // Regla estricta: cambiar forzosamente a 2 o rechazar la petición
-      req.body.rolId = 2;
+    if (error || !data || data.rolId !== ROL_ADMIN) {
+      res.status(403).json({
+        success: false,
+        error: "Se requieren permisos de administrador.",
+      });
+      return;
     }
+
+    next();
+  } catch (err) {
+    const mensaje = err instanceof Error ? err.message : String(err);
+    console.error("❌ requireAdmin:", mensaje);
+    res.status(500).json({
+      success: false,
+      error: "Error inesperado al verificar permisos.",
+    });
   }
-  next();
-}
+};

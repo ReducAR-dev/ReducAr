@@ -1,110 +1,157 @@
-import { supabase } from '../config/supabase';
-import { userService } from './user.service';
-import { usuario } from '../models/usuario';
+// src/services/auth.service.ts
+import { supabase } from "../config/supabase.js";
+import type { UUID } from "../models/common.types.js";
+import type { Result } from "../types/common.types.js";
+import type {
+  SignUpPayload,
+  SignInPayload,
+  SignInResult,
+} from "../types/auth.types.js";
 
-export class AuthService {
-  /**
-   * Registra un nuevo usuario en Supabase Auth y crea su perfil correspondiente en nuestra tabla "usuario".
-   * Esto mantiene la consistencia e integridad de los datos.
-   */
-  async signUp(
-    email: string,
-    password: string,
-    nombre: string,
-    apellido?: string,
-    fechaNacimiento?: string
-  ): Promise<{ authUser: any; dbUser: usuario }> {
-    // 1. Crear usuario en Supabase Auth
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+// ============================================
+// REGISTRO
+// ============================================
 
-    if (authError) {
-      throw new Error(`Error en el registro de autenticación: ${authError.message}`);
-    }
+/**
+ * Registra un usuario en Supabase Auth.
+ *
+ * ⚠️ NO inserta en `public.usuario`. Eso lo hace el trigger
+ *    `handle_new_user` automáticamente cuando Supabase Auth
+ *    confirma la creación del usuario.
+ */
+export const signUp = async (
+  payload: SignUpPayload,
+): Promise<Result<{ id: UUID; email: string }>> => {
+  const { data, error } = await supabase.auth.signUp({
+    email: payload.email,
+    password: payload.password,
+    options: {
+      data: payload.metadata ?? {},
+    },
+  });
 
-    if (!authData.user) {
-      throw new Error('No se pudo crear el usuario en el servicio de autenticación.');
-    }
-
-    // 2. Guardar información en nuestra tabla interna de usuarios vinculándolo con el ID de Auth
-    try {
-      const dbUser = await userService.createUser({
-        id: authData.user.id,
-        nombre,
-        apellido: apellido ?? null,
-        email,
-        fechaNacimiento: fechaNacimiento ?? null,
-        rolId: 2, // Por defecto rol general 'user'
-        estaActivo: true,
-      });
-
-      return { authUser: authData.user, dbUser };
-    } catch (dbError: any) {
-      // Manejo de error: Si falla el guardado en nuestra BD, se podría de forma ideal remover de Supabase Auth
-      // para evitar estados inconsistentes (usuarios huérfanos). Para este nivel, lanzamos el error para que sea capturado.
-      throw new Error(`Usuario autenticado, pero falló el registro en la base de datos interna: ${dbError.message}`);
-    }
+  if (error) {
+    console.error("❌ auth.signUp:", error.message);
+    return { success: false, error: error.message };
   }
 
-  /**
-   * Logea un usuario utilizando Supabase Auth
-   */
-  async signIn(email: string, password: string) {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      throw new Error(`Error al iniciar sesión: ${error.message}`);
-    }
-
-    // Validar si el usuario está activo en nuestra base de datos interna
-    const internalUser = await userService.getUserById(data.user.id);
-    if (!internalUser || !internalUser.estaActivo) {
-      // Si está inactivo, cerramos la sesión de inmediato por seguridad
-      await this.signOut();
-      throw new Error('Esta cuenta ha sido desactivada o no está registrada.');
-    }
-
-    return { session: data.session, user: internalUser };
+  if (!data.user) {
+    return { success: false, error: "No se pudo crear el usuario en Auth." };
   }
 
-  /**
-   * Cierra la sesión activa en Supabase Auth
-   */
-  async signOut(): Promise<void> {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      throw new Error(`Error al cerrar sesión: ${error.message}`);
-    }
+  return {
+    success: true,
+    data: { id: data.user.id, email: data.user.email ?? "" },
+  };
+};
+
+// ============================================
+// INICIO DE SESIÓN
+// ============================================
+
+/**
+ * Inicia sesión. Devuelve los tokens JWT que el frontend
+ * debe guardar para autenticar peticiones posteriores.
+ */
+export const signIn = async (
+  payload: SignInPayload,
+): Promise<Result<SignInResult>> => {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: payload.email,
+    password: payload.password,
+  });
+
+  if (error) {
+    console.error("❌ auth.signIn:", error.message);
+    return { success: false, error: error.message };
   }
 
-  /**
-   * Verifica la sesión activa de forma segura
-   * Utiliza el token JWT provisto para comprobar validez e identidad con Supabase Auth
-   */
-  async verifySession(accessToken: string): Promise<usuario> {
-    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
-
-    if (error || !user) {
-      throw new Error('Token inválido o sesión expirada.');
-    }
-
-    // Buscar en nuestra base de datos y verificar estado
-    const dbUser = await userService.getUserById(user.id);
-    if (!dbUser) {
-      throw new Error('Usuario no registrado en la base de datos interna.');
-    }
-
-    if (!dbUser.estaActivo) {
-      throw new Error('Esta cuenta ha sido desactivada.');
-    }
-
-    return dbUser;
+  if (!data.session || !data.user) {
+    return { success: false, error: "Credenciales inválidas." };
   }
-}
 
-export const authService = new AuthService();
+  return {
+    success: true,
+    data: {
+      access_token: data.session.access_token,
+      refresh_token: data.session.refresh_token,
+      expires_at: data.session.expires_at,
+      user: {
+        id: data.user.id,
+        email: data.user.email ?? "",
+      },
+    },
+  };
+};
+
+// ============================================
+// VERIFICACIÓN DE TOKEN (JWT)
+// ============================================
+
+/**
+ * Valida un JWT y devuelve el usuario de Auth.
+ *
+ * Este es el método central que usa el middleware de Express
+ * para saber quién es el usuario que hace la petición.
+ *
+ * ⚠️ Llama a `getUser(token)` que verifica la firma del token
+ *    contra los servidores de Supabase. NUNCA confíes en decodificar
+ *    el JWT localmente sin verificar la firma.
+ */
+export const getUserFromToken = async (
+  accessToken: string,
+): Promise<Result<{ id: UUID; email: string }>> => {
+  const { data, error } = await supabase.auth.getUser(accessToken);
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  if (!data.user) {
+    return { success: false, error: "Token inválido o expirado." };
+  }
+
+  return {
+    success: true,
+    data: { id: data.user.id, email: data.user.email ?? "" },
+  };
+};
+
+// ============================================
+// CIERRE DE SESIÓN
+// ============================================
+
+/**
+ * Cierra la sesión del usuario. En el backend, `signOut` solo
+ * invalida la sesión si se le pasa el refresh token. Si el frontend
+ * borra sus tokens, es suficiente. Este método queda como referencia.
+ */
+export const signOut = async (accessToken: string): Promise<Result<null>> => {
+  const { error } = await supabase.auth.signOut({ scope: "local" });
+
+  if (error) {
+    console.error("❌ auth.signOut:", error.message);
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, data: null };
+};
+
+// ============================================
+// RECUPERACIÓN DE CONTRASEÑA
+// ============================================
+
+/**
+ * Envía un correo de recuperación de contraseña.
+ * No requiere que el usuario esté autenticado.
+ */
+export const resetPassword = async (email: string): Promise<Result<null>> => {
+  const { error } = await supabase.auth.resetPasswordForEmail(email);
+
+  if (error) {
+    console.error("❌ auth.resetPassword:", error.message);
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, data: null };
+};

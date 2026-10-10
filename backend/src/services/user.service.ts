@@ -1,109 +1,256 @@
-import { supabase } from '../config/supabase';
-import { usuario } from '../models/usuario';
+// src/services/usuarios.service.ts
+import { supabase } from "../config/supabase.js";
+import { supabaseAdmin } from "../config/supabase-admin.js";
+import type { Usuario } from "../models/usuario.model.js";
+import type { UUID, Timestamp } from "../models/common.types.js";
+import type { Result } from "../types/common.types.js";
+import type {
+  CrearPerfilPayload,
+  ActualizarPerfilPayload,
+} from "../types/usuario.types.js";
 
-export class UserService {
-  /**
-   * Obtiene un usuario de la base de datos por su ID (UUID)
-   */
-  async getUserById(id: string): Promise<usuario | null> {
-    const { data, error } = await supabase
-      .from('usuario')
-      .select('*')
-      .eq('id', id)
-      .single();
+// ============================================
+// TIPO AUXILIAR: Rol admin
+// ============================================
 
-    if (error) {
-      if (error.code === 'PGRST116') return null; // PGRST116 = No rows returned
-      throw new Error(`Error al obtener usuario: ${error.message}`);
-    }
+const ROL_ADMIN = 1;
 
-    return data as usuario;
+/**
+ * Comprueba si un usuario es admin. Se usa internamente antes
+ * de ejecutar operaciones administrativas.
+ *
+ * ⚠️ Usa `supabaseAdmin` para leer el rol sin que RLS interfiera.
+ *    Si usaramos el cliente público, RLS podría ocultar la fila
+ *    y devolver null, dando un falso negativo.
+ */
+const esAdmin = async (usuarioId: UUID): Promise<boolean> => {
+  const { data, error } = await supabaseAdmin
+    .from("usuario")
+    .select("rolId")
+    .eq("id", usuarioId)
+    .single();
+
+  if (error || !data) return false;
+  return data.rolId === ROL_ADMIN;
+};
+
+// ============================================
+// CREACIÓN DE PERFIL
+// ============================================
+
+/**
+ * Crea la fila en `public.usuario`.
+ *
+ * ⚠️ Uso interno. Normalmente lo llama el trigger `handle_new_user`
+ *    directamente en la base de datos, no el backend. Este método
+ *    existe para casos excepcionales (por ejemplo, reparar un perfil
+ *    faltante desde un script de mantenimiento).
+ */
+export const crearPerfil = async (
+  payload: CrearPerfilPayload,
+): Promise<Result<Usuario>> => {
+  const { data, error } = await supabaseAdmin
+    .from("usuario")
+    .insert({
+      id: payload.id,
+      nombre: payload.nombre,
+      apellido: payload.apellido ?? null,
+      email: payload.email,
+      fecha_nacimiento: payload.fecha_nacimiento ?? null,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error("❌ usuarios.crearPerfil:", error.message);
+    return { success: false, error: error.message };
   }
 
-  /**
-   * Crea un nuevo registro de usuario en nuestra tabla de la base de datos
-   */
-  async createUser(userData: Partial<usuario>): Promise<usuario> {
-    const { data, error } = await supabase
-      .from('usuario')
-      .insert([
-        {
-          id: userData.id,
-          nombre: userData.nombre,
-          apellido: userData.apellido,
-          email: userData.email,
-          fechaNacimiento: userData.fechaNacimiento,
-          fotoPerfil: userData.fotoPerfil,
-          biografia: userData.biografia,
-          ubicacion: userData.ubicacion,
-          rolId: userData.rolId ?? 2, // Por defecto rol 2 (User)
-          estaActivo: userData.estaActivo ?? true,
-          fechaRegistro: new Date().toISOString(),
-          fechaActualizacion: new Date().toISOString()
-        }
-      ])
-      .select()
-      .single();
+  return { success: true, data: data as Usuario };
+};
 
-    if (error) {
-      throw new Error(`Error al crear usuario en BD: ${error.message}`);
-    }
+// ============================================
+// CONSULTA DEL PROPIO PERFIL
+// ============================================
 
-    return data as usuario;
+/**
+ * Devuelve el perfil del usuario autenticado.
+ * El `usuarioId` DEBE venir del JWT validado, nunca del body.
+ */
+export const obtenerPerfilPropio = async (
+  usuarioId: UUID,
+): Promise<Result<Usuario>> => {
+  const { data, error } = await supabase
+    .from("usuario")
+    .select("*")
+    .eq("id", usuarioId)
+    .single();
+
+  if (error) {
+    console.error("❌ usuarios.obtenerPerfilPropio:", error.message);
+    return { success: false, error: "Perfil no encontrado." };
   }
 
-  /**
-   * Actualiza la información de un usuario
-   */
-  async updateUser(id: string, userData: Partial<usuario>): Promise<usuario> {
-    const { data, error } = await supabase
-      .from('usuario')
-      .update({
-        ...userData,
-        fechaActualizacion: new Date().toISOString()
-      })
-      .eq('id', id)
-      .select()
-      .single();
+  return { success: true, data: data as Usuario };
+};
 
-    if (error) {
-      throw new Error(`Error al actualizar usuario: ${error.message}`);
-    }
+// ============================================
+// ACTUALIZACIÓN DEL PROPIO PERFIL
+// ============================================
 
-    return data as usuario;
+/**
+ * Actualiza el perfil del usuario autenticado.
+ *
+ * Reglas:
+ *  - Solo se pueden modificar los campos del payload.
+ *  - `rolId` y `esta_activo` NO están permitidos aquí.
+ *  - El `usuarioId` viene del JWT, no del body.
+ */
+export const actualizarPerfilPropio = async (
+  usuarioId: UUID,
+  payload: ActualizarPerfilPayload,
+): Promise<Result<Usuario>> => {
+  const { data, error } = await supabase
+    .from("usuario")
+    .update({
+      ...payload,
+      fecha_actualizacion: new Date().toISOString() as Timestamp,
+    })
+    .eq("id", usuarioId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("❌ usuarios.actualizarPerfilPropio:", error.message);
+    return { success: false, error: error.message };
   }
 
-  /**
-   * Desactiva (o elimina lógicamente) un usuario
-   */
-  async deleteUser(id: string): Promise<void> {
-    // Desactivamos el usuario en lugar de borrarlo físicamente para mantener integridad referencial
-    const { error } = await supabase
-      .from('usuario')
-      .update({ estaActivo: false, fechaActualizacion: new Date().toISOString() })
-      .eq('id', id);
+  return { success: true, data: data as Usuario };
+};
 
-    if (error) {
-      throw new Error(`Error al eliminar (desactivar) usuario: ${error.message}`);
-    }
+// ============================================
+// SOFT DELETE: BLOQUEAR CUENTA PROPIA
+// ============================================
+
+/**
+ * "Desactiva" la cuenta del propio usuario.
+ * NO borra la fila. Solo cambia `esta_activo` a false.
+ */
+export const bloquearCuentaPropia = async (
+  usuarioId: UUID,
+): Promise<Result<null>> => {
+  const { error } = await supabase
+    .from("usuario")
+    .update({
+      esta_activo: false,
+      fecha_actualizacion: new Date().toISOString() as Timestamp,
+    })
+    .eq("id", usuarioId);
+
+  if (error) {
+    console.error("❌ usuarios.bloquearCuentaPropia:", error.message);
+    return { success: false, error: error.message };
   }
 
-  /**
-   * Lista todos los usuarios (opcionalmente filtrando activos)
-   */
-  async listUsers(onlyActive: boolean = true): Promise<usuario[]> {
-    let query = supabase.from('usuario').select('*');
-    if (onlyActive) {
-      query = query.eq('estaActivo', true);
-    }
-    const { data, error } = await query;
+  return { success: true, data: null };
+};
 
-    if (error) {
-      throw new Error(`Error al listar usuarios: ${error.message}`);
-    }
+// ============================================
+// OPERACIONES ADMIN
+// ============================================
 
-    return data as usuario[];
+/**
+ * Devuelve el perfil de CUALQUIER usuario.
+ * Solo un admin puede llamar a este método.
+ *
+ * Doble verificación:
+ *  1. El backend comprueba que `adminId` sea admin.
+ *  2. La consulta se hace con `supabaseAdmin`, que bypassa RLS.
+ */
+export const obtenerPerfilAdmin = async (
+  adminId: UUID,
+  objetivoId: UUID,
+): Promise<Result<Usuario>> => {
+  if (!(await esAdmin(adminId))) {
+    return { success: false, error: "No autorizado. Se requiere rol admin." };
   }
-}
 
-export const userService = new UserService();
+  const { data, error } = await supabaseAdmin
+    .from("usuario")
+    .select("*")
+    .eq("id", objetivoId)
+    .single();
+
+  if (error) {
+    console.error("❌ usuarios.obtenerPerfilAdmin:", error.message);
+    return { success: false, error: "Perfil no encontrado." };
+  }
+
+  return { success: true, data: data as Usuario };
+};
+
+/**
+ * Desactiva la cuenta de otro usuario (por penalización).
+ *
+ * Reglas:
+ *  - Solo un admin puede hacerlo.
+ *  - Un admin no puede desactivarse a sí mismo.
+ */
+export const bloquearCuentaAdmin = async (
+  adminId: UUID,
+  objetivoId: UUID,
+): Promise<Result<null>> => {
+  if (!(await esAdmin(adminId))) {
+    return { success: false, error: "No autorizado. Se requiere rol admin." };
+  }
+
+  if (adminId === objetivoId) {
+    return { success: false, error: "No podés desactivar tu propia cuenta." };
+  }
+
+  const { error } = await supabaseAdmin
+    .from("usuario")
+    .update({
+      esta_activo: false,
+      fecha_actualizacion: new Date().toISOString() as Timestamp,
+    })
+    .eq("id", objetivoId);
+
+  if (error) {
+    console.error("❌ usuarios.bloquearCuentaAdmin:", error.message);
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, data: null };
+};
+
+/**
+ * Elimina DEFINITIVAMENTE a un usuario.
+ *
+ * Reglas:
+ *  - Solo un admin puede hacerlo.
+ *  - Un admin no puede eliminarse a sí mismo.
+ *  - Se elimina de `auth.users`; la fila en `public.usuario` se
+ *    borra en cascada por la FK.
+ */
+export const eliminarCuentaAdmin = async (
+  adminId: UUID,
+  objetivoId: UUID,
+): Promise<Result<null>> => {
+  if (!(await esAdmin(adminId))) {
+    return { success: false, error: "No autorizado. Se requiere rol admin." };
+  }
+
+  if (adminId === objetivoId) {
+    return { success: false, error: "No podés eliminarte a vos mismo." };
+  }
+
+  const { error } = await supabaseAdmin.auth.admin.deleteUser(objetivoId);
+
+  if (error) {
+    console.error("❌ usuarios.eliminarCuentaAdmin:", error.message);
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, data: null };
+};

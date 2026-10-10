@@ -1,108 +1,239 @@
-import { Request, Response } from 'express';
-import { userService } from '../services/user.service';
+// src/controllers/usuarios.controller.ts
+import type { Response } from "express";
+import {
+  obtenerPerfilPropio,
+  actualizarPerfilPropio,
+  bloquearCuentaPropia,
+  obtenerPerfilAdmin,
+  bloquearCuentaAdmin,
+  eliminarCuentaAdmin,
+} from "../services/user.service.js";
+import type { AuthenticatedRequest } from "../types/auth.types.js";
+import type { ActualizarPerfilPayload } from "../types/usuario.types.js";
 
-export class UserController {
-  private getParamId(req: Request): string | null {
-    const { id } = req.params;
-    if (Array.isArray(id)) {
-      return id[0] ?? null;
-    }
+// ============================================
+// HELPERS
+// ============================================
 
-    return id ?? null;
+/**
+ * Extrae y normaliza el `id` de los params.
+ * Si viene un array (raro en Express), toma el primero.
+ */
+const getParamId = (req: AuthenticatedRequest): string | null => {
+  const { id } = req.params;
+  if (Array.isArray(id)) return id[0] ?? null;
+  return id ?? null;
+};
+
+/**
+ * Verifica que la petición tenga identidad.
+ * El middleware ya lo hace, pero el controlador no debe asumirlo.
+ */
+const requireUser = (
+  req: AuthenticatedRequest,
+  res: Response,
+): string | null => {
+  if (!req.user) {
+    res.status(401).json({ success: false, error: "No autenticado." });
+    return null;
+  }
+  return req.user.id;
+};
+
+// ============================================
+// GET /usuarios/yo — Requiere JWT
+// ============================================
+
+export const getMiPerfilHandler = async (
+  req: AuthenticatedRequest,
+  res: Response,
+): Promise<void> => {
+  const usuarioId = requireUser(req, res);
+  if (!usuarioId) return;
+
+  const resultado = await obtenerPerfilPropio(usuarioId);
+
+  if (!resultado.success) {
+    res.status(404).json({ success: false, error: resultado.error });
+    return;
   }
 
-  /**
-   * Obtiene un usuario por su UUID
-   */
-  async getByUuid(req: Request, res: Response): Promise<Response> {
-    try {
-      const id = this.getParamId(req);
-      if (!id) {
-        return res.status(400).json({ error: 'El ID del usuario es requerido' });
-      }
+  res.status(200).json({ success: true, data: resultado.data });
+};
 
-      const user = await userService.getUserById(id);
-      if (!user) {
-        return res.status(404).json({ error: 'Usuario no encontrado' });
-      }
+// ============================================
+// PATCH /usuarios/yo — Requiere JWT
+// ============================================
 
-      return res.status(200).json(user);
-    } catch (error: any) {
-      return res.status(500).json({ error: error.message });
-    }
+/**
+ * Actualiza el perfil del usuario autenticado.
+ *
+ * REGLA: solo se aceptan los campos de `ActualizarPerfilPayload`.
+ * Cualquier intento de enviar `rolId` o `esta_activo` se ignora
+ * silenciosamente, porque el payload del servicio no los acepta.
+ */
+export const updateMiPerfilHandler = async (
+  req: AuthenticatedRequest,
+  res: Response,
+): Promise<void> => {
+  const usuarioId = requireUser(req, res);
+  if (!usuarioId) return;
+
+  const body = req.body ?? {};
+
+  // Whitelist explícita: solo estos campos se pasan al servicio.
+  // Aunque el cliente envíe `rolId`, `esta_activo` u otros, se descartan.
+  const payload: ActualizarPerfilPayload = {};
+  if (typeof body.nombre === "string") payload.nombre = body.nombre.trim();
+  if (body.apellido !== undefined) payload.apellido = body.apellido;
+  if (body.fecha_nacimiento !== undefined) payload.fecha_nacimiento = body.fecha_nacimiento;
+  if (body.fotoPerfil !== undefined) payload.fotoPerfil = body.fotoPerfil;
+  if (body.biografia !== undefined) payload.biografia = body.biografia;
+  if (body.ubicacion !== undefined) payload.ubicacion = body.ubicacion;
+  if (body.user_preferencia !== undefined) payload.user_preferencia = body.user_preferencia;
+
+  if (Object.keys(payload).length === 0) {
+    res.status(400).json({ success: false, error: "No hay campos válidos para actualizar." });
+    return;
   }
 
-  /**
-   * Verifica si un usuario existe en la base de datos por su correo
-   */
-  async checkByEmail(req: Request, res: Response): Promise<Response> {
-    try {
-      const { email } = req.query;
-      if (!email || typeof email !== 'string') {
-        return res.status(400).json({ error: 'El email es requerido' });
-      }
+  const resultado = await actualizarPerfilPropio(usuarioId, payload);
 
-      const users = await userService.listUsers(false);
-      const userExists = users.some(u => u.email.toLowerCase() === email.toLowerCase());
-
-      return res.status(200).json({ exists: userExists });
-    } catch (error: any) {
-      return res.status(500).json({ error: error.message });
-    }
+  if (!resultado.success) {
+    res.status(400).json({ success: false, error: resultado.error });
+    return;
   }
 
-  /**
-   * Actualiza los datos de un usuario de forma segura
-   */
-  async update(req: Request, res: Response): Promise<Response> {
-    try {
-      const id = this.getParamId(req);
-      const updateData = req.body;
+  res.status(200).json({
+    success: true,
+    message: "Perfil actualizado.",
+    data: resultado.data,
+  });
+};
 
-      if (!id) {
-        return res.status(400).json({ error: 'El ID del usuario es requerido' });
-      }
+// ============================================
+// DELETE /usuarios/yo — Requiere JWT
+// ============================================
 
-      // REGLA DE NEGOCIO: Nadie puede ser jamás de rolId = 1 (Admin) a través de controladores públicos
-      if (updateData.rolId === 1) {
-        updateData.rolId = 2; // Forzar a rolId = 2 (User)
-      }
+/**
+ * Soft delete: el propio usuario "elimina" su cuenta.
+ * En realidad solo se marca `esta_activo = false`.
+ */
+export const deleteMiCuentaHandler = async (
+  req: AuthenticatedRequest,
+  res: Response,
+): Promise<void> => {
+  const usuarioId = requireUser(req, res);
+  if (!usuarioId) return;
 
-      const updatedUser = await userService.updateUser(id, updateData);
-      return res.status(200).json({ message: 'Usuario actualizado con éxito', user: updatedUser });
-    } catch (error: any) {
-      return res.status(500).json({ error: error.message });
-    }
+  const resultado = await bloquearCuentaPropia(usuarioId);
+
+  if (!resultado.success) {
+    res.status(500).json({ success: false, error: resultado.error });
+    return;
   }
 
-  /**
-   * Realiza la baja lógica (desactivación) de un usuario
-   */
-  async delete(req: Request, res: Response): Promise<Response> {
-    try {
-      const id = this.getParamId(req);
-      if (!id) {
-        return res.status(400).json({ error: 'El ID del usuario es requerido' });
-      }
+  res.status(200).json({
+    success: true,
+    message: "Tu cuenta fue desactivada. Contactá al equipo si querés reactivarla.",
+  });
+};
 
-      await userService.deleteUser(id);
-      return res.status(200).json({ message: 'Usuario desactivado con éxito' });
-    } catch (error: any) {
-      return res.status(500).json({ error: error.message });
-    }
+// ============================================
+// GET /admin/usuarios/:id — Requiere JWT + admin
+// ============================================
+
+/**
+ * Consulta el perfil de CUALQUIER usuario.
+ * Doble verificación: el servicio comprueba que req.user.id sea admin.
+ */
+export const getPerfilAdminHandler = async (
+  req: AuthenticatedRequest,
+  res: Response,
+): Promise<void> => {
+  const adminId = requireUser(req, res);
+  if (!adminId) return;
+
+  const objetivoId = getParamId(req);
+  if (!objetivoId) {
+    res.status(400).json({ success: false, error: "El ID del usuario es obligatorio." });
+    return;
   }
 
-  /**
-   * Obtiene la lista de usuarios
-   */
-  async list(req: Request, res: Response): Promise<Response> {
-    try {
-      const users = await userService.listUsers();
-      return res.status(200).json(users);
-    } catch (error: any) {
-      return res.status(500).json({ error: error.message });
-    }
-  }
-}
+  const resultado = await obtenerPerfilAdmin(adminId, objetivoId);
 
-export const userController = new UserController();
+  if (!resultado.success) {
+    // 403 si fue rechazado por no ser admin, 404 si no existe.
+    const status = resultado.error.includes("No autorizado") ? 403 : 404;
+    res.status(status).json({ success: false, error: resultado.error });
+    return;
+  }
+
+  res.status(200).json({ success: true, data: resultado.data });
+};
+
+// ============================================
+// PATCH /admin/usuarios/:id/bloquear — Requiere JWT + admin
+// ============================================
+
+export const bloquearUsuarioAdminHandler = async (
+  req: AuthenticatedRequest,
+  res: Response,
+): Promise<void> => {
+  const adminId = requireUser(req, res);
+  if (!adminId) return;
+
+  const objetivoId = getParamId(req);
+  if (!objetivoId) {
+    res.status(400).json({ success: false, error: "El ID del usuario es obligatorio." });
+    return;
+  }
+
+  const resultado = await bloquearCuentaAdmin(adminId, objetivoId);
+
+  if (!resultado.success) {
+    const status = resultado.error.includes("No autorizado") ? 403 : 400;
+    res.status(status).json({ success: false, error: resultado.error });
+    return;
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Usuario desactivado.",
+  });
+};
+
+// ============================================
+// DELETE /admin/usuarios/:id — Requiere JWT + admin
+// ============================================
+
+/**
+ * Hard delete: elimina definitivamente al usuario de Auth
+ * y, en cascada, de `public.usuario`.
+ */
+export const eliminarUsuarioAdminHandler = async (
+  req: AuthenticatedRequest,
+  res: Response,
+): Promise<void> => {
+  const adminId = requireUser(req, res);
+  if (!adminId) return;
+
+  const objetivoId = getParamId(req);
+  if (!objetivoId) {
+    res.status(400).json({ success: false, error: "El ID del usuario es obligatorio." });
+    return;
+  }
+
+  const resultado = await eliminarCuentaAdmin(adminId, objetivoId);
+
+  if (!resultado.success) {
+    const status = resultado.error.includes("No autorizado") ? 403 : 400;
+    res.status(status).json({ success: false, error: resultado.error });
+    return;
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Usuario eliminado definitivamente.",
+  });
+};
