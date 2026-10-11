@@ -1,6 +1,6 @@
-//------------------------------------------------------------------------------
-//------------------------------RLS USUARIO-------------------------------------
-//------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------
+-- ------------------------------RLS USUARIO-------------------------------------
+-- ------------------------------------------------------------------------------
 
 --Funcion auxiliar
 create or replace function public.is_admin()
@@ -63,7 +63,7 @@ $$;
 create trigger trg_proteger_columnas_usuario
     before update on public.usuario
     for each row execute function public.proteger_columnas_usuario();
-//------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------
 
 create or replace function public.is_publisher()
 returns boolean
@@ -80,21 +80,25 @@ as $$
         and u.esta_activo
     );
 $$;
-revoke execute on function public.is_publisher() from public;
+revoke execute on function public.is_publisher() from public, anon;
 grant execute on function public.is_publisher() to authenticated;
-//-----------------------------------------------------------------
+-- -----------------------------------------------------------------
 do $$
 declare t text;
 begin
     foreach t in array array['modalidad', 'nivel', 'tipo_certificado', 'tipo_reporte']
     loop
         execute format('alter table public.%I enable row level security', t);
+
+        execute format('drop policy if exists %I on public.%I', t || ': lectura publica', t);
         execute format(
-        'create policy %L on public.%I for select to anon, authenticated using (true)',
-        t || ': lectura publica', t);
-    execute format(
-        'create policy %L on public.%I for insert to authenticated with check ((select public.is_admin()))',
-        t || ': insertar admin', t);
+            'create policy %I on public.%I for select to anon, authenticated using (true)',
+            t || ': lectura publica', t);
+
+        execute format('drop policy if exists %I on public.%I', t || ': insertar admin', t);
+        execute format(
+            'create policy %I on public.%I for insert to authenticated with check ((select public.is_admin()))',
+            t || ': insertar admin', t);
     end loop;
 end $$;
 
@@ -104,13 +108,17 @@ declare t text;
 begin
     foreach t in array array['rol', 'estado_reporte']
     loop
-    execute format('alter table public.%I enable row level security', t);
-    execute format(
-        'create policy %L on public.%I for select to authenticated using (true)',
-        t || ': lectura autenticados', t);
-    execute format(
-        'create policy %L on public.%I for insert to authenticated with check ((select public.is_admin()))',
-        t || ': insertar admin', t);
+        execute format('alter table public.%I enable row level security', t);
+
+        execute format('drop policy if exists %I on public.%I', t || ': lectura autenticados', t);
+        execute format(
+            'create policy %I on public.%I for select to authenticated using (true)',
+            t || ': lectura autenticados', t);
+
+        execute format('drop policy if exists %I on public.%I', t || ': insertar admin', t);
+        execute format(
+            'create policy %I on public.%I for insert to authenticated with check ((select public.is_admin()))',
+            t || ': insertar admin', t);
     end loop;
 end $$;
 
@@ -150,7 +158,7 @@ create policy "categoria: borrar admin" on public.categoria
     for delete to authenticated
     using ((select public.is_admin()));
 
-//-----------------------------------------------------------
+-- -----------------------------------------------------------
 alter table public.curso enable row level security;
 
 create policy "curso: ver activos o admin" on public.curso
@@ -170,7 +178,7 @@ create policy "curso: borrar admin" on public.curso
     for delete to authenticated
     using ((select public.is_admin()));
 
-//--------------------------------------------------------------
+-- --------------------------------------------------------------
 
 
 alter table public.curso_usuario enable row level security;
@@ -237,7 +245,7 @@ create policy "valoracion: crear propia" on public.valoracion
 create policy "valoracion: editar propia" on public.valoracion
     for update to authenticated
     using (usuario_id = (select auth.uid()))
-    with check (usuario_id = (select auth.uid()));
+    with check (usuario_id = (select auth.uid()) and esta_aprobada = false and fecha_aprobacion is null);
 
 -- Admin: aprobar / moderar
 create policy "valoracion: editar admin" on public.valoracion
@@ -250,11 +258,7 @@ create policy "valoracion: borrar admin" on public.valoracion
     for delete to authenticated
     using ((select public.is_admin()));
 
--- ip_address y user_agent solo los ven los admins.
--- RLS filtra FILAS, no columnas, así que se hace con permisos de columna
--- + una vista para admin.
--- ATENCIÓN: después de esto el frontend NO puede hacer select('*') sobre
--- valoracion; debe listar las columnas.
+
 revoke select on public.valoracion from anon, authenticated;
 grant select (id, usuario_id, curso_id, puntuacion, comentario,
             esta_activa, esta_aprobada, fecha_aprobacion, fecha)
@@ -300,10 +304,7 @@ create policy "reporte: borrar admin" on public.reporte
     using ((select public.is_admin()));
 
 
--- auditoria: append-only
--- Solo admin LEE. Nadie escribe desde el cliente: los INSERT los hacen los
--- triggers (deben ser SECURITY DEFINER) o el backend con service_role
--- (que se salta RLS). No hay policy de UPDATE ni DELETE => denegados.
+
 alter table public.auditoria enable row level security;
 
 create policy "auditoria: ver admin" on public.auditoria
@@ -344,27 +345,3 @@ create policy "promocion: borrar admin" on public.promocion
     for delete to authenticated
     using ((select public.is_admin()));
 
-/* --- Si añades creador_id uuid references usuario(id) ---
--- El dueño del curso (o admin) puede crear promos de SU curso.
--- Con curso.propietario_id:
-create policy "promocion: crear dueno o admin" on public.promocion
-    for insert to authenticated
-    with check (
-    (select public.is_admin())
-    or (
-        creador_id = (select auth.uid())
-        and exists (select 1 from public.curso c
-            where c.id = curso_id
-            and c.propietario_id = (select auth.uid()))
-    )
-    );
--- Y es_forzada = true solo debería poder crearla un admin (hazlo en trigger).
-*/
-
-
--- =====================================================================
--- TABLAS DE LAS REGLAS QUE NO ESTÁN EN EL SQL
--- institucion, curso_impartido, ruta*, perfil_vocacional, test_usuario
--- Cuando las crees, recuerda activar RLS (denegar por defecto):
---   alter table public.<tabla> enable row level security;
--- =====================================================================
