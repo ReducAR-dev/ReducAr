@@ -1,5 +1,5 @@
 // src/pages/PerfilPage.tsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -20,12 +20,6 @@ const photoSchema = z.object({
     .string()
     .trim()
     .max(50, "Máximo 50 caracteres")
-    .optional()
-    .or(z.literal("")),
-  foto_perfil: z
-    .string()
-    .trim()
-    .url("Debe ser una URL válida")
     .optional()
     .or(z.literal("")),
 });
@@ -61,7 +55,7 @@ type ActiveForm = "photo" | "profile" | null;
 // ============================================
 
 export default function PerfilPage() {
-  const { user, updatePerfil, fetchPerfil, isLoading } = useAuth();
+  const { user, updatePerfil, fetchPerfil, uploadFoto, isLoading } = useAuth();
 
   const [activeForm, setActiveForm] = useState<ActiveForm>(null);
   const [pendingAction, setPendingAction] = useState<ActiveForm>(null);
@@ -69,10 +63,16 @@ export default function PerfilPage() {
   const [serverError, setServerError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
+  // ===== Estado local para la subida de foto =====
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [filePreview, setFilePreview] = useState<string | null>(null);
+  // Ref para poder revocar el ObjectURL desde cualquier efecto
+  const filePreviewRef = useRef<string | null>(null);
+
   // ===== Form: foto + nombre + apellido =====
   const photoForm = useForm<PhotoFormValues>({
     resolver: zodResolver(photoSchema),
-    defaultValues: { nombre: "", apellido: "", foto_perfil: "" },
+    defaultValues: { nombre: "", apellido: "" },
   });
 
   // ===== Form: perfil extendido =====
@@ -85,6 +85,25 @@ export default function PerfilPage() {
       user_preferencia: "",
     },
   });
+
+  // ===== Utilidad: limpiar el preview (ObjectURL) =====
+  const clearFilePreview = () => {
+    if (filePreviewRef.current) {
+      URL.revokeObjectURL(filePreviewRef.current);
+      filePreviewRef.current = null;
+    }
+    setFilePreview(null);
+    setSelectedFile(null);
+  };
+
+  // ===== Cleanup al desmontar =====
+  useEffect(() => {
+    return () => {
+      if (filePreviewRef.current) {
+        URL.revokeObjectURL(filePreviewRef.current);
+      }
+    };
+  }, []);
 
   // ===== Cargar perfil si no está en el store =====
   useEffect(() => {
@@ -101,7 +120,6 @@ export default function PerfilPage() {
       photoForm.reset({
         nombre: user.nombre ?? "",
         apellido: user.apellido ?? "",
-        foto_perfil: user.foto_perfil ?? "",
       });
       profileForm.reset({
         fecha_nacimiento: user.fecha_nacimiento ?? "",
@@ -114,7 +132,8 @@ export default function PerfilPage() {
 
   // ===== ¿Hay cambios sin guardar en el form activo? =====
   const hasUnsavedChanges =
-    (activeForm === "photo" && photoForm.formState.isDirty) ||
+    (activeForm === "photo" &&
+      (photoForm.formState.isDirty || selectedFile !== null)) ||
     (activeForm === "profile" && profileForm.formState.isDirty);
 
   // ===== Intento de abrir un form =====
@@ -141,8 +160,8 @@ export default function PerfilPage() {
       photoForm.reset({
         nombre: user?.nombre ?? "",
         apellido: user?.apellido ?? "",
-        foto_perfil: user?.foto_perfil ?? "",
       });
+      clearFilePreview();
     } else if (activeForm === "profile") {
       profileForm.reset({
         fecha_nacimiento: user?.fecha_nacimiento ?? "",
@@ -180,18 +199,51 @@ export default function PerfilPage() {
     if (next) setActiveForm(next);
   };
 
-  // ===== Submit: foto/nombre/apellido =====
+  // ===== Cambio de archivo seleccionado =====
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+
+    // Liberar el preview anterior antes de asignar el nuevo.
+    if (filePreviewRef.current) {
+      URL.revokeObjectURL(filePreviewRef.current);
+      filePreviewRef.current = null;
+    }
+
+    if (!file) {
+      setSelectedFile(null);
+      setFilePreview(null);
+      return;
+    }
+
+    const url = URL.createObjectURL(file);
+    filePreviewRef.current = url;
+    setSelectedFile(file);
+    setFilePreview(url);
+  };
+
+  // ===== Submit: foto + nombre + apellido =====
   const onPhotoSubmit = async (data: PhotoFormValues) => {
     setServerError(null);
     setSuccessMsg(null);
     try {
+      // 1. Guardar nombre y apellido vía PATCH
       await updatePerfil({
         nombre: data.nombre,
         apellido: data.apellido?.trim() || null,
-        foto_perfil: data.foto_perfil?.trim() || null,
       });
+
+      // 2. Si hay archivo seleccionado, subirlo
+      if (selectedFile) {
+        await uploadFoto(selectedFile);
+        clearFilePreview();
+      }
+
       setActiveForm(null);
-      setSuccessMsg("Datos actualizados.");
+      setSuccessMsg(
+        selectedFile
+          ? "Foto y datos actualizados."
+          : "Datos actualizados.",
+      );
     } catch (err) {
       setServerError(
         err instanceof Error ? err.message : "No se pudo guardar.",
@@ -243,6 +295,12 @@ export default function PerfilPage() {
   const nombreCompleto =
     `${user.nombre ?? ""} ${user.apellido ?? ""}`.trim() || "Usuario";
 
+  // Prioridad para mostrar en el avatar:
+  // 1. Preview local (si el usuario seleccionó un archivo nuevo).
+  // 2. Foto del store (foto_perfil del backend).
+  // 3. Inicial.
+  const avatarSrc = filePreview ?? user.foto_perfil ?? null;
+
   return (
     <div className="min-h-screen bg-reducar-bg text-reducar-text py-10 px-4">
       <div className="max-w-4xl mx-auto space-y-6">
@@ -257,9 +315,9 @@ export default function PerfilPage() {
               aria-label="Editar foto, nombre y apellido"
               className="relative group w-24 h-24 rounded-full overflow-hidden border-4 border-reducar-surface shrink-0 focus:outline-none focus:ring-2 focus:ring-reducar-primary focus:ring-offset-2 focus:ring-offset-reducar-surface"
             >
-              {user.foto_perfil ? (
+              {avatarSrc ? (
                 <img
-                  src={user.foto_perfil}
+                  src={avatarSrc}
                   alt={nombreCompleto}
                   className="w-full h-full object-cover"
                 />
@@ -348,6 +406,44 @@ export default function PerfilPage() {
               </button>
             </div>
 
+            {/* Campo de archivo */}
+            <div>
+              <label
+                htmlFor="photo-file"
+                className="block mb-1.5 text-sm font-bold text-reducar-text"
+              >
+                Foto de perfil
+              </label>
+              <input
+                id="photo-file"
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                onChange={handleFileChange}
+                className="w-full text-sm text-reducar-text file:mr-4 file:px-4 file:py-2 file:rounded-xl file:border-0 file:bg-reducar-primary file:text-white file:font-bold hover:file:bg-reducar-primary-dark file:cursor-pointer file:transition-colors"
+              />
+              <p className="mt-1 text-xs text-reducar-text-secondary">
+                PNG, JPG o WEBP. Máximo 2 MB.
+              </p>
+
+              {/* Previsualización del archivo seleccionado */}
+              {filePreview && (
+                <div className="mt-3 flex items-center gap-3">
+                  <img
+                    src={filePreview}
+                    alt="Previsualización"
+                    className="w-16 h-16 rounded-full object-cover border-2 border-reducar-primary"
+                  />
+                  <button
+                    type="button"
+                    onClick={clearFilePreview}
+                    className="text-xs text-red-500 hover:underline"
+                  >
+                    Quitar imagen
+                  </button>
+                </div>
+              )}
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <InputField
                 label="Nombre"
@@ -362,14 +458,6 @@ export default function PerfilPage() {
                 {...photoForm.register("apellido")}
               />
             </div>
-
-            <InputField
-              label="URL de foto de perfil"
-              id="photo-foto_perfil"
-              placeholder="https://…"
-              error={photoForm.formState.errors.foto_perfil?.message}
-              {...photoForm.register("foto_perfil")}
-            />
 
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <button

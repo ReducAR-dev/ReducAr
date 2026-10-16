@@ -31,6 +31,15 @@ export const useAuth = () => {
     [setSession],
   );
 
+  const uploadFoto = useCallback(
+    async (file: File) => {
+      const data = await userService.subirFotoPerfil(file);
+      setPerfil(data);
+      return data;
+    },
+    [setPerfil],
+  );
+
   /**
    * Registro + auto-login.
    * El perfil se completa automáticamente porque loginConPerfil
@@ -92,5 +101,6 @@ export const useAuth = () => {
     logout,
     fetchPerfil,
     updatePerfil,
+    uploadFoto,
   };
 };

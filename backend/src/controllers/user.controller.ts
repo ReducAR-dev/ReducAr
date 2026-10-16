@@ -10,6 +10,7 @@ import {
 } from "../services/user.service.js";
 import type { AuthenticatedRequest } from "../types/auth.types.js";
 import type { ActualizarPerfilPayload } from "../types/usuario.types.js";
+import { actualizarFotoPerfil } from "../services/user.service.js";
 
 // ============================================
 // HELPERS
@@ -235,5 +236,43 @@ export const eliminarUsuarioAdminHandler = async (
   res.status(200).json({
     success: true,
     message: "Usuario eliminado definitivamente.",
+  });
+};
+
+// ============================================
+// POST /usuarios/yo/foto — Requiere JWT
+// ============================================
+
+/**
+ * Sube la foto de perfil del usuario autenticado.
+ * El archivo llega en `req.file` (procesado por multer).
+ */
+
+export const postMiFotoHandler = async (
+  req: AuthenticatedRequest,
+  res: Response,
+): Promise<void> => {
+  const usuarioId = requireUser(req, res);
+  if (!usuarioId) return;
+
+  if (!req.file) {
+    res.status(400).json({
+      success: false,
+      error: "No se recibió ningún archivo. Campo esperado: 'avatar'.",
+    });
+    return;
+  }
+
+  const resultado = await actualizarFotoPerfil(usuarioId, req.file);
+
+  if (!resultado.success) {
+    res.status(400).json({ success: false, error: resultado.error });
+    return;
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Foto de perfil actualizada.",
+    data: resultado.data,
   });
 };

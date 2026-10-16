@@ -5,6 +5,7 @@ import {
   getMiPerfilHandler,
   updateMiPerfilHandler,
   deleteMiCuentaHandler,
+  postMiFotoHandler,
   getPerfilAdminHandler,
   bloquearUsuarioAdminHandler,
   eliminarUsuarioAdminHandler,
@@ -13,6 +14,7 @@ import {
 import { requireAuth, requireAdmin } from "../middlewares/auth.middleware.js";
 import { validateBody } from "../middlewares/validation.middleware.js";
 import { actualizarPerfilSchema } from "../schema/usuario.schema.js";
+import { uploadAvatar } from "../middlewares/upload.middleware.js";
 
 const router = Router();
 
@@ -24,13 +26,22 @@ const router = Router();
 // Nunca del body ni de los params. Eso lo garantiza requireAuth.
 
 router.get("/yo", requireAuth, getMiPerfilHandler);
+
 router.patch(
   "/yo",
   requireAuth,
   validateBody(actualizarPerfilSchema),
   updateMiPerfilHandler,
 );
+
 router.delete("/yo", requireAuth, deleteMiCuentaHandler);
+
+router.post(
+  "/yo/foto",
+  requireAuth,
+  uploadAvatar,          // multer parsea multipart/form-data
+  postMiFotoHandler,     // sube a Storage + actualiza BD
+);
 
 // ============================================
 // Rutas administrativas (requieren JWT + rol admin)

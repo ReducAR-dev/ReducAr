@@ -255,3 +255,122 @@ export const eliminarCuentaAdmin = async (
 
   return { success: true, data: null };
 };
+
+
+// ============================================
+// SUBIDA DE FOTO DE PERFIL
+// ============================================
+
+const BUCKET_AVATARS = "avatars";
+
+/**
+ * Sube una imagen al bucket `avatars` y actualiza `foto_perfil` del usuario.
+ *
+ * Convención del nombre: `<usuarioId>.<extension>`.
+ * Si el usuario sube una foto nueva, se sobreescribe la anterior.
+ * Eso evita acumular archivos huérfanos en Storage.
+ */
+export const actualizarFotoPerfil = async (
+  usuarioId: UUID,
+  file: { buffer: Buffer; mimetype: string; originalname: string },
+): Promise<Result<Usuario>> => {
+  // 1. Determinar la extensión desde el MIME type.
+  const extFromMime: Record<string, string> = {
+    "image/png": "png",
+    "image/jpeg": "jpg",
+    "image/webp": "webp",
+  };
+  const extension = extFromMime[file.mimetype];
+  if (!extension) {
+    return { success: false, error: "Formato de imagen no soportado." };
+  }
+
+  // 2. Nombre ÚNICO por subida → evita que el navegador sirva la foto vieja.
+  const timestamp = Date.now();
+  const filePath = `${usuarioId}-${timestamp}.${extension}`;
+
+  // 3. Guardar cuál era la URL previa (para borrarla después).
+  const { data: previo } = await supabaseAdmin
+    .from("usuario")
+    .select("foto_perfil")
+    .eq("id", usuarioId)
+    .single();
+  const urlPrevia = previo?.foto_perfil ?? null;
+
+  // 4. Subir el nuevo archivo. Ya no usamos upsert (nombre único).
+  const { error: uploadError } = await supabaseAdmin.storage
+    .from(BUCKET_AVATARS)
+    .upload(filePath, file.buffer, {
+      contentType: file.mimetype,
+      upsert: false,
+    });
+
+  if (uploadError) {
+    console.error("❌ usuarios.actualizarFotoPerfil.upload:", uploadError.message);
+    return { success: false, error: "No se pudo subir la imagen." };
+  }
+
+  // 5. Obtener la URL pública del archivo recién subido.
+  const { data: publicUrlData } = supabaseAdmin.storage
+    .from(BUCKET_AVATARS)
+    .getPublicUrl(filePath);
+
+  const publicUrl = publicUrlData.publicUrl;
+
+  // 6. Actualizar la columna foto_perfil en la tabla usuario.
+  const { data, error } = await supabaseAdmin
+    .from("usuario")
+    .update({
+      foto_perfil: publicUrl,
+      fecha_actualizacion: new Date().toISOString() as Timestamp,
+    })
+    .eq("id", usuarioId)
+    .select()
+    .single();
+
+  if (error) {
+    // Rollback: si la BD falla, borramos el archivo huérfano que acabamos de subir.
+    await supabaseAdmin.storage
+      .from(BUCKET_AVATARS)
+      .remove([filePath])
+      .catch(() => {
+        /* best-effort */
+      });
+
+    console.error("❌ usuarios.actualizarFotoPerfil.update:", error.message);
+    return { success: false, error: error.message };
+  }
+
+  // 7. Borrar la imagen vieja (best-effort, no bloqueante).
+  if (urlPrevia) {
+    const pathViejo = extractStoragePath(urlPrevia, BUCKET_AVATARS);
+    if (pathViejo && pathViejo !== filePath) {
+      supabaseAdmin.storage
+        .from(BUCKET_AVATARS)
+        .remove([pathViejo])
+        .catch(() => {
+          /* si falla el borrado, no rompemos la subida */
+        });
+    }
+  }
+
+  return { success: true, data: data as Usuario };
+};
+
+/**
+ * Extrae el path interno del bucket desde una URL pública de Supabase.
+ *
+ * Ej:
+ *   entrada: https://xxx.supabase.co/storage/v1/object/public/avatars/user-123-1699.jpg
+ *   salida:  user-123-1699.jpg
+ */
+function extractStoragePath(publicUrl: string, bucket: string): string | null {
+  try {
+    const marker = `/storage/v1/object/public/${bucket}/`;
+    const idx = publicUrl.indexOf(marker);
+    if (idx === -1) return null;
+    return decodeURIComponent(publicUrl.slice(idx + marker.length));
+  } catch {
+    return null;
+  }
+}
