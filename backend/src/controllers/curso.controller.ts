@@ -1,7 +1,7 @@
 
 import { Request, Response } from 'express';
-import { obtenerTodosLosCursos, obtenerCursoPorId } from '../services/cursos.services';
-import { Curso } from '../models/cursos';
+import { obtenerTodosLosCursos, obtenerCursoPorId } from '../services/cursos.service';
+import { Curso } from '../models/curso.model';
 
 // Controlador para manejar la solicitud GET a la ruta /cursos
 

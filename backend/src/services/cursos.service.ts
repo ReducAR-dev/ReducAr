@@ -1,5 +1,5 @@
 import { supabase } from '../config/supabase';
-import { Curso } from '../models/cursos';
+import { Curso } from '../models/curso.model';
 
 export const obtenerCursoPorId = async (id: number): Promise<Curso | null> => {
   const { data, error } = await supabase

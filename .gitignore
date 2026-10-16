@@ -19,6 +19,10 @@ desktop.ini
 **/*.log
 npm-debug.log*
 
+# Local context
+contexto.txt
+reglasNegocio.txt
+
 # IDE
 .vscode/
 .idea/
