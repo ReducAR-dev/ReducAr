@@ -11,7 +11,7 @@ export interface PerfilUsuario {
   apellido: string | null;
   email: string;
   fecha_nacimiento: string | null;
-  fotoPerfil: string | null;
+  foto_perfil: string | null;
   biografia: string | null;
   ubicacion: string | null;
   user_preferencia: string | null;
@@ -19,4 +19,14 @@ export interface PerfilUsuario {
   esta_activo: boolean | null;
   fecha_registro: string | null;
   fecha_actualizacion: string | null;
+}
+
+export interface ActualizarPerfilPayload {
+  nombre?: string;
+  apellido?: string | null;
+  fecha_nacimiento?: string | null;
+  foto_perfil?: string | null;
+  biografia?: string | null;
+  ubicacion?: string | null;
+  user_preferencia?: string | null;
 }

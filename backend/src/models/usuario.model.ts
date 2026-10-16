@@ -7,7 +7,7 @@ export interface Usuario {
   apellido: string | null;
   email: string;
   fecha_nacimiento: ISODateOnly | null;
-  fotoPerfil: string | null;
+  foto_perfil: string | null;
   biografia: string | null;
   ubicacion: string | null;
   user_preferencia: string | null;

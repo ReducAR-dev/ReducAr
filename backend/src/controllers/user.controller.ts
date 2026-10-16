@@ -87,7 +87,7 @@ export const updateMiPerfilHandler = async (
   if (typeof body.nombre === "string") payload.nombre = body.nombre.trim();
   if (body.apellido !== undefined) payload.apellido = body.apellido;
   if (body.fecha_nacimiento !== undefined) payload.fecha_nacimiento = body.fecha_nacimiento;
-  if (body.fotoPerfil !== undefined) payload.fotoPerfil = body.fotoPerfil;
+  if (body.foto_perfil !== undefined) payload.foto_perfil = body.foto_perfil;
   if (body.biografia !== undefined) payload.biografia = body.biografia;
   if (body.ubicacion !== undefined) payload.ubicacion = body.ubicacion;
   if (body.user_preferencia !== undefined) payload.user_preferencia = body.user_preferencia;

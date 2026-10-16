@@ -51,9 +51,9 @@ export const UserMenu = () => {
         aria-haspopup="true"
         className="w-11 h-11 rounded-full overflow-hidden border-2 border-reducar-primary/60 hover:border-reducar-primary transition-colors shrink-0"
       >
-        {perfil?.fotoPerfil ? (
+        {perfil?.foto_perfil ? (
           <img
-            src={perfil.fotoPerfil}
+            src={perfil.foto_perfil}
             alt={nombreMostrado}
             className="w-full h-full object-cover"
           />
@@ -79,7 +79,7 @@ export const UserMenu = () => {
 
           <button
             type="button"
-            onClick={() => handleNavigate("/novedades")}
+            onClick={() => handleNavigate("/perfil")}
             className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-reducar-shell-text-secondary hover:bg-reducar-shell-hover hover:text-reducar-primary transition-colors"
           >
             Ver perfil
@@ -87,7 +87,7 @@ export const UserMenu = () => {
 
           <button
             type="button"
-            onClick={() => handleNavigate("/cursos")}
+            onClick={() => handleNavigate("/configuracion")}
             className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-reducar-shell-text-secondary hover:bg-reducar-shell-hover hover:text-reducar-primary transition-colors"
           >
             Configuración

@@ -14,7 +14,7 @@ interface AuthState {
     refreshToken: string,
     perfil: PerfilUsuario | null,
   ) => void;
-  setPerfil: (perfil: PerfilUsuario) => void;
+  setPerfil: (perfil: PerfilUsuario | null) => void;
   setLoading: (isLoading: boolean) => void;
   logout: () => void;
 }

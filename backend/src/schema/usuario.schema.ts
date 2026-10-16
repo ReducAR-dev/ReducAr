@@ -11,7 +11,7 @@ export const actualizarPerfilSchema = z.object({
   nombre: z.string().min(2).optional(),
   apellido: z.string().nullable().optional(),
   fecha_nacimiento: z.string().nullable().optional(),
-  fotoPerfil: z.string().nullable().optional(),
+  foto_perfil: z.string().nullable().optional(),
   biografia: z.string().nullable().optional(),
   ubicacion: z.string().nullable().optional(),
   user_preferencia: z.string().nullable().optional(),

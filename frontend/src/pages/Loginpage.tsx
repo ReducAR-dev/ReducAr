@@ -4,8 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { authService } from "../services/auth.service";
-import { useAuthStore } from "../stores/auth.store";
+import { useAuth } from "../hooks/useAuth";
 
 const loginSchema = z.object({
   email: z
@@ -38,24 +37,16 @@ export default function LoginPage() {
     },
   });
 
+  const { login } = useAuth();
+
   const onSubmit = async (data: LoginFormValues) => {
     setServerError(null);
     try {
-      const { session, perfil } = await authService.loginConPerfil({
-        email: data.email,
-        password: data.password,
-      });
-
-      useAuthStore
-        .getState()
-        .setSession(session.access_token, session.refresh_token, perfil);
-
+      await login({ email: data.email, password: data.password });
       const from = (location.state as { from?: string } | null)?.from ?? "/";
       navigate(from, { replace: true });
     } catch (err) {
-      const msg =
-        err instanceof Error ? err.message : "No se pudo iniciar sesión";
-      setServerError(msg);
+      setServerError(err instanceof Error ? err.message : "No se pudo iniciar sesión");
     }
   };
 

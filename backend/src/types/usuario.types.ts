@@ -25,7 +25,7 @@ export interface ActualizarPerfilPayload {
   nombre?: string;
   apellido?: string | null;
   fecha_nacimiento?: string | null;
-  fotoPerfil?: string | null;
+  foto_perfil?: string | null;
   biografia?: string | null;
   ubicacion?: string | null;
   user_preferencia?: string | null;

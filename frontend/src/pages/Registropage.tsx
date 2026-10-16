@@ -5,8 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import PromoBar from "../components/features/PromoBar";
-import { authService } from "../services/auth.service";
-import { useAuthStore } from "../stores/auth.store";
+import { useAuth } from "../hooks/useAuth";
 
 const signupSchema = z
   .object({
@@ -65,35 +64,21 @@ export default function RegistroPage() {
     mode: "onBlur",
   });
 
+  const { register: registerUser } = useAuth();
+
   const onSubmit = async (data: SignupFormValues) => {
     setServerError(null);
     try {
-      // 1. Crear la cuenta
-      await authService.signup({
+      await registerUser({
         nombre: data.nombre,
         apellido: data.apellido,
         fecha_nacimiento: data.fechaNacimiento,
         email: data.email,
         password: data.password,
       });
-
-      // 2. Login automático con las mismas credenciales
-      const { session, perfil } = await authService.loginConPerfil({
-        email: data.email,
-        password: data.password,
-      });
-
-      // 3. Guardar sesión en el store
-      useAuthStore
-        .getState()
-        .setSession(session.access_token, session.refresh_token, perfil);
-
-      // 4. Redirigir al home
       navigate("/", { replace: true });
     } catch (err) {
-      const msg =
-        err instanceof Error ? err.message : "No se pudo crear la cuenta";
-      setServerError(msg);
+      setServerError(err instanceof Error ? err.message : "No se pudo crear la cuenta");
     }
   };
 
