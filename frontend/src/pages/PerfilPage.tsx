@@ -353,7 +353,7 @@ export default function PerfilPage() {
               </p>
               <div className="mt-2 flex flex-wrap gap-2 text-xs">
                 <span className="px-2.5 py-1 rounded-full bg-reducar-primary-light text-reducar-primary font-semibold">
-                  {user.rolId === 1 ? "Administrador" : "Usuario"}
+                  {user.rol_id === 1 ? "Administrador" : "Usuario"}
                 </span>
                 {user.esta_activo === false ? (
                   <span className="px-2.5 py-1 rounded-full bg-red-500/10 text-red-500 font-semibold">

@@ -19,7 +19,8 @@ export const Footer = () => {
       </svg>
 
       <div className="relative max-w-7xl mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+          {/* Columna 1: marca + redes */}
           <div className="lg:col-span-1 space-y-4">
             <Link to="/" className="flex items-center gap-2" aria-label="Ir al inicio">
               <img src={logoReducar} alt="" className="h-10 w-auto" aria-hidden="true" />
@@ -46,34 +47,42 @@ export const Footer = () => {
             </div>
           </div>
 
+          {/* Columna 2: Explorar */}
           <div className="space-y-4">
             <h4 className="text-white font-extrabold text-sm">Explorar</h4>
             <ul className="space-y-3">
-              <li><Link to="/cursos" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Todas las oportunidades</Link></li>
-              <li><Link to="/cursos" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Categorías</Link></li>
-              <li><Link to="/instituciones" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Organizaciones</Link></li>
+              <li><Link to="/cursos" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Explorar cursos</Link></li>
+              <li><Link to="/rutas" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Rutas de aprendizaje</Link></li>
+              <li><Link to="/instituciones" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Instituciones</Link></li>
+              <li><Link to="/novedades" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Novedades</Link></li>
+              <li><Link to="/test" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Test vocacional</Link></li>
             </ul>
           </div>
 
+          {/* Columna 3: ReducAR */}
           <div className="space-y-4">
             <h4 className="text-white font-extrabold text-sm">ReducAR</h4>
             <ul className="space-y-3">
-              <li><Link to="/nosotros" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Quiénes somos</Link></li>
-              <li><Link to="/novedades" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Novedades</Link></li>
+              <li><Link to="/como-funciona" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Cómo funciona</Link></li>
+              <li><Link to="/nosotros" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Nosotros</Link></li>
+              <li><Link to="/testimonios" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Testimonios</Link></li>
               <li><Link to="/ayuda" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Ayuda</Link></li>
               <li><Link to="/contacto" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Contacto</Link></li>
-              <li><Link to="/preguntas-frecuentes" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Preguntas frecuentes</Link></li>
             </ul>
           </div>
 
+          {/* Columna 4: Legal */}
           <div className="space-y-4">
             <h4 className="text-white font-extrabold text-sm">Legal</h4>
             <ul className="space-y-3">
-              <li><Link to="/politicas-privacidad" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Política de privacidad</Link></li>
+              <li><Link to="/politicas-privacidad" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Políticas de privacidad</Link></li>
               <li><Link to="/terminos-condiciones" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Términos y condiciones</Link></li>
+              <li><Link to="/preguntas-frecuentes" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Preguntas frecuentes</Link></li>
+              <li><Link to="/mapa-del-sitio" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Mapa del sitio</Link></li>
             </ul>
           </div>
 
+          {/* Columna 5: CTA organización */}
           <div className="lg:col-span-1 p-5 rounded-2xl bg-reducar-shell-surface-soft border border-reducar-shell-border space-y-3">
             <h4 className="text-white font-extrabold text-sm leading-snug">¿Representás a una organización?</h4>
             <p className="text-reducar-shell-text-secondary text-xs leading-relaxed">

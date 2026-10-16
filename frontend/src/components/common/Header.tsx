@@ -33,8 +33,9 @@ function MoonIcon() {
   );
 }
 
+// Menú principal: 5 items, sin "Inicio".
+// El logo (arriba a la izquierda) cumple la función de "ir al home".
 const menuItems = [
-  { label: "Inicio", path: "/" },
   { label: "Explorar cursos", shortLabel: "Cursos", path: "/cursos" },
   { label: "Rutas de aprendizaje", shortLabel: "Rutas", path: "/rutas" },
   { label: "Test vocacional", shortLabel: "Test", path: "/test" },
@@ -42,13 +43,13 @@ const menuItems = [
   { label: "Novedades", path: "/novedades" },
 ];
 
+// Dropdown "Más": confianza + soporte.
 const dropdownItems = [
+  { label: "Cómo funciona", path: "/como-funciona" },
   { label: "Nosotros", path: "/nosotros" },
+  { label: "Testimonios", path: "/testimonios" },
   { label: "Ayuda", path: "/ayuda" },
   { label: "Contacto", path: "/contacto" },
-  { label: "Preguntas frecuentes", path: "/preguntas-frecuentes" },
-  { label: "Políticas de privacidad", path: "/politicas-privacidad" },
-  { label: "Términos y condiciones", path: "/terminos-condiciones" },
 ];
 
 export const Header = () => {
@@ -57,8 +58,10 @@ export const Header = () => {
   const navigate = useNavigate();
 
   const accessToken = useAuthStore((s) => s.accessToken);
+  const rol_id = useAuthStore((s) => s.perfil?.rol_id);
   const logout = useAuthStore((s) => s.logout);
   const estaLogueado = !!accessToken;
+  const esAdmin = rol_id === 1;
 
   useLayoutEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -188,18 +191,50 @@ export const Header = () => {
                 <>
                   <button
                     type="button"
-                    onClick={() => handleNavigate("/novedades")}
-                    className="w-full h-11 inline-flex items-center justify-center rounded-xl border border-reducar-primary text-reducar-primary font-bold hover:bg-reducar-primary/10 transition-colors"
+                    onClick={() => handleNavigate("/mi-cuenta")}
+                    className="w-full h-11 inline-flex items-center justify-center rounded-xl bg-reducar-primary text-white font-bold hover:bg-reducar-primary-dark transition-colors"
                   >
-                    Ver perfil
+                    Mi cuenta
                   </button>
                   <button
                     type="button"
-                    onClick={() => handleNavigate("/cursos")}
+                    onClick={() => handleNavigate("/perfil")}
                     className="w-full h-11 inline-flex items-center justify-center rounded-xl border border-reducar-shell-border text-reducar-shell-text font-bold hover:bg-reducar-shell-hover transition-colors"
                   >
-                    Configuración
+                    Mi perfil
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => handleNavigate("/mi-cuenta/favoritos")}
+                    className="w-full h-11 inline-flex items-center justify-center rounded-xl border border-reducar-shell-border text-reducar-shell-text font-bold hover:bg-reducar-shell-hover transition-colors"
+                  >
+                    Mis favoritos
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleNavigate("/mi-cuenta/cursos")}
+                    className="w-full h-11 inline-flex items-center justify-center rounded-xl border border-reducar-shell-border text-reducar-shell-text font-bold hover:bg-reducar-shell-hover transition-colors"
+                  >
+                    Mis cursos
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleNavigate("/mi-cuenta/reportes")}
+                    className="w-full h-11 inline-flex items-center justify-center rounded-xl border border-reducar-shell-border text-reducar-shell-text font-bold hover:bg-reducar-shell-hover transition-colors"
+                  >
+                    Mis reportes
+                  </button>
+
+                  {esAdmin && (
+                    <button
+                      type="button"
+                      onClick={() => handleNavigate("/admin")}
+                      className="w-full h-11 inline-flex items-center justify-center rounded-xl border border-reducar-primary text-reducar-primary font-bold hover:bg-reducar-primary/10 transition-colors"
+                    >
+                      Panel admin
+                    </button>
+                  )}
+
                   <button
                     type="button"
                     onClick={handleLogoutMobile}

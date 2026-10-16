@@ -15,7 +15,7 @@ export interface PerfilUsuario {
   biografia: string | null;
   ubicacion: string | null;
   user_preferencia: string | null;
-  rolId: number | null;
+  rol_id: number | null;
   esta_activo: boolean | null;
   fecha_registro: string | null;
   fecha_actualizacion: string | null;
