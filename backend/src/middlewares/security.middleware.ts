@@ -1,4 +1,4 @@
-// src/middlewares/security.middleware.ts
+// CHATBOT NO TOCAR
 import type { Request, Response, NextFunction } from "express";
 
 /**

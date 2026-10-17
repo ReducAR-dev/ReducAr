@@ -1,3 +1,4 @@
+// Chatbot NO TOCAR
 import {
   CHAT_CATEGORIES,
   type ChatRequest,

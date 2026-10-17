@@ -1,3 +1,4 @@
+// Chatbot NO TOCAR
 import { CHAT_SYSTEM_PROMPT } from '../prompts/chat.system-prompt.js';
 import {
   CHAT_CATEGORIES,

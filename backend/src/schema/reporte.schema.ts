@@ -1,33 +1,47 @@
-import { z } from 'zod';
+// src/schema/reporte.schema.ts
+import { z } from "zod";
 
-export const reporteBaseSchema = z.object({
-  id: z.number().int().positive(), // int4, PRIMARY, NON-NULLABLE
-  usuario_id: z.string()
-    .uuid("El ID de usuario debe ser un UUID válido")
-    .nullish(), // uuid, FK, NULLABLE
-  tipo_reporteid: z.number() // OJO: Supabase muestra camelCase aquí (tipo_reporteId)
+// ============================================
+// Crear reporte (usuario logueado)
+// ============================================
+// Un reporte se crea contra una entidad (curso, usuario, valoración).
+// El estado inicial siempre es "pending" (id=1), y eso lo fuerza el
+// backend, no el cliente.
+
+export const crearReporteSchema = z.object({
+  tipo_reporte_id: z
+    .number({ message: "El tipo de reporte es obligatorio." })
     .int()
-    .positive()
-    .nullish(), // int4, FK, NULLABLE
-    
-  entidad_tipo: z.string()
-    .min(1, "El tipo de entidad es requerido")
-    .max(255, "El tipo de entidad es demasiado largo"), // varchar, NON-NULLABLE
-  entidad_id: z.string()
-    .max(255, "El ID de entidad es demasiado largo")
-    .nullish(), // varchar, NULLABLE (Puede ser un UUID o un ID numérico en texto)
-    
-  mensaje: z.string()
-    .min(1, "El mensaje del reporte no puede estar vacío"), // text, NON-NULLABLE
-    
-  estado_id: z.number()
-    .int()
-    .positive()
-    .nullish(), // int4, FK, NULLABLE
-    
-  respuesta_admin: z.string().nullish(), // text, NULLABLE
-  fecha_creacion: z.coerce.date().nullish(), // timestamp, NULLABLE
-  fecha_resolucion: z.coerce.date().nullish(), // timestamp, NULLABLE
+    .positive(),
+  entidad_tipo: z
+    .enum(["curso", "usuario", "valoracion"], {
+      message: "entidad_tipo debe ser 'curso', 'usuario' o 'valoracion'.",
+    }),
+  entidad_id: z.string().trim().min(1, "La entidad es obligatoria."),
+  mensaje: z
+    .string({ message: "El mensaje es obligatorio." })
+    .trim()
+    .min(10, "Contá un poco más (mínimo 10 caracteres).")
+    .max(1000, "Máximo 1000 caracteres."),
 });
 
-export type Reporte = z.infer<typeof reporteBaseSchema>;
+// ============================================
+// Resolver reporte (solo admin)
+// ============================================
+export const resolverReporteSchema = z.object({
+  estado_id: z.number().int().positive(),
+  respuesta_admin: z.string().trim().max(1000).optional(),
+});
+
+// ============================================
+// Query de listado (admin)
+// ============================================
+export const listarReportesQuerySchema = z.object({
+  page: z.coerce.number().int().positive().optional().default(1),
+  limit: z.coerce.number().int().positive().max(100).optional().default(30),
+  estado_id: z.coerce.number().int().positive().optional(),
+});
+
+export type CrearReportePayload = z.infer<typeof crearReporteSchema>;
+export type ResolverReportePayload = z.infer<typeof resolverReporteSchema>;
+export type ListarReportesQuery = z.infer<typeof listarReportesQuerySchema>;

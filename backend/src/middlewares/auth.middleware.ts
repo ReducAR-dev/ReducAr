@@ -113,11 +113,11 @@ export const requireAdmin = async (
   try {
     const { data, error } = await supabaseAdmin
       .from("usuario")
-      .select("rolId")
+      .select("rol_id")   // ✅
       .eq("id", req.user.id)
       .single();
 
-    if (error || !data || data.rolId !== ROL_ADMIN) {
+    if (error || !data || data.rol_id !== ROL_ADMIN) {
       res.status(403).json({
         success: false,
         error: "Se requieren permisos de administrador.",

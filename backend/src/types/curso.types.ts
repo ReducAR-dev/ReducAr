@@ -1,27 +1,34 @@
+/**
+ * Curso "resumido" para listados. Incluye los joins con
+ * categoría / institución ya resueltos por el servicio.
+ */
 export interface CursoResumen {
   id: number;
   titulo: string;
-  institucion: string; 
-  categoria: string; 
-  descripcionCorta: string; 
-  modalidad: string; 
+  institucion: string;
+  categoria: string;
+  descripcion_corta: string;
+  modalidad: string;
   precio: number;
 }
 
-export interface CursoDetalle { 
-  id: number; 
-  institucion: string; 
-  categoria: string; 
-  titulo: string; 
-  descripcionLarga: string; 
-  modalidad: string; 
-  nivel: string; 
-  tipoCertificado: string; 
-  duracionDias: number;
+/**
+ * Curso completo para la vista de detalle.
+ */
+export interface CursoDetalle {
+  id: number;
+  institucion: string;
+  categoria: string;
+  titulo: string;
+  descripcion_larga: string;
+  modalidad: string;
+  nivel: string;
+  tipo_certificado: string;
+  duracion_dias: number;
   precio: number;
-  fechaInicio: string; 
-  fechaTermino: string; 
-  fechaMaxInscripcion: string; 
-  enlaceInscripcion: string;
-  cuposDisponibles: number;
+  fecha_inicio: string;
+  fecha_termino: string;
+  fecha_max_inscripcion: string;
+  enlace_inscripcion: string;
+  cupos_disponibles: number;
 }

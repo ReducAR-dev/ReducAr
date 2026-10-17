@@ -3,7 +3,7 @@ import type { UUID, Timestamp } from "./common.types.js";
 
 export interface Favorito {
   id: number;
-  usuarioId: UUID | null;
-  cursoId: number | null;
+  usuario_id: UUID | null;
+  curso_id: number | null;
   fecha: Timestamp | null;
 }

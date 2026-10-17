@@ -1,8 +1,6 @@
-// src/models/categoria.model.ts
-
 export interface Categoria {
   id: number;
   nombre: string;
   descripcion: string | null;
-  iconoUrl: string | null;
+  icono_url: string | null;
 }

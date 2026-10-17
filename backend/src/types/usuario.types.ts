@@ -1,4 +1,3 @@
-// src/types/usuario.types.ts
 import type { UUID } from "../models/common.types.js";
 
 // ============================================

@@ -1,15 +1,14 @@
-// src/models/promocion.model.ts
 import type { ISODateOnly } from "./common.types.js";
 
 export interface Promocion {
   id: number;
-  cursoId: number | null;
+  curso_id: number | null;
   titulo: string;
-  descuentoPorcentaje: number;
+  descuento_porcentaje: number;
   motivo: string | null;
-  etiquetaUrl: string | null;
-  fechaInicio: ISODateOnly;
-  fechaFinalizacion: ISODateOnly;
+  etiqueta_url: string | null;
+  fecha_inicio: ISODateOnly;
+  fecha_finalizacion: ISODateOnly;
   orden: number | null;
-  estaActiva: boolean | null;
+  esta_activa: boolean | null;
 }

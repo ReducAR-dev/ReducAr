@@ -1,3 +1,9 @@
-// src/schemas/index.ts
 export * from "./auth.schema.js";
+export * from "./categoria.schema.js";
+export * from "./curso.schema.js";
+export * from "./novedad.schema.js";
+export * from "./promocion.schema.js";
+export * from "./reporte.schema.js";
+export * from "./tipo_accion.schema.js";
 export * from "./usuario.schema.js";
+export * from "./valoracion.schema.js";

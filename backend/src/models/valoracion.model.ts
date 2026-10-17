@@ -1,16 +1,15 @@
-// src/models/valoracion.model.ts
 import type { UUID, Timestamp } from "./common.types.js";
 
 export interface Valoracion {
   id: number;
-  usuarioId: UUID | null;
-  cursoId: number | null;
+  usuario_id: UUID | null;
+  curso_id: number | null;
   puntuacion: number;
   comentario: string | null;
-  estaActiva: boolean | null;
-  estaAprobada: boolean | null;
-  fechaAprobacion: Timestamp | null;
-  ipAddress: string | null;
-  userAgent: string | null;
+  esta_activa: boolean | null;
+  esta_aprobada: boolean | null;
+  fecha_aprobacion: Timestamp | null;
+  ip_address: string | null;
+  user_agent: string | null;
   fecha: Timestamp | null;
 }

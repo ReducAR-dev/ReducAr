@@ -1,4 +1,3 @@
-// src/models/usuario.model.ts
 import type { UUID, ISODateOnly, Timestamp } from "./common.types.js";
 
 export interface Usuario {
@@ -11,7 +10,7 @@ export interface Usuario {
   biografia: string | null;
   ubicacion: string | null;
   user_preferencia: string | null;
-  rolId: number | null;
+  rol_id: number | null;
   esta_activo: boolean | null;
   fecha_registro: Timestamp | null;
   fecha_actualizacion: Timestamp | null;

@@ -1,35 +1,42 @@
-import { z } from 'zod';
+// src/schema/valoracion.schema.ts
+import { z } from "zod";
 
-export const valoracionBaseSchema = z.object({
-  id: z.number().int().positive(), // int4, PRIMARY, NON-NULLABLE
-  usuario_id: z.string()
-    .uuid("El ID de usuario debe ser un UUID válido"), // uuid, FK, NON-NULLABLE
-  curso_id: z.number()
+// ============================================
+// Crear valoración (usuario logueado)
+// ============================================
+// El backend completa: usuario_id (del JWT), ip_address, user_agent,
+// esta_activa (true), esta_aprobada (false), fecha_aprobacion (null).
+
+export const crearValoracionSchema = z.object({
+  curso_id: z
+    .number({ message: "El curso es obligatorio." })
     .int()
-    .positive(), // int4, FK, NON-NULLABLE
-  
-  // Asumiendo que la puntuación es de 1 a 5 estrellas. Si es de 1 a 10, ajusta el .max()
-  puntuacion: z.number()
+    .positive(),
+  puntuacion: z
+    .number({ message: "La puntuación es obligatoria." })
     .int()
-    .min(1, "La puntuación mínima es 1")
-    .max(5, "La puntuación máxima es 5"), // int4, NON-NULLABLE
-  
-  comentario: z.string()
-    .max(2000, "El comentario es demasiado largo")
-    .nullish(), // text, NULLABLE
-    
-  esta_activa: z.boolean().nullish(), // bool, NULLABLE
-  esta_aprobada: z.boolean().nullish(), // bool, NULLABLE
-  
-  fecha_aprobacion: z.coerce.date().nullish(), // timestamp, NULLABLE
-  
-  // 45 caracteres es el estándar para direcciones IPv6
-  ip_address: z.string()
-    .max(45, "Dirección IP inválida")
-    .nullish(), // varchar, NULLABLE
-    
-  user_agent: z.string().nullish(), // text, NULLABLE
-  fecha: z.coerce.date().nullish(), // timestamp, NULLABLE
+    .min(1, "Mínimo 1 estrella.")
+    .max(5, "Máximo 5 estrellas."),
+  comentario: z.string().trim().max(2000).nullable().optional(),
 });
 
-export type Valoracion = z.infer<typeof valoracionBaseSchema>;
+// ============================================
+// Moderar valoración (solo admin)
+// ============================================
+export const moderarValoracionSchema = z.object({
+  esta_aprobada: z.boolean(),
+});
+
+// ============================================
+// Query de listado
+// ============================================
+export const listarValoracionesQuerySchema = z.object({
+  page: z.coerce.number().int().positive().optional().default(1),
+  limit: z.coerce.number().int().positive().max(100).optional().default(30),
+  curso_id: z.coerce.number().int().positive().optional(),
+  solo_aprobadas: z.coerce.boolean().optional().default(true),
+});
+
+export type CrearValoracionPayload = z.infer<typeof crearValoracionSchema>;
+export type ModerarValoracionPayload = z.infer<typeof moderarValoracionSchema>;
+export type ListarValoracionesQuery = z.infer<typeof listarValoracionesQuerySchema>;

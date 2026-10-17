@@ -63,8 +63,8 @@ import AdminValoracionesPage from "./pages/admin/AdminValoracionesPage";
 // ============================================
 // Páginas de error
 // ============================================
-import Error404Page from "./pages/Error404Page";
-import Error500Page from "./pages/Error500Page";
+import Error404Page from "./pages/errors/Error404Page";
+import Error500Page from "./pages/errors/Error500Page";
 
 function App() {
   return (

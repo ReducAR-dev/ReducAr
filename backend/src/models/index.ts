@@ -8,3 +8,5 @@ export * from "./valoracion.model.js";
 export * from "./reporte.model.js";
 export * from "./promocion.model.js";
 export * from "./auditoria.model.js";
+export * from "./common.types.js";
+export * from "./novedad.model.js";

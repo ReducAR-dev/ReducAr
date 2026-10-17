@@ -22,6 +22,7 @@ import {
   chatRoutes,
   cursoRoutes,
   testRoutes,
+  novedadRoutes, 
 } from "./routes/index.js";
 
 // Cargar variables de entorno ANTES que cualquier otra cosa
@@ -79,6 +80,7 @@ app.use("/api/usuarios", usuarioRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/cursos", cursoRoutes);
 app.use("/api", testRoutes);
+app.use("/api/novedades", novedadRoutes);
 
 // Ruta de salud
 app.get("/", (_req, res) => {

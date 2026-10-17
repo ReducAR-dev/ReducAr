@@ -1,3 +1,4 @@
+// Chatbot NO TOCAR
 import type { EscalateRequest } from '../types/chat.types.js';
 
 const RESEND_EMAILS_URL = 'https://api.resend.com/emails';

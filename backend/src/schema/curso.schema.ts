@@ -1,41 +1,61 @@
-import { z } from 'zod';
+// src/schema/curso.schema.ts
+import { z } from "zod";
 
-// 1. Esquema Base (Mapeo exacto de tu tabla en Supabase)
-export const cursoBaseSchema = z.object({
-  id: z.number().int().positive(), // int4, PRIMARY, NOT NULL
-  
-  // Al ser NULLABLE en Supabase, usamos .nullish()
-  nombre_propietario: z.string().nullish(), // varchar, NULLABLE
-  categoria_id: z.number().int().positive().nullish(), // int4, FK, NULLABLE
-  
-  titulo: z.string().min(1, "El título es requerido"), // varchar, NOT NULL
-  
-  // Agregamos límites de caracteres (ajusta los números según tu lógica de negocio)
-  descripcion_corta: z.string().max(250, "La descripción corta no debe superar los 250 caracteres").nullish(), // text, NULLABLE
-  descripcion_larga: z.string().max(5000, "La descripción larga es demasiado extensa").nullish(), // text, NULLABLE
-  
-  modalidad_id: z.number().int().positive().nullish(), // int4, FK, NULLABLE
-  nivel_id: z.number().int().positive().nullish(), // int4, FK, NULLABLE
-  tipo_certificado_id: z.number().int().positive().nullish(), // int4, FK, NULLABLE
-  
-  duracion_dias: z.number().int().nonnegative().nullish(), // int4, NULLABLE
-  precio: z.number().nonnegative().nullish(), // numeric, NULLABLE
-  
-  // Fechas NULLABLE
-  fecha_inicio: z.coerce.date().nullish(), // date, NULLABLE
-  fecha_termino: z.coerce.date().nullish(), // date, NULLABLE
-  fecha_max_inscripcion: z.coerce.date().nullish(), // date, NULLABLE
-  fecha_publicacion: z.coerce.date().nullish(), // timestamp, NULLABLE
-  
-  // Al ser text y NULLABLE, permitimos null, undefined o string vacío
-  enlace_inscripcion: z.string().url("Debe ser una URL válida").nullish().or(z.literal('')), // text, NULLABLE
-  
-  cupos_disponibles: z.number().int().nonnegative().nullish(), // int4, NULLABLE
-  esta_activo: z.boolean().nullish(), // bool, NULLABLE
-  
-  // Lo mismo para la imagen, permitimos null, undefined o string vacío
-  imagen_url: z.string().url("Debe ser una URL válida").nullish().or(z.literal('')), // text, NULLABLE
+// ============================================
+// Base
+// ============================================
+// Los campos comunes a crear y actualizar. NO incluimos `id` porque
+// la BD lo autoincrementa y el cliente nunca lo manda.
+
+const cursoBaseCampos = {
+  nombre_propietario: z.string().trim().max(150).nullish(),
+  categoria_id: z.number().int().positive().nullish(),
+  titulo: z
+    .string({ message: "El título es obligatorio." })
+    .trim()
+    .min(3, "Mínimo 3 caracteres.")
+    .max(200, "Máximo 200 caracteres."),
+  descripcion_corta: z.string().trim().max(300).nullish(),
+  descripcion_larga: z.string().trim().max(5000).nullish(),
+  modalidad_id: z.number().int().positive().nullish(),
+  nivel_id: z.number().int().positive().nullish(),
+  tipo_certificado_id: z.number().int().positive().nullish(),
+  duracion_dias: z.number().int().nonnegative().nullish(),
+  precio: z.number().nonnegative().nullish(),
+  fecha_inicio: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullish(),
+  fecha_termino: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullish(),
+  fecha_max_inscripcion: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullish(),
+  enlace_inscripcion: z.string().url("URL inválida.").nullish().or(z.literal("")),
+  cupos_disponibles: z.number().int().nonnegative().nullish(),
+  esta_activo: z.boolean().optional(),
+  imagen_url: z.string().url("URL inválida.").nullish().or(z.literal("")),
+};
+
+// ============================================
+// Crear
+// ============================================
+export const crearCursoSchema = z.object(cursoBaseCampos);
+
+// ============================================
+// Actualizar (todos opcionales)
+// ============================================
+export const actualizarCursoSchema = crearCursoSchema.partial();
+
+// ============================================
+// Query de listado
+// ============================================
+export const listarCursosQuerySchema = z.object({
+  page: z.coerce.number().int().positive().optional().default(1),
+  limit: z.coerce.number().int().positive().max(100).optional().default(30),
+  categoria_id: z.coerce.number().int().positive().optional(),
+  modalidad_id: z.coerce.number().int().positive().optional(),
+  nivel_id: z.coerce.number().int().positive().optional(),
+  solo_activos: z.coerce.boolean().optional().default(true),
 });
 
-// Exportamos el tipo de TypeScript inferido de Zod para usarlo en tu código
-export type Curso = z.infer<typeof cursoBaseSchema>;
+// ============================================
+// Tipos inferidos
+// ============================================
+export type CrearCursoPayload = z.infer<typeof crearCursoSchema>;
+export type ActualizarCursoPayload = z.infer<typeof actualizarCursoSchema>;
+export type ListarCursosQuery = z.infer<typeof listarCursosQuerySchema>;

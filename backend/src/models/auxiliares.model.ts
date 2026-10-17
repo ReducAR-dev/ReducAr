@@ -1,5 +1,3 @@
-// src/models/auxiliares.model.ts
-
 export interface Rol {
   id: number;
   nombre: string;

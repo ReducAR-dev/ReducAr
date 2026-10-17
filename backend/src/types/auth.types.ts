@@ -1,4 +1,3 @@
-// src/types/auth.types.ts
 import type { Request } from "express";
 import type { UUID } from "../models/common.types.js";
 

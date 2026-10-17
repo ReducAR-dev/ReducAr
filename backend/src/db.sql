@@ -205,6 +205,28 @@ CREATE TABLE auditoria (
 );
 
 
+-- =============================================================
+-- 9. Novedades
+-- =============================================================
+-- Tabla Creada
+-- Se llena automáticamente el ID
+-- RLS activo
+CREATE TABLE novedad (
+    id                      integer     PRIMARY KEY,
+    titulo                  varchar     NOT NULL,
+    descripcion_corta       text,
+    descripcion_larga       text,
+    fecha_evento            date        NOT NULL,
+    modalidad_id            integer     REFERENCES modalidad(id),
+    ubicacion               varchar,
+    imagen_url              text,
+    enlace                  text,
+    esta_activa             boolean     DEFAULT true,
+    fecha_creacion          timestamp   DEFAULT CURRENT_TIMESTAMP,
+    fecha_actualizacion     timestamp   DEFAULT CURRENT_TIMESTAMP
+);
+
+
 /* =============================================
 // 9. REGLAS DE NEGOCIO POR SECCIÓN
 // =============================================
