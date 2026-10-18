@@ -1,7 +1,7 @@
 // src/pages/RutasPage.tsx
 import { Link } from "react-router-dom";
 import PromoBar from "../components/features/PromoBar";
-import RouteCard from "../components/features/RouteCard";
+import RouteCard from "../components/ui/RouteCard";
 import { rutasMock } from "../mocks/rutas";
 
 const routeSearchTerms: Record<number, string> = {

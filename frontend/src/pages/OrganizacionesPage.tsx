@@ -1,6 +1,6 @@
 // src/pages/OrganizacionesPage.tsx
 import PromoBar from "../components/features/PromoBar";
-import OrganizacionCard from "../components/features/OrganizacionCard";
+import OrganizacionCard from "../components/ui/OrganizacionCard";
 import { organizacionesMock } from "../mocks/organizaciones";
 
 function OrganizacionesPage() {
