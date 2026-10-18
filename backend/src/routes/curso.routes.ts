@@ -1,24 +1,67 @@
-import { Router } from 'express';
-import * as cursoController   from '../controllers/curso.controller';
-// el router de express nos permite definir rutas y asociarlas con controladores
+// src/routes/curso.routes.ts
+import { Router } from "express";
+
+import {
+  getCursosPublicosHandler,
+  getCursoDetalleHandler,
+  getCursosAdminHandler,
+  postCursoHandler,
+  patchCursoHandler,
+  deleteCursoHandler,
+  activarCursoHandler,
+} from "../controllers/curso.controller.js";
+
+import { requireAuth, requireAdmin } from "../middlewares/auth.middleware.js";
+import { validateBody } from "../middlewares/validation.middleware.js";
+import { crearCursoSchema, actualizarCursoSchema } from "../schema/curso.schema.js";
 
 const router = Router();
 
+// ============================================
+// RUTAS PÚBLICAS (Cualquiera puede ver)
+// ============================================
 
-router.get('/', cursoController.getCursos);
+// Listado de cursos (con paginación y filtros en los query params)
+router.get("/", getCursosPublicosHandler);
 
-// obtener un curso     
-router.get('/:id', cursoController.getCursoPorId);
+// ============================================
+// RUTAS DE ADMINISTRADOR (Requieren JWT + Rol Admin)
+// ============================================
+// IMPORTANTE: Esta ruta debe ir ANTES de "/:id" para evitar que
+// Express confunda "admin" con un ID de curso.
 
-// crear un curso
-router.post('/', cursoController.postCurso); 
+// Listado completo para el panel de admin (incluye inactivos)
+router.get("/admin", requireAuth, requireAdmin, getCursosAdminHandler);
 
-// actualizar un curso 
-router.patch('/:id', cursoController.patchCurso);
+// Crear un nuevo curso
+router.post(
+  "/",
+  requireAuth,
+  requireAdmin,
+  validateBody(crearCursoSchema),
+  postCursoHandler
+);
 
-// eliminar un curso 
-router.delete('/:id', cursoController.deleteCurso);
+// Actualizar un curso existente
+router.patch(
+  "/:id",
+  requireAuth,
+  requireAdmin,
+  validateBody(actualizarCursoSchema),
+  patchCursoHandler
+);
 
-// exportamos el router para que pueda ser usado en otros archivos 
+// Desactivar un curso (Soft Delete, valida que no haya alumnos)
+router.delete("/:id", requireAuth, requireAdmin, deleteCursoHandler);
+
+// Reactivar un curso desactivado
+router.patch("/:id/activar", requireAuth, requireAdmin, activarCursoHandler);
+
+// ============================================
+// RUTA DE DETALLE PÚBLICO (Va al final)
+// ============================================
+
+// Ver el detalle de un curso específico por su ID
+router.get("/:id", getCursoDetalleHandler);
+
 export default router;
-

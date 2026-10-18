@@ -33,6 +33,16 @@ function MoonIcon() {
   );
 }
 
+function ShoppingCartIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="w-5 h-5">
+      <circle cx="9" cy="21" r="1" stroke="currentColor" strokeWidth="2" />
+      <circle cx="20" cy="21" r="1" stroke="currentColor" strokeWidth="2" />
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 // Menú principal: 5 items, sin "Inicio".
 // El logo (arriba a la izquierda) cumple la función de "ir al home".
 const menuItems = [
@@ -99,15 +109,15 @@ export const Header = () => {
 
   return (
     <header className="bg-reducar-shell-bg/95 backdrop-blur-md border-b border-reducar-shell-border sticky top-0 z-50 text-reducar-shell-text">
-      <div className="w-full max-w-7xl mx-auto px-4 flex items-center gap-6 h-21">
-        <a href="/" className="flex items-center gap-2 shrink-0" aria-label="Ir al inicio de ReducAR">
+      <div className="w-full max-w-7xl mx-auto px-4 flex items-center justify-between gap-6 h-21">
+        <a href="/" className="flex items-center gap-2 shrink-0 mr-6" aria-label="Ir al inicio de ReducAr">
           <img src={logoReducar} alt="" className="h-12 w-auto" aria-hidden="true" />
           <span className="text-2xl font-extrabold text-white whitespace-nowrap">
-            Reduc<span className="text-reducar-turquoise">AR</span>
+            Reduc<span className="text-reducar-turquoise">Ar</span>
           </span>
         </a>
 
-        <Navbar items={menuItems} dropdownItems={dropdownItems} className="hidden lg:flex flex-1" />
+        <Navbar items={menuItems} dropdownItems={dropdownItems} className="hidden lg:flex justify-center flex-1" />
 
         <div className="flex items-center gap-2 ml-auto">
           <button
@@ -119,9 +129,23 @@ export const Header = () => {
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
 
+          <button
+            className="p-2.5 rounded-xl bg-reducar-shell-surface border border-reducar-shell-border text-reducar-shell-text hover:bg-reducar-shell-hover hover:border-reducar-primary transition-colors relative"
+            type="button"
+            onClick={() => navigate("/carrito")}
+            aria-label="Ver carrito de compras"
+          >
+            <ShoppingCartIcon />
+            <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-reducar-primary text-[10px] font-bold text-white flex items-center justify-center">
+              2
+            </span>
+          </button>
+
           {estaLogueado ? (
             <>
-              <UserMenu />
+              <div className="ml-2">
+                <UserMenu />
+              </div>
 
               <button
                 type="button"

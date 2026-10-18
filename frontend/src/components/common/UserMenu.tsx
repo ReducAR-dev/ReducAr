@@ -1,6 +1,6 @@
 // src/components/common/UserMenu.tsx
 import { useState, useRef, useEffect } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../../stores/auth.store";
 import { authService } from "../../services/auth.service";
 
@@ -66,104 +66,108 @@ export const UserMenu = () => {
         )}
       </button>
 
-      {isOpen && (
-        <div className="absolute top-full right-0 mt-2 w-64 p-2 bg-reducar-shell-surface border border-reducar-shell-border rounded-xl shadow-2xl z-50 animate-[dropdownIn_0.15s_ease-out]">
-          {/* Encabezado: nombre + email */}
-          <div className="px-3 py-2 border-b border-reducar-shell-border mb-1">
-            <p className="text-sm font-bold text-reducar-shell-text truncate">
-              {nombreMostrado}
+      <div
+        className={`absolute top-full right-0 mt-2 w-64 p-2 bg-reducar-shell-surface border border-reducar-shell-border rounded-xl shadow-2xl z-50 transition-all duration-150 ease-out origin-top-right ${
+          isOpen
+            ? "opacity-100 scale-100 pointer-events-auto translate-y-0"
+            : "opacity-0 scale-95 pointer-events-none -translate-y-1"
+        }`}
+      >
+        {/* Encabezado: nombre + email */}
+        <div className="px-3 py-2 border-b border-reducar-shell-border mb-1">
+          <p className="text-sm font-bold text-reducar-shell-text truncate">
+            {nombreMostrado}
+          </p>
+          {perfil?.email && (
+            <p className="text-xs text-reducar-shell-text-secondary truncate">
+              {perfil.email}
             </p>
-            {perfil?.email && (
-              <p className="text-xs text-reducar-shell-text-secondary truncate">
-                {perfil.email}
-              </p>
-            )}
-          </div>
-
-          {/* ====== CONTEXTO ADMIN ====== */}
-          {esContextoAdmin ? (
-            <>
-              <button
-                type="button"
-                onClick={() => handleNavigate("/")}
-                className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-reducar-shell-text hover:bg-reducar-shell-hover hover:text-reducar-primary transition-colors"
-              >
-                Volver al sitio
-              </button>
-              <button
-                type="button"
-                onClick={() => handleNavigate("/perfil")}
-                className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-reducar-shell-text-secondary hover:bg-reducar-shell-hover hover:text-reducar-primary transition-colors"
-              >
-                Mi perfil
-              </button>
-            </>
-          ) : (
-            /* ====== CONTEXTO PÚBLICO ====== */
-            <>
-              <button
-                type="button"
-                onClick={() => handleNavigate("/mi-cuenta")}
-                className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-reducar-shell-text hover:bg-reducar-shell-hover hover:text-reducar-primary transition-colors"
-              >
-                Mi cuenta
-              </button>
-              <button
-                type="button"
-                onClick={() => handleNavigate("/perfil")}
-                className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-reducar-shell-text-secondary hover:bg-reducar-shell-hover hover:text-reducar-primary transition-colors"
-              >
-                Mi perfil
-              </button>
-              <button
-                type="button"
-                onClick={() => handleNavigate("/mi-cuenta/favoritos")}
-                className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-reducar-shell-text-secondary hover:bg-reducar-shell-hover hover:text-reducar-primary transition-colors"
-              >
-                Mis favoritos
-              </button>
-              <button
-                type="button"
-                onClick={() => handleNavigate("/mi-cuenta/cursos")}
-                className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-reducar-shell-text-secondary hover:bg-reducar-shell-hover hover:text-reducar-primary transition-colors"
-              >
-                Mis cursos
-              </button>
-              <button
-                type="button"
-                onClick={() => handleNavigate("/mi-cuenta/reportes")}
-                className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-reducar-shell-text-secondary hover:bg-reducar-shell-hover hover:text-reducar-primary transition-colors"
-              >
-                Mis reportes
-              </button>
-
-              {/* Panel admin: solo si rol_id === 1 */}
-              {esAdmin && (
-                <>
-                  <div className="my-1 h-px bg-reducar-shell-border" />
-                  <button
-                    type="button"
-                    onClick={() => handleNavigate("/admin")}
-                    className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-bold text-reducar-primary hover:bg-reducar-primary/10 transition-colors"
-                  >
-                    Panel admin
-                  </button>
-                </>
-              )}
-            </>
           )}
-
-          {/* Cerrar sesión */}
-          <div className="my-1 h-px bg-reducar-shell-border" />
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-red-400 hover:bg-red-500/10 transition-colors"
-          >
-            Cerrar sesión
-          </button>
         </div>
-      )}
+
+        {/* ====== CONTEXTO ADMIN ====== */}
+        {esContextoAdmin ? (
+          <>
+            <button
+              type="button"
+              onClick={() => handleNavigate("/")}
+              className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-reducar-shell-text hover:bg-reducar-shell-hover hover:text-reducar-primary transition-colors"
+            >
+              Volver al sitio
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavigate("/perfil")}
+              className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-reducar-shell-text-secondary hover:bg-reducar-shell-hover hover:text-reducar-primary transition-colors"
+            >
+              Mi perfil
+            </button>
+          </>
+        ) : (
+          /* ====== CONTEXTO PÚBLICO ====== */
+          <>
+            <button
+              type="button"
+              onClick={() => handleNavigate("/mi-cuenta")}
+              className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-reducar-shell-text hover:bg-reducar-shell-hover hover:text-reducar-primary transition-colors"
+            >
+              Mi cuenta
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavigate("/perfil")}
+              className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-reducar-shell-text-secondary hover:bg-reducar-shell-hover hover:text-reducar-primary transition-colors"
+            >
+              Mi perfil
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavigate("/mi-cuenta/favoritos")}
+              className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-reducar-shell-text-secondary hover:bg-reducar-shell-hover hover:text-reducar-primary transition-colors"
+            >
+              Mis favoritos
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavigate("/mi-cuenta/cursos")}
+              className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-reducar-shell-text-secondary hover:bg-reducar-shell-hover hover:text-reducar-primary transition-colors"
+            >
+              Mis cursos
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavigate("/mi-cuenta/reportes")}
+              className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-reducar-shell-text-secondary hover:bg-reducar-shell-hover hover:text-reducar-primary transition-colors"
+            >
+              Mis reportes
+            </button>
+
+            {/* Panel admin: solo si rol_id === 1 */}
+            {esAdmin && (
+              <>
+                <div className="my-1 h-px border-t border-reducar-shell-border" />
+                <button
+                  type="button"
+                  onClick={() => handleNavigate("/admin")}
+                  className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-bold text-reducar-primary hover:bg-reducar-primary/10 transition-colors"
+                >
+                  Panel admin
+                </button>
+              </>
+            )}
+          </>
+        )}
+
+        {/* Cerrar sesión */}
+        <div className="my-1 h-px border-t border-reducar-shell-border" />
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-red-400 hover:bg-red-500/10 transition-colors"
+        >
+          Cerrar sesión
+        </button>
+      </div>
     </div>
   );
 };

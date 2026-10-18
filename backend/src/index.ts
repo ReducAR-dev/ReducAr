@@ -5,7 +5,9 @@ import dotenv from "dotenv";
 
 import { verificarConexion } from "./config/supabase.js";
 
-// Middlewares globales
+// ============================================
+// MIDDLEWARES GLOBALES
+// ============================================
 import {
   loggingMiddleware,
   securityHeaders,
@@ -15,7 +17,9 @@ import {
   chatErrorHandler,
 } from "./middlewares/index.js";
 
-// Rutas (barrel)
+// ============================================
+// RUTAS (Barrel exports)
+// ============================================
 import {
   authRoutes,
   usuarioRoutes,
@@ -25,14 +29,14 @@ import {
   novedadRoutes, 
 } from "./routes/index.js";
 
-// Cargar variables de entorno ANTES que cualquier otra cosa
+// Cargar variables de entorno antes de inicializar la app
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ============================================
-// CORS
+// CONFIGURACIÓN DE CORS
 // ============================================
 
 const FRONTEND_ORIGINS = new Set(
@@ -50,10 +54,6 @@ const isAllowedFrontendOrigin = (origin: string): boolean =>
   (process.env.NODE_ENV !== "production" &&
     LOCAL_DEVELOPMENT_ORIGIN.test(origin));
 
-// ============================================
-// Middlewares globales (orden importa)
-// ============================================
-
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -63,51 +63,59 @@ app.use(
       }
       callback(null, false);
     },
+    credentials: true, // Importante si en el futuro usan cookies
   }),
 );
 
-app.use(express.json({ limit: "1mb" }));
-app.use(securityHeaders);
-app.use(loggingMiddleware);
-app.use(globalRateLimit);
-
 // ============================================
-// Rutas
+// MIDDLEWARES GLOBALES (El orden importa)
 // ============================================
 
+app.use(express.json({ limit: "1mb" })); // Parseo de JSON
+app.use(securityHeaders);               // Headers de seguridad
+app.use(loggingMiddleware);             // Logs en consola
+app.use(globalRateLimit);               // Límite de peticiones global
+
+// ============================================
+// MONTAJE DE RUTAS
+// ============================================
+
+// --- Rutas Públicas ---
+// (Aunque algunas tengan rutas internas protegidas, el router se monta aquí)
 app.use("/api/auth", authRoutes);
 app.use("/api/usuarios", usuarioRoutes);
-app.use("/api/chat", chatRoutes);
-app.use("/cursos", cursoRoutes);
-app.use("/api", testRoutes);
+app.use("/api/cursos", cursoRoutes);   // <-- CORREGIDO: Se agregó /api
 app.use("/api/novedades", novedadRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api", testRoutes);           // Endpoints de test/healthcheck
 
-// Ruta de salud
+// ============================================
+// RUTA DE SALUD (Healthcheck)
+// ============================================
 app.get("/", (_req, res) => {
   res.send("🚀 Servidor Backend de ReducAR funcionando!");
 });
 
 // ============================================
-// Manejo de errores y 404
+// MANEJO DE ERRORES Y 404
 // ============================================
-//
-// Orden:
-//   1. chatErrorHandler  → maneja errores específicos de /api/chat
-//   2. notFoundHandler   → cualquier ruta no registrada
-//   3. errorHandler      → cualquier otro error que llegue con next(err)
+// El orden ESTRICTO es:
+// 1. Errores específicos (chat)
+// 2. Rutas no encontradas (404)
+// 3. Errores genéricos (500)
 
 app.use(chatErrorHandler);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
 // ============================================
-// Arranque
+// ARRANQUE DEL SERVIDOR
 // ============================================
 
 app.listen(PORT, async () => {
   console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
 
-  // Verificar conexión a Supabase solo en desarrollo
+  // Verificar conexión a Supabase solo en entorno de desarrollo local
   if (process.env.NODE_ENV !== "production") {
     await verificarConexion();
   }

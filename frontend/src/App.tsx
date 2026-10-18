@@ -34,6 +34,9 @@ import PoliticasPrivacidadPage from "./pages/PoliticasPrivacidadPage";
 import TerminosCondicionesPage from "./pages/TerminosCondicionesPage";
 import ComoFuncionaPage from "./pages/ComoFuncionaPage";
 import TestimoniosPage from "./pages/TestimoniosPage";
+import CarritoPage from "./pages/CarritoPage";
+import OportunidadCursoPage from "./pages/OportunidadCursoPage";
+
 
 // ============================================
 // Autenticación
@@ -44,10 +47,10 @@ import Register from "./pages/Registropage";
 // ============================================
 // Páginas de usuario logueado
 // ============================================
-import MiCuentaPage from "./pages/MiCuentaPage";
-import MisFavoritosPage from "./pages/MisFavoritosPage";
-import MisCursosPage from "./pages/MisCursosPage";
-import MisReportesPage from "./pages/MisReportesPage";
+import MiCuentaPage from "./pages/usuario/MiCuentaPage";
+import MisFavoritosPage from "./pages/usuario/MisFavoritosPage";
+import MisCursosPage from "./pages/usuario/MisCursosPage";
+import MisReportesPage from "./pages/usuario/MisReportesPage";
 import PerfilPage from "./pages/PerfilPage";
 import ConfiguracionPage from "./pages/ConfiguracionPage";
 
@@ -96,6 +99,8 @@ function App() {
             <Route path="/mi-cuenta/favoritos" element={<MisFavoritosPage />} />
             <Route path="/mi-cuenta/cursos" element={<MisCursosPage />} />
             <Route path="/mi-cuenta/reportes" element={<MisReportesPage />} />
+            <Route path="/carrito" element={<CarritoPage />} />
+            <Route path="/oportunidad-curso" element={<OportunidadCursoPage />} />
             <Route path="/perfil" element={<PerfilPage />} />
             <Route path="/configuracion" element={<ConfiguracionPage />} />
 

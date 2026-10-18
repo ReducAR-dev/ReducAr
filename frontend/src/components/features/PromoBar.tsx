@@ -18,7 +18,7 @@ function PromoBar() {
             Desarrollo Web Full Stack gratuito. Cupos limitados.
           </span>
           <a
-            href="#"
+            href="/oportunidad-curso"
             className="ml-3 font-bold flex items-center gap-1 hover:opacity-80 whitespace-nowrap shrink-0"
           >
             Ver oportunidad <span aria-hidden="true">→</span>
@@ -30,7 +30,7 @@ function PromoBar() {
           <GraduationIcon className="w-4 h-4 shrink-0" />
           <strong className="whitespace-nowrap">Oportunidad destacada:</strong>
           <a
-            href="#"
+            href="/oportunidad-curso"
             className="font-bold flex items-center gap-1 hover:opacity-80 whitespace-nowrap"
           >
             Ver oportunidad <span aria-hidden="true">→</span>
