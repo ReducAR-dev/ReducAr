@@ -1,5 +1,3 @@
-// src/App.tsx
-
 // ============================================
 // Core / Router
 // ============================================
@@ -21,7 +19,8 @@ import { AuthBootstrap } from "./components/AuthBootstrap";
 // Páginas públicas
 // ============================================
 import Homepage from "./pages/Homepage";
-import Cursospage from "./pages/Cursospage";
+import Cursospage from "./pages/cursos/Cursospage";
+import CursoDetallePage from "./pages/cursos/CursoDetallePage";
 import TestPage from "./pages/TestPage";
 import OrganizacionesPage from "./pages/OrganizacionesPage";
 import NovedadesPage from "./pages/NovedadesPage";
@@ -81,6 +80,7 @@ function App() {
             {/* --- Público --- */}
             <Route index element={<Homepage />} />
             <Route path="/cursos" element={<Cursospage />} />
+            <Route path="/cursos/:id" element={<CursoDetallePage />} />
             <Route path="/test" element={<TestPage />} />
             <Route path="/rutas" element={<RutasPage />} />
             <Route path="/instituciones" element={<OrganizacionesPage />} />

@@ -65,6 +65,7 @@ const mapearCurso = (dbCurso: any): CursoResumen => {
     descripcion_corta: dbCurso.descripcion_corta || "",
     modalidad: dbCurso.modalidad?.nombre || "No definida",
     precio: dbCurso.precio || 0,
+    imagen_url: dbCurso.imagen_url || null,
   };
 };
 
