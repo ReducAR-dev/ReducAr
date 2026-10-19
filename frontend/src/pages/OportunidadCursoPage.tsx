@@ -1,6 +1,4 @@
 // src/pages/OportunidadCursoPage.tsx
-import { useState } from "react";
-
 interface CursoDescuento {
   id: number;
   titulo: string;

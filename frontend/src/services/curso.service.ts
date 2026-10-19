@@ -10,6 +10,7 @@ export interface CursoResumen {
   descripcion_corta: string;
   modalidad: string;
   precio: number;
+  imagen_url: string | null;
 }
 
 interface CursosResponse {

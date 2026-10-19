@@ -17,7 +17,7 @@ export const NovedadCard = ({ novedad, className = "" }: NovedadCardProps) => {
 
   // fecha_evento viene como "YYYY-MM-DD" y la separamos sin usar Date()
   // para evitar problemas de zona horaria.
-  const [year, month, day] = novedad.fecha_evento.split("-");
+  const [, month, day] = novedad.fecha_evento.split("-");
   const mesTexto = MESES[parseInt(month, 10) - 1] || month;
 
   return (

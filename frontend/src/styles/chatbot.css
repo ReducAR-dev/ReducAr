@@ -1,4 +1,28 @@
 .chatbot-root {
+  /*
+   * El chatbot vive fuera de las páginas que antes declaraban las variables
+   * `--home-*`.  Mantenemos los nombres internos del componente, pero los
+   * conectamos con los tokens globales actuales para que el panel funcione en
+   * todas las rutas y respete el tema claro/oscuro.
+   */
+  --home-background: var(--surface-bg, #f8f9fc);
+  --home-surface: var(--surface-card, #ffffff);
+  --home-surface-soft: var(--surface-soft, #f0f1f7);
+  --home-primary-light: var(--surface-primary-light, rgba(123, 108, 246, 0.12));
+  --home-text: var(--text-primary, #0b1024);
+  --home-text-secondary: var(--text-secondary, #5a6280);
+  --home-border: var(--border-color, rgba(0, 0, 0, 0.1));
+  --home-placeholder: var(--placeholder-color, #9aa3c0);
+  --home-primary: var(--color-reducar-primary, #7b6cf6);
+  --home-primary-dark: var(--color-reducar-primary-dark, #5b3af0);
+  --home-turquoise-dark: var(--color-reducar-turquoise-dark, #24cccd);
+  --home-on-accent: #ffffff;
+  --home-button-border: color-mix(in srgb, var(--home-primary) 30%, var(--home-border));
+  --home-primary-shadow: rgba(91, 58, 240, 0.28);
+  --home-section-shadow: rgba(11, 16, 36, 0.2);
+  --home-search-shadow: rgba(11, 16, 36, 0.08);
+  --home-hero-glow-turquoise: rgba(63, 217, 201, 0.16);
+
   position: fixed;
   right: 24px;
   bottom: 24px;
