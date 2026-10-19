@@ -18,8 +18,8 @@ export const Footer = () => {
         <circle cx="220" cy="180" r="5" fill="rgba(120,130,220,0.35)" />
       </svg>
 
-      <div className="relative max-w-7xl mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+      <div className="relative max-w-7xl mx-auto px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-9 lg:gap-10">
           {/* Columna 1: marca + redes */}
           <div className="lg:col-span-1 space-y-4">
             <Link to="/" className="flex items-center gap-2" aria-label="Ir al inicio">
@@ -35,13 +35,13 @@ export const Footer = () => {
               desarrollo profesional.
             </p>
             <div className="flex gap-3">
-              <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full border border-white/30 text-reducar-shell-text hover:border-[#3fd9c9] hover:text-[#3fd9c9] transition-colors" aria-label="Instagram">
+              <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" className="grid h-11 w-11 place-items-center rounded-full border border-white/30 text-reducar-shell-text hover:border-reducar-turquoise hover:text-reducar-turquoise transition-colors" aria-label="Instagram">
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.8"/><circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
               </a>
-              <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full border border-white/30 text-reducar-shell-text hover:border-[#3fd9c9] hover:text-[#3fd9c9] transition-colors" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" className="grid h-11 w-11 place-items-center rounded-full border border-white/30 text-reducar-shell-text hover:border-reducar-turquoise hover:text-reducar-turquoise transition-colors" aria-label="LinkedIn">
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" strokeWidth="1.8"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
               </a>
-              <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full border border-white/30 text-reducar-shell-text hover:border-[#3fd9c9] hover:text-[#3fd9c9] transition-colors" aria-label="Facebook">
+              <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" className="grid h-11 w-11 place-items-center rounded-full border border-white/30 text-reducar-shell-text hover:border-reducar-turquoise hover:text-reducar-turquoise transition-colors" aria-label="Facebook">
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.8"/><path d="M14 8h1.5M14 8a2 2 0 0 0-2 2v9M10 12h5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
               </a>
             </div>
@@ -51,11 +51,11 @@ export const Footer = () => {
           <div className="space-y-4">
             <h4 className="text-white font-extrabold text-sm">Explorar</h4>
             <ul className="space-y-3">
-              <li><Link to="/cursos" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Explorar cursos</Link></li>
-              <li><Link to="/rutas" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Rutas de aprendizaje</Link></li>
-              <li><Link to="/instituciones" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Instituciones</Link></li>
-              <li><Link to="/novedades" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Novedades</Link></li>
-              <li><Link to="/test" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Test vocacional</Link></li>
+              <li><Link to="/cursos" className="inline-flex min-h-9 items-center text-reducar-shell-text-secondary text-sm hover:text-reducar-turquoise transition-colors">Explorar cursos</Link></li>
+              <li><Link to="/rutas" className="inline-flex min-h-9 items-center text-reducar-shell-text-secondary text-sm hover:text-reducar-turquoise transition-colors">Rutas de aprendizaje</Link></li>
+              <li><Link to="/instituciones" className="inline-flex min-h-9 items-center text-reducar-shell-text-secondary text-sm hover:text-reducar-turquoise transition-colors">Instituciones</Link></li>
+              <li><Link to="/novedades" className="inline-flex min-h-9 items-center text-reducar-shell-text-secondary text-sm hover:text-reducar-turquoise transition-colors">Novedades</Link></li>
+              <li><Link to="/test" className="inline-flex min-h-9 items-center text-reducar-shell-text-secondary text-sm hover:text-reducar-turquoise transition-colors">Test vocacional</Link></li>
             </ul>
           </div>
 
@@ -63,11 +63,11 @@ export const Footer = () => {
           <div className="space-y-4">
             <h4 className="text-white font-extrabold text-sm">ReducAR</h4>
             <ul className="space-y-3">
-              <li><Link to="/como-funciona" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Cómo funciona</Link></li>
-              <li><Link to="/nosotros" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Nosotros</Link></li>
-              <li><Link to="/testimonios" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Testimonios</Link></li>
-              <li><Link to="/ayuda" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Ayuda</Link></li>
-              <li><Link to="/contacto" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Contacto</Link></li>
+              <li><Link to="/como-funciona" className="inline-flex min-h-9 items-center text-reducar-shell-text-secondary text-sm hover:text-reducar-turquoise transition-colors">Cómo funciona</Link></li>
+              <li><Link to="/nosotros" className="inline-flex min-h-9 items-center text-reducar-shell-text-secondary text-sm hover:text-reducar-turquoise transition-colors">Nosotros</Link></li>
+              <li><Link to="/testimonios" className="inline-flex min-h-9 items-center text-reducar-shell-text-secondary text-sm hover:text-reducar-turquoise transition-colors">Testimonios</Link></li>
+              <li><Link to="/ayuda" className="inline-flex min-h-9 items-center text-reducar-shell-text-secondary text-sm hover:text-reducar-turquoise transition-colors">Ayuda</Link></li>
+              <li><Link to="/contacto" className="inline-flex min-h-9 items-center text-reducar-shell-text-secondary text-sm hover:text-reducar-turquoise transition-colors">Contacto</Link></li>
             </ul>
           </div>
 
@@ -75,10 +75,10 @@ export const Footer = () => {
           <div className="space-y-4">
             <h4 className="text-white font-extrabold text-sm">Legal</h4>
             <ul className="space-y-3">
-              <li><Link to="/politicas-privacidad" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Políticas de privacidad</Link></li>
-              <li><Link to="/terminos-condiciones" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Términos y condiciones</Link></li>
-              <li><Link to="/preguntas-frecuentes" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Preguntas frecuentes</Link></li>
-              <li><Link to="/mapa-del-sitio" className="text-reducar-shell-text-secondary text-sm hover:text-[#3fd9c9] transition-colors">Mapa del sitio</Link></li>
+              <li><Link to="/politicas-privacidad" className="inline-flex min-h-9 items-center text-reducar-shell-text-secondary text-sm hover:text-reducar-turquoise transition-colors">Políticas de privacidad</Link></li>
+              <li><Link to="/terminos-condiciones" className="inline-flex min-h-9 items-center text-reducar-shell-text-secondary text-sm hover:text-reducar-turquoise transition-colors">Términos y condiciones</Link></li>
+              <li><Link to="/preguntas-frecuentes" className="inline-flex min-h-9 items-center text-reducar-shell-text-secondary text-sm hover:text-reducar-turquoise transition-colors">Preguntas frecuentes</Link></li>
+              <li><Link to="/ayuda" className="inline-flex min-h-9 items-center text-reducar-shell-text-secondary text-sm hover:text-reducar-turquoise transition-colors">Mapa del sitio</Link></li>
             </ul>
           </div>
 
@@ -88,7 +88,7 @@ export const Footer = () => {
             <p className="text-reducar-shell-text-secondary text-xs leading-relaxed">
               Sumate a ReducAR y hacé llegar tus oportunidades a más personas.
             </p>
-            <Link to="/instituciones" className="block text-center h-10 leading-10 rounded-xl border border-[#7b6cf6] text-[#b8b0ff] text-xs font-extrabold hover:bg-[#7b6cf6] hover:text-white transition-colors">
+            <Link to="/instituciones" className="flex min-h-11 items-center justify-center rounded-xl border border-reducar-primary text-reducar-primary text-xs font-extrabold hover:bg-reducar-primary hover:text-white transition-colors">
               Sumar mi organización
             </Link>
           </div>

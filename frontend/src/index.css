@@ -35,24 +35,30 @@
   --surface-bg: #f8f9fc;
   --surface-card: #ffffff;
   --surface-soft: #f0f1f7;
+  --surface-elevated: #ffffff;
   --surface-hover: rgba(0, 0, 0, 0.04);
   --surface-primary-light: rgba(123, 108, 246, 0.12);
   --text-primary: #0b1024;
   --text-secondary: #5a6280;
   --border-color: rgba(0, 0, 0, 0.1);
   --placeholder-color: #9aa3c0;
+  --focus-ring: rgba(123, 108, 246, 0.32);
+  --page-shadow: 0 24px 70px rgba(11, 16, 36, 0.1);
 }
 
 [data-theme="dark"] {
   --surface-bg: #0b1024;
   --surface-card: #111936;
   --surface-soft: #0f1730;
+  --surface-elevated: #172143;
   --surface-hover: rgba(255, 255, 255, 0.05);
   --surface-primary-light: rgba(123, 108, 246, 0.15);
   --text-primary: #e6e8f2;
   --text-secondary: #9aa3c0;
   --border-color: rgba(255, 255, 255, 0.1);
   --placeholder-color: #6b7280;
+  --focus-ring: rgba(63, 217, 201, 0.34);
+  --page-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
 }
 
 @theme inline {
@@ -74,13 +80,21 @@
   html {
     scrollbar-gutter: stable;
     overflow-x: clip;
+    font-family: "Segoe UI Variable", "Segoe UI", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
   }
   body {
+    min-width: 320px;
+    min-height: 100vh;
     overflow-x: clip;
     max-width: 100%;
     background-color: var(--surface-bg);
     color: var(--text-primary);
     font-family: inherit;
+    line-height: 1.6;
     transition: background-color 0.2s ease, color 0.2s ease;
   }
   *, *::before, *::after {
@@ -91,8 +105,36 @@
     max-width: 100%;
     height: auto;
   }
-  button, input { font: inherit; }
+  button, input, textarea, select { font: inherit; }
   button { cursor: pointer; }
+  a { color: inherit; }
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+    letter-spacing: -0.025em;
+  }
+  p { text-wrap: pretty; }
+  :focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+  ::selection {
+    color: #ffffff;
+    background: var(--color-reducar-primary);
+  }
+}
+
+@media (max-width: 640px) {
+  html { font-size: 15px; }
+  button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 @keyframes slideDown {

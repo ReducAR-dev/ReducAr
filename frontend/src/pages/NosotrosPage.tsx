@@ -1,260 +1,120 @@
+import { Link } from "react-router-dom";
+import {
+  InfoCard,
+  SectionHeading,
+  primaryActionClass,
+  secondaryActionClass,
+} from "../components/common/StaticPageLayout";
+
+const resources = [
+  { icon: "📚", label: "Cursos", path: "/cursos" },
+  { icon: "🗺️", label: "Rutas de aprendizaje", path: "/rutas" },
+  { icon: "🧭", label: "Test vocacional", path: "/test" },
+  { icon: "🏛️", label: "Instituciones", path: "/instituciones" },
+  { icon: "📅", label: "Novedades", path: "/novedades" },
+];
+
 export default function NosotrosPage() {
   return (
-    <main className="min-h-screen bg-[#020b24] text-white">
-
-      {/* HERO */}
-      <section className="relative overflow-hidden px-6 py-14 md:px-16">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-2">
-
-          <div className="relative z-10">
-            <span className="rounded-full bg-gradient-to-r from-violet-700 to-blue-600 px-4 py-2 text-sm font-bold">
-              NOSOTROS
+    <main className="min-h-screen bg-reducar-bg text-reducar-text">
+      <section className="relative overflow-hidden border-b border-reducar-border">
+        <div
+          className="absolute inset-0 bg-[radial-gradient(circle_at_12%_20%,rgba(123,108,246,0.2),transparent_34%),radial-gradient(circle_at_86%_80%,rgba(63,217,201,0.16),transparent_28%)]"
+          aria-hidden="true"
+        />
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 sm:py-18 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:py-22">
+          <div>
+            <span className="inline-flex rounded-full border border-reducar-primary/25 bg-reducar-primary-light px-3.5 py-2 text-xs font-extrabold uppercase tracking-[0.14em] text-reducar-primary">
+              Nosotros
             </span>
-
-            <h1 className="mt-6 text-5xl font-extrabold leading-tight md:text-6xl">
-              Conocé
-              <span className="block bg-gradient-to-r from-violet-500 via-blue-500 to-cyan-400 bg-clip-text text-transparent">
+            <h1 className="mt-5 text-4xl font-extrabold leading-[1.06] tracking-tight sm:text-5xl lg:text-6xl">
+              Conocé a quienes impulsan
+              <span className="block bg-linear-to-r from-reducar-primary via-reducar-gradient-middle to-reducar-turquoise bg-clip-text text-transparent">
                 ReducAR
               </span>
             </h1>
-
-            <p className="mt-6 max-w-lg text-lg leading-8 text-slate-200">
-              Somos un grupo de desarrolladores que creamos esta plataforma
-              para conectar personas con oportunidades de formación y ayudar
-              a construir un mejor futuro.
+            <p className="mt-5 max-w-xl text-base leading-7 text-reducar-text-secondary sm:text-lg sm:leading-8">
+              Creamos esta plataforma para conectar personas con oportunidades de formación y ayudar a construir un futuro con más acceso al aprendizaje.
             </p>
-
-            <div className="mt-6 h-1 w-16 rounded-full bg-gradient-to-r from-violet-500 to-cyan-400" />
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+              <Link to="/cursos" className={primaryActionClass}>Explorar oportunidades</Link>
+              <Link to="/contacto" className={secondaryActionClass}>Contactarnos</Link>
+            </div>
           </div>
 
-          <div className="relative z-10">
+          <div className="relative">
+            <div className="absolute -inset-3 rounded-[2rem] bg-linear-to-r from-reducar-primary/20 to-reducar-turquoise/20 blur-2xl" aria-hidden="true" />
             <img
               src="/foto-grupo.jpg"
-              alt="Equipo ReducAR"
-              className="w-full rounded-2xl border border-violet-500 object-cover shadow-2xl"
+              alt="Equipo de ReducAR"
+              className="relative aspect-[4/3] w-full rounded-3xl border border-reducar-primary/25 object-cover shadow-2xl"
             />
           </div>
-
-        </div>
-
-        <div className="absolute -bottom-20 right-0 h-64 w-64 rounded-full bg-violet-700/20 blur-3xl" />
-      </section>
-
-
-      {/* QUÉ ES REDUCAR */}
-      <section className="bg-[#061238] px-6 py-12 md:px-16">
-        <div className="mx-auto max-w-6xl">
-
-          <span className="rounded-full bg-violet-800 px-4 py-2 text-xs font-bold">
-            ¿QUÉ ES REDUCAR?
-          </span>
-
-          <h2 className="mt-5 max-w-3xl text-4xl font-extrabold leading-tight">
-            Más que una plataforma,
-            <span className="block bg-gradient-to-r from-violet-500 to-cyan-400 bg-clip-text text-transparent">
-              una comunidad.
-            </span>
-          </h2>
-
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">
-            ReducAR reúne cursos, instituciones y recursos educativos en un
-            solo lugar, facilitando la búsqueda de oportunidades de formación
-            y conectando a las personas con propuestas que se adaptan a sus
-            intereses y objetivos.
-          </p>
-
-          {/* TARJETAS */}
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
-
-            <div className="rounded-2xl border border-violet-700 bg-[#07143a] p-7">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-violet-600 text-3xl shadow-lg">
-                🎓
-              </div>
-
-              <h3 className="mt-5 text-2xl font-bold">
-                Aprendé
-              </h3>
-
-              <p className="mt-2 leading-7 text-slate-300">
-                Encontrá cursos y oportunidades de formación.
-              </p>
-            </div>
-
-
-            <div className="rounded-2xl border border-blue-600 bg-[#07143a] p-7">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-500 text-3xl shadow-lg">
-                ➤
-              </div>
-
-              <h3 className="mt-5 text-2xl font-bold">
-                Orientate
-              </h3>
-
-              <p className="mt-2 leading-7 text-slate-300">
-                Descubrí opciones según tus intereses y objetivos.
-              </p>
-            </div>
-
-
-            <div className="rounded-2xl border border-cyan-500 bg-[#07143a] p-7">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-cyan-500 text-3xl shadow-lg">
-                🚀
-              </div>
-
-              <h3 className="mt-5 text-2xl font-bold">
-                Crece
-              </h3>
-
-              <p className="mt-2 leading-7 text-slate-300">
-                Desarrollá nuevas habilidades para tu futuro profesional.
-              </p>
-            </div>
-
-          </div>
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-18 lg:px-8">
+        <SectionHeading
+          title="Más que una plataforma, una comunidad"
+          description="Reunimos cursos, instituciones y recursos educativos en un solo lugar para facilitar decisiones informadas."
+        />
+        <div className="grid gap-5 md:grid-cols-3">
+          <InfoCard icon="🎓" title="Aprendé">
+            Encontrá cursos, becas y propuestas de formación organizadas de manera clara.
+          </InfoCard>
+          <InfoCard icon="🧭" title="Orientate">
+            Descubrí alternativas alineadas con tus intereses, tiempos y objetivos.
+          </InfoCard>
+          <InfoCard icon="🚀" title="Crecé">
+            Desarrollá habilidades y conectate con nuevas posibilidades para tu futuro.
+          </InfoCard>
+        </div>
+      </section>
 
-      {/* MISIÓN */}
-      <section className="px-6 py-10 md:px-16">
-        <div className="mx-auto max-w-6xl rounded-2xl border border-cyan-400 bg-gradient-to-r from-[#1737a0] via-[#10266d] to-[#07143a] px-8 py-10">
-
-          <div className="grid items-center gap-8 md:grid-cols-2">
-
-            <div className="flex items-start gap-6">
-
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-violet-600 text-3xl">
-                🎯
-              </div>
-
+      <section className="px-4 pb-14 sm:px-6 sm:pb-18 lg:px-8">
+        <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl bg-linear-to-br from-reducar-primary-dark via-reducar-primary to-reducar-turquoise-dark p-6 text-white shadow-2xl sm:p-9 lg:p-11">
+          <div className="grid items-center gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/16 text-2xl ring-1 ring-white/25">🎯</div>
               <div>
-                <span className="rounded-full bg-violet-700 px-4 py-2 text-xs font-bold">
-                  NUESTRA MISIÓN
-                </span>
-
-                <h2 className="mt-5 text-2xl font-bold leading-9">
-                  Facilitar el acceso a oportunidades de formación y ayudar a
-                  cada persona a encontrar su camino.
+                <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-white/75">Nuestra misión</p>
+                <h2 className="mt-2 text-2xl font-extrabold leading-tight sm:text-3xl">
+                  Facilitar el acceso a oportunidades de formación y ayudar a cada persona a encontrar su camino.
                 </h2>
               </div>
-
             </div>
-
-            <div className="border-l border-violet-400 pl-8">
-              <p className="text-3xl font-semibold italic text-violet-300">
-                Aprender también es
-                <span className="block text-cyan-400">
-                  una oportunidad.
-                </span>
-              </p>
-            </div>
-
+            <p className="border-t border-white/25 pt-6 text-2xl font-semibold italic leading-snug text-white/90 sm:text-3xl lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+              “Aprender también es una oportunidad.”
+            </p>
           </div>
         </div>
       </section>
 
-
-      {/* QUÉ ENCONTRÁS */}
-      <section className="px-6 py-10 md:px-16">
-        <div className="mx-auto max-w-6xl">
-
-          <span className="rounded-full bg-violet-800 px-4 py-2 text-xs font-bold">
-            ¿QUÉ ENCONTRARÁS EN REDUCAR?
-          </span>
-
-          <h2 className="mt-5 text-4xl font-extrabold">
-            Todo en
-            <span className="bg-gradient-to-r from-violet-500 to-cyan-400 bg-clip-text text-transparent">
-              {" "}un mismo lugar
-            </span>
-          </h2>
-
-
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-5">
-
-            <div className="rounded-2xl border border-blue-700 bg-[#07143a] p-5 text-center">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-2xl">
-                📚
-              </div>
-
-              <p className="mt-4 font-semibold">
-                Cursos
-              </p>
-            </div>
-
-
-            <div className="rounded-2xl border border-blue-700 bg-[#07143a] p-5 text-center">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-2xl">
-                🗺️
-              </div>
-
-              <p className="mt-4 font-semibold">
-                Rutas de aprendizaje
-              </p>
-            </div>
-
-
-            <div className="rounded-2xl border border-violet-700 bg-[#07143a] p-5 text-center">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-violet-600 text-2xl">
-                👤
-              </div>
-
-              <p className="mt-4 font-semibold">
-                Test vocacional
-              </p>
-            </div>
-
-
-            <div className="rounded-2xl border border-violet-700 bg-[#07143a] p-5 text-center">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-violet-600 text-2xl">
-                🏛️
-              </div>
-
-              <p className="mt-4 font-semibold">
-                Instituciones
-              </p>
-            </div>
-
-
-            <div className="rounded-2xl border border-violet-700 bg-[#07143a] p-5 text-center">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-violet-600 text-2xl">
-                📅
-              </div>
-
-              <p className="mt-4 font-semibold">
-                Novedades
-              </p>
-            </div>
-
+      <section className="border-y border-reducar-border bg-reducar-surface-soft">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-18 lg:px-8">
+          <SectionHeading title="Todo en un mismo lugar" description="Accedé rápidamente a los principales recursos de la plataforma." />
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            {resources.map((resource) => (
+              <Link
+                key={resource.path}
+                to={resource.path}
+                className="group flex min-h-36 flex-col items-center justify-center rounded-2xl border border-reducar-border bg-reducar-surface p-4 text-center shadow-sm transition hover:-translate-y-1 hover:border-reducar-primary/40 hover:shadow-lg"
+              >
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-reducar-primary-light text-2xl transition group-hover:scale-105" aria-hidden="true">{resource.icon}</span>
+                <span className="mt-3 text-sm font-extrabold text-reducar-text">{resource.label}</span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
-
-      {/* FINAL */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#101b62] via-[#07143a] to-[#101b62] px-6 py-14 text-center">
-
-        <div className="relative z-10">
-
-          <h2 className="text-3xl font-extrabold md:text-4xl">
-            Empezá a explorar oportunidades
-          </h2>
-
-          <p className="mt-3 text-slate-300">
-            Tu próximo aprendizaje puede estar a un clic.
-          </p>
-
-          <button className="mt-7 rounded-full bg-gradient-to-r from-violet-600 to-cyan-400 px-8 py-3 font-bold transition hover:scale-105">
-            Explorar cursos →
-          </button>
-
+      <section className="px-4 py-14 text-center sm:px-6 sm:py-18 lg:px-8">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="text-3xl font-extrabold sm:text-4xl">Empezá a explorar oportunidades</h2>
+          <p className="mt-3 text-reducar-text-secondary">Tu próximo aprendizaje puede estar a un clic.</p>
+          <Link to="/cursos" className={`${primaryActionClass} mt-7`}>Ver cursos disponibles →</Link>
         </div>
-
-        <div className="absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-violet-700/30 blur-3xl" />
-        <div className="absolute -bottom-24 -right-20 h-64 w-64 rounded-full bg-cyan-500/20 blur-3xl" />
-
       </section>
-
     </main>
   );
 }

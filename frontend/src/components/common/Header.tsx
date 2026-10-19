@@ -1,6 +1,6 @@
 // src/components/common/Header.tsx
 import { useEffect, useLayoutEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logoReducar from "../../assets/logo-reducar.png";
 import Navbar from "./Navbar";
 import { useAuthStore } from "../../stores/auth.store";
@@ -66,6 +66,7 @@ export const Header = () => {
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const accessToken = useAuthStore((s) => s.accessToken);
   const rol_id = useAuthStore((s) => s.perfil?.rol_id);
@@ -89,6 +90,10 @@ export const Header = () => {
     return () => systemTheme.removeEventListener("change", handleChange);
   }, []);
 
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
   const toggleTheme = () => {
     const next = theme === "dark" ? "light" : "dark";
     localStorage.setItem(THEME_STORAGE_KEY, next);
@@ -108,20 +113,20 @@ export const Header = () => {
   };
 
   return (
-    <header className="bg-reducar-shell-bg/95 backdrop-blur-md border-b border-reducar-shell-border sticky top-0 z-50 text-reducar-shell-text">
-      <div className="w-full max-w-7xl mx-auto px-4 flex items-center justify-between gap-6 h-21">
-        <a href="/" className="flex items-center gap-2 shrink-0 mr-6" aria-label="Ir al inicio de ReducAr">
-          <img src={logoReducar} alt="" className="h-12 w-auto" aria-hidden="true" />
-          <span className="text-2xl font-extrabold text-white whitespace-nowrap">
+    <header className="bg-reducar-shell-bg/95 backdrop-blur-md border-b border-reducar-shell-border sticky top-0 z-50 text-reducar-shell-text shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
+      <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 flex items-center justify-between gap-2 lg:gap-6 h-18 lg:h-21">
+        <Link to="/" className="flex items-center gap-1.5 sm:gap-2 shrink-0 lg:mr-6 rounded-xl" aria-label="Ir al inicio de ReducAr">
+          <img src={logoReducar} alt="" className="h-9 sm:h-11 lg:h-12 w-auto" aria-hidden="true" />
+          <span className="hidden min-[360px]:inline text-lg sm:text-xl lg:text-2xl font-extrabold text-white whitespace-nowrap tracking-tight">
             Reduc<span className="text-reducar-turquoise">Ar</span>
           </span>
-        </a>
+        </Link>
 
         <Navbar items={menuItems} dropdownItems={dropdownItems} className="hidden lg:flex justify-center flex-1" />
 
-        <div className="flex items-center gap-2 ml-auto">
+        <div className="flex items-center gap-1.5 sm:gap-2 ml-auto">
           <button
-            className="p-2.5 rounded-xl bg-reducar-shell-surface border border-reducar-shell-border text-reducar-shell-text hover:bg-reducar-shell-hover hover:border-reducar-primary transition-colors"
+            className="w-11 h-11 grid place-items-center rounded-xl bg-reducar-shell-surface border border-reducar-shell-border text-reducar-shell-text hover:bg-reducar-shell-hover hover:border-reducar-primary transition-colors"
             type="button"
             onClick={toggleTheme}
             aria-label={theme === "dark" ? "Activar modo claro" : "Activar modo oscuro"}
@@ -130,7 +135,7 @@ export const Header = () => {
           </button>
 
           <button
-            className="p-2.5 rounded-xl bg-reducar-shell-surface border border-reducar-shell-border text-reducar-shell-text hover:bg-reducar-shell-hover hover:border-reducar-primary transition-colors relative"
+            className="w-11 h-11 grid place-items-center rounded-xl bg-reducar-shell-surface border border-reducar-shell-border text-reducar-shell-text hover:bg-reducar-shell-hover hover:border-reducar-primary transition-colors relative"
             type="button"
             onClick={() => navigate("/carrito")}
             aria-label="Ver carrito de compras"
@@ -149,10 +154,11 @@ export const Header = () => {
 
               <button
                 type="button"
-                className="lg:hidden p-2.5 rounded-xl bg-reducar-shell-surface border border-reducar-shell-border text-reducar-shell-text hover:bg-reducar-shell-hover transition-colors"
+                className="lg:hidden w-11 h-11 grid place-items-center rounded-xl bg-reducar-shell-surface border border-reducar-shell-border text-reducar-shell-text hover:bg-reducar-shell-hover transition-colors"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 aria-label={isMobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
                 aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-navigation"
               >
                 {isMobileMenuOpen ? (
                   <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -185,10 +191,11 @@ export const Header = () => {
 
               <button
                 type="button"
-                className="lg:hidden p-2.5 rounded-xl bg-reducar-shell-surface border border-reducar-shell-border text-reducar-shell-text hover:bg-reducar-shell-hover transition-colors"
+                className="lg:hidden w-11 h-11 grid place-items-center rounded-xl bg-reducar-shell-surface border border-reducar-shell-border text-reducar-shell-text hover:bg-reducar-shell-hover transition-colors"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 aria-label={isMobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
                 aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-navigation"
               >
                 {isMobileMenuOpen ? (
                   <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -206,8 +213,8 @@ export const Header = () => {
       </div>
 
       {isMobileMenuOpen && (
-        <div className="lg:hidden border-t border-reducar-shell-border bg-reducar-shell-bg animate-[slideDown_0.2s_ease-out]">
-          <div className="max-w-7xl mx-auto px-4 py-4 max-h-[calc(100vh-84px)] overflow-y-auto">
+        <div id="mobile-navigation" className="lg:hidden border-t border-reducar-shell-border bg-reducar-shell-bg animate-[slideDown_0.2s_ease-out] shadow-2xl">
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 max-h-[calc(100dvh-72px)] overflow-y-auto overscroll-contain">
             <Navbar items={menuItems} dropdownItems={dropdownItems} isMobile onItemClick={closeMobileMenu} />
 
             <div className="mt-4 pt-4 border-t border-reducar-shell-border flex flex-col gap-2">
