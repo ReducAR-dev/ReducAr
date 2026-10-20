@@ -26,7 +26,8 @@ import {
   chatRoutes,
   cursoRoutes,
   testRoutes,
-  novedadRoutes, 
+  novedadRoutes,
+  favoritoRoutes,
 } from "./routes/index.js";
 
 // Cargar variables de entorno antes de inicializar la app
@@ -86,6 +87,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/usuarios", usuarioRoutes);
 app.use("/api/cursos", cursoRoutes);   // <-- CORREGIDO: Se agregó /api
 app.use("/api/novedades", novedadRoutes);
+app.use("/api/favoritos", favoritoRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api", testRoutes);           // Endpoints de test/healthcheck
 

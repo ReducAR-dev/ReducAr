@@ -4,8 +4,10 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_PUBLISHABLE_KEY;
+const supabaseUrl = process.env.SUPABASE_URL?.trim();
+const supabaseKey =
+  process.env.SUPABASE_PUBLISHABLE_KEY?.trim() ||
+  process.env.SUPABASE_ANON_KEY?.trim();
 
 if (!supabaseUrl) {
   throw new Error(
@@ -16,8 +18,16 @@ if (!supabaseUrl) {
 
 if (!supabaseKey) {
   throw new Error(
-    '❌ Falta SUPABASE_PUBLISHABLE_KEY en el .env. ' +
-    'Cópiala desde Supabase Dashboard → Settings → API → Publishable key.'
+    '❌ Falta SUPABASE_PUBLISHABLE_KEY (o la clave heredada ' +
+    'SUPABASE_ANON_KEY) en el .env. Copiala desde Supabase Dashboard ' +
+    '→ Settings → API.'
+  );
+}
+
+if (!process.env.SUPABASE_PUBLISHABLE_KEY?.trim()) {
+  console.warn(
+    '⚠️ Usando SUPABASE_ANON_KEY por compatibilidad. ' +
+    'Migrá a SUPABASE_PUBLISHABLE_KEY cuando sea posible.',
   );
 }
 
