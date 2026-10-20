@@ -1,6 +1,6 @@
 // src/components/common/HeaderAdmin.tsx
 import { useEffect, useLayoutEffect, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logoReducar from "../../assets/logo-reducar.png";
 import { useAuthStore } from "../../stores/auth.store";
 import { UserMenu } from "./UserMenu";
@@ -35,9 +35,7 @@ export const HeaderAdmin = () => {
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
 
   const accessToken = useAuthStore((s) => s.accessToken);
-  const rol_id = useAuthStore((s) => s.perfil?.rol_id);
   const estaLogueado = !!accessToken;
-  const esAdmin = rol_id === 1;
 
   useLayoutEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -60,13 +58,6 @@ export const HeaderAdmin = () => {
     localStorage.setItem(THEME_STORAGE_KEY, next);
     setTheme(next);
   };
-
-  // Si hay sesión pero no es admin, expulsar al home.
-  // No es un problema de seguridad (el back protege), pero evita que un user
-  // común vea el layout del panel vacío si escribe /admin a mano.
-  if (estaLogueado && !esAdmin) {
-    return <Navigate to="/" replace />;
-  }
 
   return (
     <header className="bg-reducar-shell-bg/95 backdrop-blur-md border-b border-reducar-shell-border sticky top-0 z-50 text-reducar-shell-text">

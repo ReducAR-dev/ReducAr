@@ -9,7 +9,7 @@ import { cursoService } from "../../services/curso.service";
 function Cursospage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const querySearch = searchParams.get("q") ?? "";
-  
+
   // Estados de filtros (Mapeados a IDs de la BD)
   const [modalidad, setModalidad] = useState<number | undefined>(undefined);
   const [nivel, setNivel] = useState<number | undefined>(undefined);
@@ -53,7 +53,11 @@ function Cursospage() {
 
       <main>
         {/* Header (Mantenido igual) */}
-        <section className="relative overflow-hidden py-8 pb-12 border-b border-reducar-border">
+        <section className="relative overflow-hidden py-6 pb-12 border-b border-reducar-border">
+          <div className="flex items-center gap-2 mb-5 text-xs font-semibold text-reducar-text-secondary">
+            <span>Inicio</span><span>›</span>
+            <strong className="text-reducar-primary">Test de orientación</strong>
+          </div>
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex flex-col items-center max-w-2xl mx-auto text-center">
               <span className="inline-flex items-center px-3.5 py-2 mb-4 text-xs font-extrabold text-reducar-primary bg-reducar-primary-light border border-reducar-primary/20 rounded-full">
@@ -83,7 +87,7 @@ function Cursospage() {
 
         <section className="py-10 pb-20">
           <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-[245px_minmax(0,1fr)] gap-6 items-start">
-            
+
             {/* Sidebar de Filtros */}
             <aside className="p-5 bg-reducar-surface border border-reducar-border rounded-2xl shadow-lg sticky top-24">
               <div className="pb-5 flex items-start justify-between gap-3 border-b border-reducar-border">
@@ -94,14 +98,14 @@ function Cursospage() {
               {/* Filtro Modalidad (IDs mapeados a tu BD) */}
               <div className="py-5 border-b border-reducar-border">
                 <h3 className="mb-3.5 text-xs font-extrabold text-reducar-text">Modalidad</h3>
-                {[{id: 2, label: "Virtual"}, {id: 1, label: "Presencial"}, {id: 3, label: "Híbrida"}].map((opcion) => (
+                {[{ id: 2, label: "Virtual" }, { id: 1, label: "Presencial" }, { id: 3, label: "Híbrida" }].map((opcion) => (
                   <label key={opcion.id} className="flex items-center gap-2.5 mt-3 text-xs text-reducar-text-secondary cursor-pointer">
-                    <input 
-                      type="radio" 
-                      name="modalidad" 
-                      checked={modalidad === opcion.id} 
-                      onChange={() => { setModalidad(opcion.id); setPage(1); }} 
-                      className="w-4 h-4 accent-reducar-primary" 
+                    <input
+                      type="radio"
+                      name="modalidad"
+                      checked={modalidad === opcion.id}
+                      onChange={() => { setModalidad(opcion.id); setPage(1); }}
+                      className="w-4 h-4 accent-reducar-primary"
                     />
                     <span>{opcion.label}</span>
                   </label>
@@ -111,14 +115,14 @@ function Cursospage() {
               {/* Filtro Nivel */}
               <div className="py-5 border-b border-reducar-border">
                 <h3 className="mb-3.5 text-xs font-extrabold text-reducar-text">Nivel</h3>
-                {[{id: 1, label: "Inicial"}, {id: 2, label: "Intermedio"}, {id: 3, label: "Avanzado"}].map((opcion) => (
+                {[{ id: 1, label: "Inicial" }, { id: 2, label: "Intermedio" }, { id: 3, label: "Avanzado" }].map((opcion) => (
                   <label key={opcion.id} className="flex items-center gap-2.5 mt-3 text-xs text-reducar-text-secondary cursor-pointer">
-                    <input 
-                      type="radio" 
-                      name="nivel" 
-                      checked={nivel === opcion.id} 
-                      onChange={() => { setNivel(opcion.id); setPage(1); }} 
-                      className="w-4 h-4 accent-reducar-primary" 
+                    <input
+                      type="radio"
+                      name="nivel"
+                      checked={nivel === opcion.id}
+                      onChange={() => { setNivel(opcion.id); setPage(1); }}
+                      className="w-4 h-4 accent-reducar-primary"
                     />
                     <span>{opcion.label}</span>
                   </label>

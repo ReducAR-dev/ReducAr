@@ -1,7 +1,8 @@
 // ============================================
-// Core / Router
+// Core / Router / Funcionalidades
 // ============================================
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ScrollToTop from "./components/common/ScrollToTop";
 
 // ============================================
 // Layouts
@@ -14,6 +15,7 @@ import { AdminLayout } from "./layouts/AdminLayout";
 // Componentes globales
 // ============================================
 import { AuthBootstrap } from "./components/AuthBootstrap";
+import { UserRoute } from "./components/common/UserRoute";
 
 // ============================================
 // Páginas públicas
@@ -22,7 +24,7 @@ import Homepage from "./pages/Homepage";
 import Cursospage from "./pages/cursos/Cursospage";
 import CursoDetallePage from "./pages/cursos/CursoDetallePage";
 import TestPage from "./pages/TestPage";
-import OrganizacionesPage from "./pages/OrganizacionesPage";
+import OrganizacionesPage from "./pages/InstitucionesPage";
 import NovedadesPage from "./pages/NovedadesPage";
 import RutasPage from "./pages/RutasPage";
 import NosotrosPage from "./pages/NosotrosPage";
@@ -50,12 +52,13 @@ import MiCuentaPage from "./pages/usuario/MiCuentaPage";
 import MisFavoritosPage from "./pages/usuario/MisFavoritosPage";
 import MisCursosPage from "./pages/usuario/MisCursosPage";
 import MisReportesPage from "./pages/usuario/MisReportesPage";
-import PerfilPage from "./pages/PerfilPage";
-import ConfiguracionPage from "./pages/ConfiguracionPage";
+import MisDatosPage from "./pages/usuario/MisDatosPage";
+import ConfiguracionPage from "./pages/usuario/ConfiguracionPage";
 
 // ============================================
 // Páginas de administración
 // ============================================
+import { AdminRoute } from "./components/common/AdminRoute";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import AdminCursosPage from "./pages/admin/AdminCursosPage";
 import AdminUsuariosPage from "./pages/admin/AdminUsuariosPage";
@@ -71,6 +74,7 @@ import Error500Page from "./pages/errors/Error500Page";
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <AuthBootstrap>
         <Routes>
           {/* ============================================
@@ -95,14 +99,16 @@ function App() {
             <Route path="/testimonios" element={<TestimoniosPage />} />
 
             {/* --- Usuario logueado --- */}
-            <Route path="/mi-cuenta" element={<MiCuentaPage />} />
-            <Route path="/mi-cuenta/favoritos" element={<MisFavoritosPage />} />
-            <Route path="/mi-cuenta/cursos" element={<MisCursosPage />} />
-            <Route path="/mi-cuenta/reportes" element={<MisReportesPage />} />
-            <Route path="/carrito" element={<CarritoPage />} />
-            <Route path="/oportunidad-curso" element={<OportunidadCursoPage />} />
-            <Route path="/perfil" element={<PerfilPage />} />
-            <Route path="/configuracion" element={<ConfiguracionPage />} />
+            <Route element={<UserRoute />}>
+              <Route path="/mi-cuenta" element={<MiCuentaPage />} />
+              <Route path="/mi-cuenta/favoritos" element={<MisFavoritosPage />} />
+              <Route path="/mi-cuenta/cursos" element={<MisCursosPage />} />
+              <Route path="/mi-cuenta/reportes" element={<MisReportesPage />} />
+              <Route path="/carrito" element={<CarritoPage />} />
+              <Route path="/oportunidad-curso" element={<OportunidadCursoPage />} />
+              <Route path="/perfil" element={<MisDatosPage />} />
+              <Route path="/configuracion" element={<ConfiguracionPage />} />
+            </Route>
 
             {/* --- Errores --- */}
             <Route path="/500" element={<Error500Page />} />
@@ -120,12 +126,14 @@ function App() {
           {/* ============================================
               Administración (AdminLayout)
              ============================================ */}
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboardPage />} />
-            <Route path="cursos" element={<AdminCursosPage />} />
-            <Route path="usuarios" element={<AdminUsuariosPage />} />
-            <Route path="reportes" element={<AdminReportesPage />} />
-            <Route path="valoraciones" element={<AdminValoracionesPage />} />
+          <Route element={<AdminRoute />}>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboardPage />} />
+              <Route path="cursos" element={<AdminCursosPage />} />
+              <Route path="usuarios" element={<AdminUsuariosPage />} />
+              <Route path="reportes" element={<AdminReportesPage />} />
+              <Route path="valoraciones" element={<AdminValoracionesPage />} />
+            </Route>
           </Route>
         </Routes>
       </AuthBootstrap>

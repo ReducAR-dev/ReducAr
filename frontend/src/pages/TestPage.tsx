@@ -63,7 +63,11 @@ function TestPage() {
   return (
     <>
       <PromoBar />
-      <main className="min-h-screen bg-reducar-bg text-reducar-text py-16 px-4">
+      <main className="min-h-screen bg-reducar-bg text-reducar-text py-6 px-4">
+            <div className="flex items-center gap-2 mb-5 text-xs font-semibold text-reducar-text-secondary">
+              <span>Inicio</span><span>›</span>
+              <strong className="text-reducar-primary">Test de orientación</strong>
+            </div>
         <div className="max-w-3xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-extrabold text-reducar-text text-center tracking-tight mb-4">
             {testMock.nombre}

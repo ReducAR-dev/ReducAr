@@ -1,14 +1,18 @@
 // src/components/common/UserMenu.tsx
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query"; // <-- Importante
 import { useAuthStore } from "../../stores/auth.store";
 import { authService } from "../../services/auth.service";
 
 export const UserMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const queryClient = useQueryClient(); // <-- Hook de TanStack Query
+
   const perfil = useAuthStore((s) => s.perfil);
   const logout = useAuthStore((s) => s.logout);
 
@@ -23,10 +27,26 @@ export const UserMenu = () => {
   }, []);
 
   const handleLogout = async () => {
-    await authService.logout();
-    logout();
-    setIsOpen(false);
-    navigate("/");
+    try {
+      setIsLoggingOut(true);
+      await authService.logout(); // Cierra sesión en el backend
+      
+      // 3. Purga de caché y estado global
+      logout(); // Limpia Zustand (y el localStorage de reducar-auth automáticamente)
+      queryClient.clear(); // Limpia TODA la caché de React Query (evita fugas de datos entre usuarios)
+      
+      setIsOpen(false);
+      navigate("/");
+    } catch (error) {
+      console.error("Error al cerrar sesión", error);
+      // Fallback: incluso si el backend falla, limpiamos el frontend por seguridad
+      logout();
+      queryClient.clear();
+      setIsOpen(false);
+      navigate("/");
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   const handleNavigate = (path: string) => {
@@ -35,7 +55,6 @@ export const UserMenu = () => {
   };
 
   const inicial = perfil?.email?.[0]?.toUpperCase() ?? "?";
-
   const nombreMostrado = perfil?.nombre
     ? `${perfil.nombre}${perfil.apellido ? " " + perfil.apellido : ""}`
     : (perfil?.email ?? "Usuario");
@@ -73,7 +92,6 @@ export const UserMenu = () => {
             : "opacity-0 scale-95 pointer-events-none -translate-y-1"
         }`}
       >
-        {/* Encabezado: nombre + email */}
         <div className="px-3 py-2 border-b border-reducar-shell-border mb-1">
           <p className="text-sm font-bold text-reducar-shell-text truncate">
             {nombreMostrado}
@@ -85,7 +103,6 @@ export const UserMenu = () => {
           )}
         </div>
 
-        {/* ====== CONTEXTO ADMIN ====== */}
         {esContextoAdmin ? (
           <>
             <button
@@ -100,11 +117,10 @@ export const UserMenu = () => {
               onClick={() => handleNavigate("/perfil")}
               className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-reducar-shell-text-secondary hover:bg-reducar-shell-hover hover:text-reducar-primary transition-colors"
             >
-              Mi perfil
+              Mis datos
             </button>
           </>
         ) : (
-          /* ====== CONTEXTO PÚBLICO ====== */
           <>
             <button
               type="button"
@@ -118,7 +134,7 @@ export const UserMenu = () => {
               onClick={() => handleNavigate("/perfil")}
               className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-reducar-shell-text-secondary hover:bg-reducar-shell-hover hover:text-reducar-primary transition-colors"
             >
-              Mi perfil
+              Mis datos
             </button>
             <button
               type="button"
@@ -142,7 +158,6 @@ export const UserMenu = () => {
               Mis reportes
             </button>
 
-            {/* Panel admin: solo si rol_id === 1 */}
             {esAdmin && (
               <>
                 <div className="my-1 h-px border-t border-reducar-shell-border" />
@@ -158,14 +173,26 @@ export const UserMenu = () => {
           </>
         )}
 
-        {/* Cerrar sesión */}
         <div className="my-1 h-px border-t border-reducar-shell-border" />
+        
+        {/* Botón de Cerrar Sesión con Animación */}
         <button
           type="button"
           onClick={handleLogout}
-          className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-red-400 hover:bg-red-500/10 transition-colors"
+          disabled={isLoggingOut}
+          className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Cerrar sesión
+          {isLoggingOut ? (
+            <>
+              <svg className="animate-spin h-4 w-4 text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Cerrando sesión...
+            </>
+          ) : (
+            "Cerrar sesión"
+          )}
         </button>
       </div>
     </div>

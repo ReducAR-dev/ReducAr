@@ -127,7 +127,7 @@ export const Navbar = ({
       })}
 
       {/* Dropdown "Más" */}
-      <div ref={dropdownRef} className="relative">
+      <div ref={dropdownRef} className="relative mr-5">
         <button
           type="button"
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}

@@ -1,0 +1,19 @@
+# https://www.robotstxt.org/robotstxt.html
+
+User-agent: *
+Allow: /
+
+# Disallowed paths (private, authentication, errors, and system pages)
+Disallow: /login
+Disallow: /registro
+Disallow: /mi-cuenta/
+Disallow: /carrito
+Disallow: /oportunidad-curso
+Disallow: /perfil
+Disallow: /configuracion
+Disallow: /admin/
+Disallow: /500
+Disallow: /test
+
+# Sitemap
+Sitemap: https://reducar.com/sitemap.xml
