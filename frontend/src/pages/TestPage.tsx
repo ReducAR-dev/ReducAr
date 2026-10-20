@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PromoBar from "../components/features/PromoBar";
 import TestQuestion from "../components/test/TestQuestion";
 import { testMock, preguntasMock, opcionesMock, categoriasMock } from "../mocks/test";
@@ -13,6 +13,12 @@ function TestPage() {
 
   const pregunta = preguntasMock[preguntaActual];
   const opciones = opcionesMock.filter((opcion) => opcion.pregunta_id === pregunta.id);
+
+  // Sincronizar la respuesta seleccionada si el usuario navega hacia atrás
+  useEffect(() => {
+    const respuestaExistente = respuestas.find((r) => r.preguntaId === pregunta.id);
+    setRespuestaSeleccionada(respuestaExistente ? respuestaExistente.opcionId : null);
+  }, [preguntaActual, pregunta.id, respuestas]);
 
   const seleccionarOpcion = (opcion: (typeof opcionesMock)[number]) => {
     setRespuestaSeleccionada(opcion.id);
@@ -37,14 +43,26 @@ function TestPage() {
     setResultado({ categoria: categoria.nombre, puntaje: Number(ganadora[1]) });
   };
 
-  const siguientePregunta = () => {
-    if (respuestaSeleccionada === null) return;
+  const handleNext = () => {
+    if (!respuestaSeleccionada) return; // No debería pasar gracias al botón deshabilitado
     if (preguntaActual < preguntasMock.length - 1) {
-      setPreguntaActual((a) => a + 1);
-      setRespuestaSeleccionada(null);
-      return;
+      setPreguntaActual((prev) => prev + 1);
+    } else {
+      calcularResultado();
     }
-    calcularResultado();
+  };
+
+  const handlePrev = () => {
+    if (preguntaActual > 0) {
+      setPreguntaActual((prev) => prev - 1);
+    }
+  };
+
+  const reiniciarTest = () => {
+    setPreguntaActual(0);
+    setRespuestas([]);
+    setResultado(null);
+    setRespuestaSeleccionada(null);
   };
 
   if (resultado) {
@@ -53,12 +71,15 @@ function TestPage() {
         <PromoBar />
         <main className="min-h-screen bg-reducar-bg text-reducar-text py-16 px-4">
           <div className="max-w-3xl mx-auto">
-            <TestResult categoria={resultado.categoria} puntaje={resultado.puntaje} />
+            <TestResult categoria={resultado.categoria} puntaje={resultado.puntaje} onReiniciar={reiniciarTest} />
           </div>
         </main>
       </>
     );
   }
+
+  // Calcular progreso (de 0 a 100)
+  const progreso = ((preguntaActual + 1) / preguntasMock.length) * 100;
 
   return (
     <>
@@ -68,8 +89,7 @@ function TestPage() {
         {/* Cabecera */}
         <section className="pt-7 pb-10 border-b border-reducar-border">
           <div className="max-w-5xl mx-auto px-4">
-
-            {/* Breadcrumb */}
+            
             <div className="max-w-3xl mx-auto mb-5">
               <div className="flex items-center gap-2 text-xs font-semibold text-reducar-text-secondary">
                 <Link to="/" className="hover:text-reducar-primary transition-colors">Inicio</Link>
@@ -78,7 +98,6 @@ function TestPage() {
               </div>
             </div>
 
-            {/* Título del Test */}
             <div className="max-w-3xl mx-auto text-center flex flex-col items-center">
               <span className="inline-flex items-center justify-center mb-4 px-4 py-2 text-[10px] font-extrabold text-reducar-primary bg-reducar-primary-light border border-reducar-primary/35 rounded-full">
                 ✦ Descubrí tu perfil
@@ -96,8 +115,19 @@ function TestPage() {
         {/* Contenedor del Test */}
         <section className="py-10 px-4">
           <div className="max-w-3xl mx-auto">
-            <div className="w-fit mx-auto mb-8 px-4 py-2 text-xs font-bold tracking-wider text-reducar-primary bg-reducar-primary-light border border-reducar-primary/20 rounded-full">
-              PREGUNTA {preguntaActual + 1} DE {preguntasMock.length}
+            
+            {/* Indicador de Progreso */}
+            <div className="mb-8">
+              <div className="flex justify-between items-center mb-2 text-xs font-bold text-reducar-text-secondary">
+                <span>PREGUNTA {preguntaActual + 1} DE {preguntasMock.length}</span>
+                <span>{Math.round(progreso)}%</span>
+              </div>
+              <div className="w-full h-2 bg-reducar-surface-soft rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-linear-to-r from-reducar-primary to-reducar-turquoise transition-all duration-500 ease-out"
+                  style={{ width: `${progreso}%` }}
+                />
+              </div>
             </div>
 
             <TestQuestion
@@ -106,6 +136,30 @@ function TestPage() {
               respuestaSeleccionada={respuestaSeleccionada}
               onSeleccionar={seleccionarOpcion}
             />
+
+            {/* Botones de Navegación (Los que faltaban) */}
+            <div className="mt-8 flex items-center justify-between gap-4">
+              <button
+                type="button"
+                onClick={handlePrev}
+                disabled={preguntaActual === 0}
+                className="px-6 h-12 rounded-xl border border-reducar-border text-reducar-text font-bold text-sm hover:bg-reducar-surface-soft transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Anterior
+              </button>
+
+              <button
+                type="button"
+                onClick={handleNext}
+                disabled={!respuestaSeleccionada}
+                className={`px-8 h-12 rounded-xl text-white font-bold text-sm transition-all shadow-lg 
+                  ${respuestaSeleccionada 
+                    ? "bg-linear-to-r from-reducar-primary to-reducar-turquoise-dark hover:-translate-y-0.5 hover:shadow-xl" 
+                    : "bg-gray-400 cursor-not-allowed opacity-70"}`}
+              >
+                {preguntaActual === preguntasMock.length - 1 ? "Finalizar Test" : "Siguiente pregunta"}
+              </button>
+            </div>
           </div>
         </section>
       </main>

@@ -163,10 +163,9 @@ function OpportunityCarousel() {
 
   const goToPrevious = () => setCurrentIndex((p) => p === 0 ? opportunities.length - 1 : p - 1);
   const goToNext = () => setCurrentIndex((p) => p === opportunities.length - 1 ? 0 : p + 1);
-  const goToSlide = (index: number) => setCurrentIndex(index);
 
   return (
-    <div className="relative w-full h-[450px] rounded-3xl overflow-hidden shadow-2xl border border-reducar-border group">
+    <div className="relative w-full h-112.5 rounded-3xl overflow-hidden shadow-2xl border border-reducar-border group">
       {/* Imagen de fondo */}
       <img
         src={currentOpportunity.image}
