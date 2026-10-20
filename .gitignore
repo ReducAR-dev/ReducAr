@@ -8,6 +8,9 @@
 **/.env
 **/.env.local
 **/.env.*.local
+**/.env.example
+**/.env.*.example
+
 
 # Archivos de sistema
 .DS_Store
