@@ -12,8 +12,6 @@ const router = Router();
 // ============================================
 // RUTAS DE FAVORITOS (Requieren JWT)
 // ============================================
-// Todas las rutas usan `requireAuth` porque cada usuario
-// solo puede consultar, agregar y quitar sus propios favoritos.
 
 // Consultar todos los favoritos del usuario autenticado
 router.get("/", requireAuth, getMisFavoritosHandler);
@@ -22,6 +20,6 @@ router.get("/", requireAuth, getMisFavoritosHandler);
 router.post("/", requireAuth, postFavoritoHandler);
 
 // Quitar un curso de favoritos por el ID del curso
-router.delete("/:cursoId", requireAuth, deleteFavoritoHandler);
+router.delete("/:id", requireAuth, deleteFavoritoHandler);
 
 export default router;

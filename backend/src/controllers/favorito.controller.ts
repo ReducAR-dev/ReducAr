@@ -8,13 +8,9 @@ import {
 import type { AuthenticatedRequest } from "../types/auth.types.js";
 
 // ============================================
-// HELPERS DE SEGURIDAD Y VALIDACIÓN
+// HELPERS
 // ============================================
 
-/**
- * Extrae `req.user.id` o corta con 401.
- * Garantiza que la consulta siempre se filtre por el usuario autenticado.
- */
 const requireUser = (
   req: AuthenticatedRequest,
   res: Response,
@@ -26,36 +22,18 @@ const requireUser = (
   return req.user.id;
 };
 
-/**
- * Parsea y valida un entero positivo (para ID de curso en body o params).
- */
-const parsePositiveInt = (val: unknown): number | null => {
-  if (typeof val === "number") {
-    return Number.isInteger(val) && val > 0 ? val : null;
-  }
-  if (typeof val === "string" && val.trim() !== "") {
-    const n = Number.parseInt(val, 10);
-    return Number.isInteger(n) && n > 0 ? n : null;
-  }
-  return null;
-};
-
-/**
- * Extrae el `:cursoId` (o `:id`) de los parámetros de la URL.
- */
-const getCursoIdParam = (req: Request): number | null => {
-  const raw = req.params.cursoId ?? req.params.id;
-  const value = Array.isArray(raw) ? raw[0] : raw;
-  return parsePositiveInt(value);
+const getIdParam = (req: Request): number | null => {
+  const raw = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+  if (!raw) return null;
+  const n = Number.parseInt(raw, 10);
+  if (!Number.isInteger(n) || n <= 0) return null;
+  return n;
 };
 
 // ============================================
 // GET /api/favoritos — Requiere JWT
 // ============================================
 
-/**
- * Obtiene la lista de cursos favoritos del propio usuario autenticado.
- */
 export const getMisFavoritosHandler = async (
   req: AuthenticatedRequest,
   res: Response,
@@ -80,10 +58,6 @@ export const getMisFavoritosHandler = async (
 // POST /api/favoritos — Requiere JWT
 // ============================================
 
-/**
- * Añade un curso existente a la lista de favoritos del usuario.
- * Espera `{ curso_id: number }` en el body.
- */
 export const postFavoritoHandler = async (
   req: AuthenticatedRequest,
   res: Response,
@@ -91,14 +65,9 @@ export const postFavoritoHandler = async (
   const usuarioId = requireUser(req, res);
   if (!usuarioId) return;
 
-  const body = req.body ?? {};
-  const cursoId = parsePositiveInt(body.curso_id ?? body.cursoId);
-
-  if (!cursoId) {
-    res.status(400).json({
-      success: false,
-      error: "Se requiere un 'curso_id' válido (entero positivo).",
-    });
+  const cursoId = Number(req.body?.curso_id);
+  if (!Number.isInteger(cursoId) || cursoId <= 0) {
+    res.status(400).json({ success: false, error: "ID de curso inválido." });
     return;
   }
 
@@ -118,12 +87,9 @@ export const postFavoritoHandler = async (
 };
 
 // ============================================
-// DELETE /api/favoritos/:cursoId — Requiere JWT
+// DELETE /api/favoritos/:id — Requiere JWT
 // ============================================
 
-/**
- * Quita un curso de la lista de favoritos del usuario autenticado.
- */
 export const deleteFavoritoHandler = async (
   req: AuthenticatedRequest,
   res: Response,
@@ -131,12 +97,9 @@ export const deleteFavoritoHandler = async (
   const usuarioId = requireUser(req, res);
   if (!usuarioId) return;
 
-  const cursoId = getCursoIdParam(req);
+  const cursoId = getIdParam(req);
   if (!cursoId) {
-    res.status(400).json({
-      success: false,
-      error: "ID de curso inválido.",
-    });
+    res.status(400).json({ success: false, error: "ID de curso inválido." });
     return;
   }
 
