@@ -12,10 +12,7 @@ const courses = [
 ] as const;
 
 const dailyOffset = new Date().getDate() % courses.length;
-const featuredCourses = [
-  ...courses.slice(dailyOffset),
-  ...courses.slice(0, dailyOffset),
-];
+const featuredCourses = [...courses.slice(dailyOffset), ...courses.slice(0, dailyOffset)];
 
 function RandomCoursesCarousel() {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -31,26 +28,20 @@ function RandomCoursesCarousel() {
     <div className="mt-16">
       <div className="flex items-end justify-between gap-6 mb-6">
         <div>
-          <span className="text-xs font-extrabold tracking-widest text-reducar-primary uppercase">
-            Una selección para vos
+          <span className="text-[11px] font-extrabold tracking-widest text-reducar-primary uppercase bg-reducar-primary-light px-2.5 py-1 rounded-md">
+            Selección diaria
           </span>
-          <h3 className="text-3xl font-extrabold Cursos para descubrir tracking-tight mt-2">
-            Cursos para descubrir
+          <h3 className="text-3xl font-extrabold text-reducar-text tracking-tight mt-3">
+            Cursos para descubrir hoy
           </h3>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Link
-            to="/cursos"
-            className="mr-2 text-reducar-primary text-sm font-extrabold hover:text-reducar-turquoise transition-colors"
-          >
-            Ver todos
-          </Link>
+        <div className="hidden sm:flex items-center gap-2">
           <button
             type="button"
             onClick={() => moveCarousel(-1)}
             aria-label="Ver cursos anteriores"
-            className="w-10 h-10 grid place-items-center rounded-xl bg-reducar-surface border border-reducar-border text-reducar-primary text-lg hover:bg-reducar-primary hover:text-white transition-colors"
+            className="w-10 h-10 grid place-items-center rounded-full bg-reducar-surface border border-reducar-border text-reducar-text hover:border-reducar-primary hover:text-reducar-primary transition-all shadow-sm"
           >
             ←
           </button>
@@ -58,7 +49,7 @@ function RandomCoursesCarousel() {
             type="button"
             onClick={() => moveCarousel(1)}
             aria-label="Ver más cursos"
-            className="w-10 h-10 grid place-items-center rounded-xl bg-reducar-surface border border-reducar-border text-reducar-primary text-lg hover:bg-reducar-primary hover:text-white transition-colors"
+            className="w-10 h-10 grid place-items-center rounded-full bg-reducar-surface border border-reducar-border text-reducar-text hover:border-reducar-primary hover:text-reducar-primary transition-all shadow-sm"
           >
             →
           </button>
@@ -67,40 +58,38 @@ function RandomCoursesCarousel() {
 
       <div
         ref={trackRef}
-        className="grid grid-flow-col auto-cols-[minmax(260px,1fr)] lg:auto-cols-[calc((100%-42px)/4)] gap-4 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory scrollbar-none [&::-webkit-scrollbar]:hidden"
+        className="grid grid-flow-col auto-cols-[minmax(280px,1fr)] lg:auto-cols-[calc((100%-48px)/4)] gap-4 overflow-x-auto pb-6 pt-2 snap-x snap-mandatory scrollbar-none [&::-webkit-scrollbar]:hidden"
       >
         {featuredCourses.map((course) => (
-          <article
+          <Link
             key={course.title}
-            className="overflow-hidden bg-reducar-surface border border-reducar-border rounded-2xl snap-start"
+            to={`/cursos?q=${encodeURIComponent(course.title)}`}
+            className="group flex flex-col overflow-hidden bg-reducar-surface border border-reducar-border rounded-2xl snap-start 
+                       transition-all duration-300 ease-in-out hover:-translate-y-1 hover:border-reducar-primary/50 hover:shadow-[0_0_20px_rgba(123,108,246,0.15)]"
           >
-            <img src={course.image} alt="" className="w-full h-29.5 object-cover" />
-            <div className="p-4">
-              <span className="text-xs font-extrabold tracking-widest text-reducar-primary uppercase">
+            <div className="relative h-32 overflow-hidden bg-reducar-primary-light">
+              <img src={course.image} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            </div>
+            <div className="p-4 flex flex-col flex-1">
+              <span className="text-[10px] font-extrabold tracking-widest text-reducar-primary uppercase">
                 {course.category}
               </span>
-              <h4 className="text-base font-bold Cursos para descubrir mt-1.5 mb-1.5 min-h-10.75 leading-snug">
+              <h4 className="text-base font-bold text-reducar-text mt-1.5 mb-1 leading-snug line-clamp-2 group-hover:text-reducar-primary transition-colors">
                 {course.title}
               </h4>
-              <p className="text-sm text-reducar-text-secondary truncate">
+              <p className="text-xs font-semibold text-reducar-text-secondary truncate mb-3">
                 {course.organization}
               </p>
-              <div className="flex flex-wrap gap-1.5 my-3">
-                <span className="px-2 py-1 text-[10px] font-bold text-reducar-text-secondary bg-reducar-surface-soft border border-reducar-border rounded-full">
-                  {course.modality}
+              <div className="mt-auto flex flex-wrap gap-1.5">
+                <span className="px-2 py-1 text-[10px] font-bold text-reducar-text-secondary bg-reducar-surface-soft rounded-md">
+                  ◉ {course.modality}
                 </span>
-                <span className="px-2 py-1 text-[10px] font-bold text-reducar-text-secondary bg-reducar-surface-soft border border-reducar-border rounded-full">
-                  {course.duration}
+                <span className="px-2 py-1 text-[10px] font-bold text-reducar-text-secondary bg-reducar-surface-soft rounded-md">
+                  ◷ {course.duration}
                 </span>
               </div>
-              <Link
-                to={`/cursos?q=${encodeURIComponent(course.title)}`}
-                className="inline-flex items-center gap-1 text-reducar-primary text-xs font-extrabold hover:text-reducar-turquoise transition-colors"
-              >
-                Ver curso <span aria-hidden="true">→</span>
-              </Link>
             </div>
-          </article>
+          </Link>
         ))}
       </div>
     </div>

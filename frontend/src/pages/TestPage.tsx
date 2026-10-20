@@ -1,9 +1,9 @@
-// src/pages/TestPage.tsx
 import { useState } from "react";
 import PromoBar from "../components/features/PromoBar";
 import TestQuestion from "../components/test/TestQuestion";
 import { testMock, preguntasMock, opcionesMock, categoriasMock } from "../mocks/test";
 import TestResult from "../components/test/TestResult";
+import { Link } from "react-router-dom";
 
 function TestPage() {
   const [preguntaActual, setPreguntaActual] = useState(0);
@@ -63,39 +63,51 @@ function TestPage() {
   return (
     <>
       <PromoBar />
-      <main className="min-h-screen bg-reducar-bg text-reducar-text py-6 px-4">
-            <div className="flex items-center gap-2 mb-5 text-xs font-semibold text-reducar-text-secondary">
-              <span>Inicio</span><span>›</span>
-              <strong className="text-reducar-primary">Test de orientación</strong>
+      <main className="min-h-screen bg-reducar-bg text-reducar-text">
+
+        {/* Cabecera */}
+        <section className="pt-7 pb-10 border-b border-reducar-border">
+          <div className="max-w-5xl mx-auto px-4">
+
+            {/* Breadcrumb */}
+            <div className="max-w-3xl mx-auto mb-5">
+              <div className="flex items-center gap-2 text-xs font-semibold text-reducar-text-secondary">
+                <Link to="/" className="hover:text-reducar-primary transition-colors">Inicio</Link>
+                <span>›</span>
+                <strong className="text-reducar-primary">Test de orientación</strong>
+              </div>
             </div>
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-reducar-text text-center tracking-tight mb-4">
-            {testMock.nombre}
-          </h1>
-          <p className="text-center text-sm text-reducar-text-secondary mb-8">{testMock.descripcion}</p>
 
-          <div className="w-fit mx-auto mb-8 px-4 py-2 text-sm font-semibold text-reducar-text-secondary bg-reducar-primary-light border border-reducar-primary/20 rounded-full">
-            Pregunta {preguntaActual + 1} de {preguntasMock.length}
+            {/* Título del Test */}
+            <div className="max-w-3xl mx-auto text-center flex flex-col items-center">
+              <span className="inline-flex items-center justify-center mb-4 px-4 py-2 text-[10px] font-extrabold text-reducar-primary bg-reducar-primary-light border border-reducar-primary/35 rounded-full">
+                ✦ Descubrí tu perfil
+              </span>
+              <h1 className="text-3xl md:text-4xl font-extrabold text-reducar-text tracking-tight mb-4">
+                {testMock.nombre}
+              </h1>
+              <p className="text-sm text-reducar-text-secondary leading-relaxed max-w-xl">
+                {testMock.descripcion}
+              </p>
+            </div>
           </div>
+        </section>
 
-          <TestQuestion
-            pregunta={pregunta}
-            opciones={opciones}
-            respuestaSeleccionada={respuestaSeleccionada}
-            onSeleccionar={seleccionarOpcion}
-          />
+        {/* Contenedor del Test */}
+        <section className="py-10 px-4">
+          <div className="max-w-3xl mx-auto">
+            <div className="w-fit mx-auto mb-8 px-4 py-2 text-xs font-bold tracking-wider text-reducar-primary bg-reducar-primary-light border border-reducar-primary/20 rounded-full">
+              PREGUNTA {preguntaActual + 1} DE {preguntasMock.length}
+            </div>
 
-          <div className="flex justify-end mt-6">
-            <button
-              type="button"
-              onClick={siguientePregunta}
-              disabled={respuestaSeleccionada === null}
-              className="min-w-37.5 min-h-13 px-6 rounded-2xl bg-linear-to-r from-reducar-primary to-reducar-turquoise-dark text-white text-base font-bold hover:-translate-y-0.5 hover:shadow-2xl disabled:opacity-45 disabled:cursor-not-allowed disabled:shadow-none transition-all"
-            >
-              {preguntaActual === preguntasMock.length - 1 ? "Finalizar test" : "Siguiente →"}
-            </button>
+            <TestQuestion
+              pregunta={pregunta}
+              opciones={opciones}
+              respuestaSeleccionada={respuestaSeleccionada}
+              onSeleccionar={seleccionarOpcion}
+            />
           </div>
-        </div>
+        </section>
       </main>
     </>
   );

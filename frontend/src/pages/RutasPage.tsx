@@ -13,22 +13,37 @@ function RutasPage() {
     <div className="min-h-screen bg-reducar-bg text-reducar-text">
       <PromoBar />
       <main>
-        <section className="py-16 pb-14 text-center border-b border-reducar-border bg-[radial-gradient(circle_at_20%_20%,rgba(123,108,246,0.15),transparent_30%),radial-gradient(circle_at_82%_76%,rgba(63,217,201,0.1),transparent_28%)]">
+        {/* Cabecera con Breadcrumb y Fondo */}
+        <section className="relative overflow-hidden pt-7 pb-14 border-b border-reducar-border bg-[radial-gradient(circle_at_20%_20%,rgba(123,108,246,0.15),transparent_30%),radial-gradient(circle_at_82%_76%,rgba(63,217,201,0.1),transparent_28%)]">
           <div className="max-w-6xl mx-auto px-4">
-            <span className="inline-block mb-4 text-sm font-extrabold tracking-widest text-reducar-primary uppercase">
-              ✦ Aprendizaje paso a paso
-            </span>
-            <h1 className="max-w-3xl mx-auto mb-5 text-4xl md:text-6xl font-extrabold text-reducar-text tracking-tight leading-[1.08]">
-              Elegí una ruta y empezá a construir
-              <span className="text-reducar-primary"> tu futuro digital</span>
-            </h1>
-            <p className="max-w-2xl mx-auto text-lg text-reducar-text-secondary leading-relaxed">
-              Explorá recorridos sugeridos para comenzar en distintas áreas de tecnología y encontrá cursos relacionados con tus intereses.
-            </p>
+
+            {/* Breadcrumb */}
+            <div className="max-w-5xl mx-auto">
+              <div className="flex items-center gap-2 mb-5 text-xs font-semibold text-reducar-text-secondary">
+                <Link to="/" className="hover:text-reducar-primary transition-colors">Inicio</Link>
+                <span>›</span>
+                <strong className="text-reducar-primary">Rutas de aprendizaje</strong>
+              </div>
+            </div>
+
+            {/* Hero Content */}
+            <div className="max-w-3xl mx-auto text-center flex flex-col items-center">
+              <span className="inline-flex items-center justify-center mb-4 px-4 py-2 text-[10px] font-extrabold text-reducar-primary bg-reducar-primary-light border border-reducar-primary/35 rounded-full">
+                ✦ Aprendizaje paso a paso
+              </span>
+              <h1 className="text-4xl md:text-5xl font-extrabold text-reducar-text tracking-tight leading-[1.08] max-w-2xl">
+                Elegí una ruta y empezá a construir
+                <span className="bg-gradient-to-r from-reducar-gradient-start via-reducar-gradient-middle to-reducar-gradient-end bg-clip-text text-transparent"> tu futuro digital</span>
+              </h1>
+              <p className="max-w-2xl mt-4 text-sm text-reducar-text-secondary leading-relaxed">
+                Explorá recorridos sugeridos para comenzar en distintas áreas de tecnología y encontrá cursos relacionados con tus intereses.
+              </p>
+            </div>
           </div>
         </section>
 
-        <section className="py-16 pb-20">
+        {/* Listado de Rutas */}
+        <section className="py-12 pb-20">
           <div className="max-w-6xl mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {rutasMock.filter((r) => r.esta_activa).map((route, index) => (
@@ -41,17 +56,6 @@ function RutasPage() {
                   searchTerm={routeSearchTerms[route.id] ?? route.titulo}
                 />
               ))}
-            </div>
-
-            <div className="mt-8 p-8 flex flex-wrap items-center justify-between gap-8 bg-reducar-surface-soft border border-reducar-border rounded-3xl">
-              <div>
-                <span className="text-xs font-extrabold tracking-widest text-reducar-primary uppercase">¿No sabés por dónde empezar?</span>
-                <h2 className="mt-2 mb-2 text-2xl font-extrabold text-reducar-text">Descubrí el área que mejor se adapta a vos</h2>
-                <p className="m-0 text-reducar-text-secondary text-sm">Respondé cinco preguntas y obtené una orientación para elegir tu primera ruta de aprendizaje.</p>
-              </div>
-              <Link to="/test" className="shrink-0 px-5 py-3 rounded-xl bg-reducar-primary text-white text-sm font-extrabold hover:bg-reducar-primary-dark transition-colors">
-                Hacer test vocacional
-              </Link>
             </div>
           </div>
         </section>

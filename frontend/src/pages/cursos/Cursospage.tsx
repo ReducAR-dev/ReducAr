@@ -1,9 +1,8 @@
-// src/pages/Cursospage.tsx
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import PromoBar from "../../components/features/PromoBar";
-import { CursoCard } from "../../components/features/CursoCard";
+import { CursoCard } from "../../components/ui/CursoCard";
 import { cursoService } from "../../services/curso.service";
 
 function Cursospage() {
@@ -52,13 +51,19 @@ function Cursospage() {
       <PromoBar />
 
       <main>
-        {/* Header (Mantenido igual) */}
-        <section className="relative overflow-hidden py-6 pb-12 border-b border-reducar-border">
-          <div className="flex items-center gap-2 mb-5 text-xs font-semibold text-reducar-text-secondary">
-            <span>Inicio</span><span>›</span>
-            <strong className="text-reducar-primary">Test de orientación</strong>
-          </div>
+        {/* Header */}
+        <section className="relative overflow-hidden pt-7 pb-12 border-b border-reducar-border">
           <div className="max-w-7xl mx-auto px-4">
+
+            {/* 1. BREADCRUMB: Envuelto en max-w-5xl para igualar los márgenes de Instituciones */}
+            <div className="max-w-5xl mx-auto">
+              <div className="flex items-center gap-2 mb-5 text-xs font-semibold text-reducar-text-secondary">
+                <span>Inicio</span><span>›</span>
+                <strong className="text-reducar-primary">Explorar cursos</strong>
+              </div>
+            </div>
+
+            {/* 2. HERO: Título y subtítulo centrados */}
             <div className="flex flex-col items-center max-w-2xl mx-auto text-center">
               <span className="inline-flex items-center px-3.5 py-2 mb-4 text-xs font-extrabold text-reducar-primary bg-reducar-primary-light border border-reducar-primary/20 rounded-full">
                 ✦ Formación para tu futuro
@@ -69,6 +74,7 @@ function Cursospage() {
               </h1>
             </div>
 
+            {/* 3. BUSCADOR */}
             <form
               className="max-w-2xl mx-auto mt-7 flex items-center gap-2 p-1.5 pl-4 bg-reducar-surface border border-reducar-border rounded-2xl shadow-lg focus-within:border-reducar-primary focus-within:ring-2 focus-within:ring-reducar-primary/20 transition-all"
               onSubmit={(e) => { e.preventDefault(); }}
@@ -86,16 +92,24 @@ function Cursospage() {
         </section>
 
         <section className="py-10 pb-20">
+          {/* Grilla principal: 1 columna en celular, 2 columnas (filtro + contenido) en PC */}
           <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-[245px_minmax(0,1fr)] gap-6 items-start">
 
             {/* Sidebar de Filtros */}
-            <aside className="p-5 bg-reducar-surface border border-reducar-border rounded-2xl shadow-lg sticky top-24">
+            {/* 
+                CAMBIO AQUÍ: 
+                - Se eliminó el "sticky top-24" general.
+                - Se agregó "lg:sticky lg:top-24" para que solo flote en PC.
+                - Se agregó "z-10" para asegurar que si flota en PC, quede por encima de las cards.
+                - Se agregó "mb-6 lg:mb-0" para dar un poco de aire en celular.
+            */}
+            <aside className="p-5 bg-reducar-surface border border-reducar-border rounded-2xl shadow-lg lg:sticky lg:top-24 z-10 mb-6 lg:mb-0">
               <div className="pb-5 flex items-start justify-between gap-3 border-b border-reducar-border">
                 <h2 className="text-base font-extrabold text-reducar-text">Filtrar búsqueda</h2>
                 <button type="button" onClick={limpiarFiltros} className="text-xs font-bold text-reducar-primary hover:text-reducar-turquoise">Limpiar</button>
               </div>
 
-              {/* Filtro Modalidad (IDs mapeados a tu BD) */}
+              {/* Filtro Modalidad */}
               <div className="py-5 border-b border-reducar-border">
                 <h3 className="mb-3.5 text-xs font-extrabold text-reducar-text">Modalidad</h3>
                 {[{ id: 2, label: "Virtual" }, { id: 1, label: "Presencial" }, { id: 3, label: "Híbrida" }].map((opcion) => (
@@ -129,7 +143,7 @@ function Cursospage() {
                 ))}
               </div>
 
-              {/* Toggles visuales (Pendiente lógica backend) */}
+              {/* Toggles visuales */}
               <div className="py-5 flex items-center justify-between gap-3 border-b border-reducar-border">
                 <div>
                   <strong className="block text-xs text-reducar-text">Solo gratuitos</strong>

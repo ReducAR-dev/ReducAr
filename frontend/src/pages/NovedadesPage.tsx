@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import PromoBar from "../components/features/PromoBar";
 import NovedadCard from "../components/ui/NovedadCard";
 import { novedadService } from "../services/novedad.service";
+import { Link } from "react-router-dom";
 
 function NovedadesPage() {
   const [page, setPage] = useState(1);
@@ -24,39 +25,53 @@ function NovedadesPage() {
 
       <main>
         {/* Cabecera */}
-        <section className="pt-14 pb-8">
-          <div className="max-w-5xl mx-auto px-4 flex flex-col items-center text-center">
-            <span className="inline-flex items-center justify-center mb-4 px-4 py-2 text-xs font-extrabold text-reducar-primary bg-reducar-primary-light border border-reducar-primary/30 rounded-full">
-              ✦ Novedades
-            </span>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-reducar-text tracking-tight max-w-3xl leading-tight">
-              Enterate de los próximos
-              <span className="bg-gradient-to-r from-reducar-gradient-start via-reducar-gradient-middle to-reducar-gradient-end bg-clip-text text-transparent"> eventos</span>
-            </h1>
-            <p className="max-w-2xl mt-4 text-sm text-reducar-text-secondary leading-relaxed">
-              Descubrí eventos, encuentros y conferencias de tecnología para aprender, conectar con la comunidad y seguir creciendo.
-            </p>
+        <section className="pt-7 pb-8">
+          <div className="max-w-5xl mx-auto px-4">
 
-            {/* Stats dinámicos (si hay data) */}
-            {meta && meta.total > 0 && (
-              <div className="w-full max-w-3xl mt-8 py-5 grid grid-cols-2 md:grid-cols-3 border-y border-reducar-border/50">
-                <div className="flex flex-col items-center">
-                  <strong className="text-2xl font-extrabold text-reducar-text">{meta.total}</strong>
-                  <span className="mt-1 text-[10px] font-extrabold tracking-widest text-reducar-text-secondary">EVENTOS</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <strong className="text-2xl font-extrabold text-reducar-text">Agenda</strong>
-                  <span className="mt-1 text-[10px] font-extrabold tracking-widest text-reducar-text-secondary">PRÓXIMOS</span>
-                </div>
+            {/* Breadcrumb */}
+            <div className="max-w-3xl mx-auto">
+              <div className="flex items-center gap-2 mb-5 text-xs font-semibold text-reducar-text-secondary">
+                <Link to="/" className="hover:text-reducar-primary transition-colors">Inicio</Link>
+                <span>›</span>
+                <strong className="text-reducar-primary">Novedades</strong>
               </div>
-            )}
+            </div>
+
+            {/* Hero Content */}
+            <div className="max-w-3xl mx-auto flex flex-col items-center text-center">
+              <span className="inline-flex items-center justify-center mb-4 px-4 py-2 text-[10px] font-extrabold text-reducar-primary bg-reducar-primary-light border border-reducar-primary/35 rounded-full">
+                ✦ Novedades
+              </span>
+              <h1 className="text-4xl md:text-5xl font-extrabold text-reducar-text tracking-tight max-w-2xl leading-tight">
+                Enterate de los próximos
+                <span className="bg-linear-to-r from-reducar-gradient-start via-reducar-gradient-middle to-reducar-gradient-end bg-clip-text text-transparent"> eventos</span>
+              </h1>
+              <p className="max-w-2xl mt-4 text-sm text-reducar-text-secondary leading-relaxed">
+                Descubrí eventos, encuentros y conferencias de tecnología para aprender, conectar con la comunidad y seguir creciendo.
+              </p>
+
+              {/* Stats dinámicos */}
+              {meta && meta.total > 0 && (
+                <div className="w-full max-w-xl mt-8 py-5 grid grid-cols-2 border-y border-reducar-border/50">
+                  <div className="flex flex-col items-center border-r border-reducar-border/50">
+                    <strong className="text-2xl font-extrabold text-reducar-text">{meta.total}</strong>
+                    <span className="mt-1 text-[10px] font-extrabold tracking-widest text-reducar-text-secondary">EVENTOS</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <strong className="text-2xl font-extrabold text-reducar-text">Agenda</strong>
+                    <span className="mt-1 text-[10px] font-extrabold tracking-widest text-reducar-text-secondary">PRÓXIMOS</span>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </section>
+
 
         {/* Listado */}
         <section id="eventos" className="py-6 pb-20">
           <div className="max-w-4xl mx-auto px-4">
-            
+
             {/* Estado: Cargando inicial */}
             {isLoading && (
               <div className="flex flex-col items-center justify-center py-20 text-reducar-text-secondary space-y-4">
@@ -129,8 +144,6 @@ function NovedadesPage() {
 
           </div>
         </section>
-
-        {/* Se eliminó el "CTA" final porque era irrelevante */}
       </main>
     </div>
   );
