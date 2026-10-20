@@ -5,3 +5,4 @@ export { default as cursoRoutes } from "./curso.routes.js";
 export { default as testRoutes } from "./test.routes.js";
 export { default as novedadRoutes } from "./novedad.routes.js";
 export { default as favoritoRoutes } from "./favorito.routes.js";
+export { default as cursoUsuarioRoutes } from "./cursoUsuario.routes.js";
