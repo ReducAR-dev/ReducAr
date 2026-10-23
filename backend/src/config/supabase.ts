@@ -45,3 +45,18 @@ export async function verificarConexion(): Promise<boolean> {
     return false;
   }
 }
+
+export const getSupabaseWithAuth = (accessToken: string) => {
+  return createClient(supabaseUrl, supabaseKey, {
+    global: {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+    },
+  });
+};

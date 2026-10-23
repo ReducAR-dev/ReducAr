@@ -1,51 +1,91 @@
-// src/services/favorito.service.ts
-import { supabaseAdmin } from "../config/supabase-admin.js";
+import { getSupabaseWithAuth } from "../config/supabase.js";
 import type { Favorito } from "../models/favorito.model.js";
 import type { UUID } from "../models/common.types.js";
 import type { Result } from "../types/common.types.js";
 
+export interface FavoritoConCurso {
+  id: number;
+  curso_id: number;
+  fecha: string;
+  curso: {
+    titulo: string;
+    imagen_url: string | null;
+    precio: number;
+    categoria: string;
+    modalidad: string;
+    institucion: string;
+  }
+}
+
 // ============================================
-// OBTENER FAVORITOS DEL USUARIO
+// OBTENER FAVORITOS DEL USUARIO (CON JOIN)
 // ============================================
 
-/**
- * Devuelve todos los favoritos del usuario autenticado.
- * El `usuarioId` proviene siempre del JWT validado (`req.user.id`).
- */
 export const obtenerFavoritosUsuario = async (
   usuarioId: UUID,
-): Promise<Result<Favorito[]>> => {
-  const { data, error } = await supabaseAdmin
+  accessToken: string,
+): Promise<Result<FavoritoConCurso[]>> => {
+  const supabase = getSupabaseWithAuth(accessToken);
+
+  const { data, error } = await supabase
     .from("favorito")
-    .select("*")
+    .select(`
+      id,
+      curso_id,
+      fecha,
+      curso!inner (
+        titulo,
+        imagen_url,
+        precio,
+        nombre_propietario,
+        categoria!inner ( nombre ),
+        modalidad!inner ( nombre )
+      )
+    `)
     .eq("usuario_id", usuarioId)
     .order("fecha", { ascending: false });
-
+    
   if (error) {
     console.error("❌ favorito.obtenerFavoritosUsuario:", error.message);
     return { success: false, error: error.message };
   }
 
-  return { success: true, data: (data ?? []) as Favorito[] };
+  const items = (data || []).map((f: any) => {
+    const cursoData = Array.isArray(f.curso) ? f.curso[0] : f.curso;
+    const catData = Array.isArray(cursoData?.categoria) ? cursoData.categoria[0] : cursoData?.categoria;
+    const modData = Array.isArray(cursoData?.modalidad) ? cursoData.modalidad[0] : cursoData?.modalidad;
+
+    return {
+      id: f.id,
+      curso_id: f.curso_id,
+      fecha: f.fecha,
+      curso: {
+        titulo: cursoData?.titulo || "Curso no disponible",
+        imagen_url: cursoData?.imagen_url || null,
+        precio: cursoData?.precio || 0,
+        categoria: catData?.nombre || "General",
+        modalidad: modData?.nombre || "Virtual",
+        institucion: cursoData?.nombre_propietario || "ReducAR",
+      }
+    };
+  });
+
+  return { success: true, data: items };
 };
 
 // ============================================
 // AGREGAR A FAVORITOS
 // ============================================
 
-/**
- * Agrega un curso a la lista de favoritos del usuario autenticado.
- *
- * Reglas de negocio:
- *  - El curso debe existir y estar activo (`esta_activo = true`).
- *  - Un usuario no puede guardar el mismo curso dos veces (UNIQUE compuesto en BD).
- */
 export const agregarFavorito = async (
   usuarioId: UUID,
   cursoId: number,
+  accessToken: string,
 ): Promise<Result<Favorito>> => {
+  const supabase = getSupabaseWithAuth(accessToken);
+
   // 1. Verificar que el curso exista y esté activo
-  const { data: cursoExiste, error: cursoError } = await supabaseAdmin
+  const { data: cursoExiste, error: cursoError } = await supabase
     .from("curso")
     .select("id")
     .eq("id", cursoId)
@@ -60,7 +100,7 @@ export const agregarFavorito = async (
   }
 
   // 2. Insertar en la tabla favorito
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await supabase
     .from("favorito")
     .insert({
       usuario_id: usuarioId,
@@ -70,7 +110,6 @@ export const agregarFavorito = async (
     .single();
 
   if (error) {
-    // Código 23505 en PostgreSQL = unique_violation (ya está en favoritos)
     if (error.code === "23505") {
       return {
         success: false,
@@ -89,18 +128,17 @@ export const agregarFavorito = async (
 // ELIMINAR DE FAVORITOS
 // ============================================
 
-/**
- * Elimina un curso de la lista de favoritos del usuario autenticado.
- * Filtra por `usuario_id` y `curso_id` para garantizar que solo borre los suyos.
- */
 export const eliminarFavorito = async (
   usuarioId: UUID,
   cursoId: number,
+  accessToken: string,
 ): Promise<Result<null>> => {
-  const { data, error } = await supabaseAdmin
+  const supabase = getSupabaseWithAuth(accessToken);
+
+  const { data, error } = await supabase
     .from("favorito")
     .delete()
-    .eq("usuario_id", usuarioId)
+    .eq("usuario_id", usuarioId) // Filtro de identidad
     .eq("curso_id", cursoId)
     .select("id");
 
