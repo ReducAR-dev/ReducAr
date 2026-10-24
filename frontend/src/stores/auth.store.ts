@@ -1,6 +1,5 @@
-// src/stores/auth.store.ts
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 import type { PerfilUsuario } from "../types/user.types";
 
 interface AuthState {
@@ -44,6 +43,7 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: "reducar-auth",
+      storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,

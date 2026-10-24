@@ -1,7 +1,7 @@
 // src/services/user.service.ts
 import { apiRequest } from "./api";
 import { useAuthStore } from "../stores/auth.store";
-import type { ApiSuccess } from "../types/auth.types";
+import type { ApiSuccess } from "../types/api.types";
 import type {
   PerfilUsuario,
   ActualizarPerfilPayload,

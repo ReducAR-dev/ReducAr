@@ -42,8 +42,10 @@ import OportunidadCursoPage from "./pages/OportunidadCursoPage";
 // ============================================
 // Autenticación
 // ============================================
-import Login from "./pages/Loginpage";
-import Register from "./pages/Registropage";
+import Login from "./pages/login/Loginpage";
+import Register from "./pages/login/Registropage";
+import AuthCallbackPage from "./pages/login/AuthCallbackPage";
+import ForgotPasswordPage from "./pages/login/ForgotPasswordPage";
 
 // ============================================
 // Páginas de usuario logueado
@@ -77,6 +79,11 @@ function App() {
       <ScrollToTop />
       <AuthBootstrap>
         <Routes>
+
+          {/* ============================================
+               Redireccionamiento, sin layout
+             ============================================ */}
+          <Route path="/auth/callback" element={<AuthCallbackPage />} />
           {/* ============================================
               Sitio público + usuario logueado (MainLayout)
              ============================================ */}
@@ -121,6 +128,7 @@ function App() {
           <Route path="/" element={<AuthLayout />}>
             <Route path="/registro" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/recuperar-password" element={<ForgotPasswordPage />} />
           </Route>
 
           {/* ============================================
