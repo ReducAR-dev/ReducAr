@@ -213,6 +213,7 @@ export const oauthCallbackHandler = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+   console.log("🔍 Callback recibido. Query params:", req.query);
   const frontendUrl = process.env.FRONTEND_URL;
   if (!frontendUrl) {
     res.status(500).send("Configuración incompleta.");
