@@ -213,14 +213,14 @@ export const oauthCallbackHandler = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-   console.log("🔍 Callback recibido. Query params:", req.query);
+  console.log("🔍 Callback recibido. Query params:", req.query);
+
   const frontendUrl = process.env.FRONTEND_URL;
   if (!frontendUrl) {
     res.status(500).send("Configuración incompleta.");
     return;
   }
 
-  // Supabase puede enviar error en vez de code (usuario canceló, etc.)
   const errorParam =
     typeof req.query.error === "string" ? req.query.error : null;
   if (errorParam) {
@@ -236,9 +236,11 @@ export const oauthCallbackHandler = async (
   }
 
   const code = typeof req.query.code === "string" ? req.query.code : null;
-  const state = typeof req.query.state === "string" ? req.query.state : null;
 
-  if (!code || !state) {
+  // 👇 Leemos session_id en vez de state
+  const sessionId = typeof req.query.session_id === "string" ? req.query.session_id : null;
+
+  if (!code || !sessionId) {
     res.redirect(
       302,
       `${frontendUrl}/auth/callback?error=${encodeURIComponent("Parámetros de OAuth incompletos.")}`,
@@ -246,7 +248,8 @@ export const oauthCallbackHandler = async (
     return;
   }
 
-  const pkce = consumePkce(state);
+  // 👇 Buscamos el PKCE usando el sessionId
+  const pkce = consumePkce(sessionId);
   if (!pkce) {
     res.redirect(
       302,
@@ -264,8 +267,6 @@ export const oauthCallbackHandler = async (
     return;
   }
 
-  // Generamos código de un solo uso y redirigimos al front.
-  // Los tokens NUNCA viajan en la URL.
   const singleUseCode = createSingleUseCode(resultado.data);
   res.redirect(
     302,

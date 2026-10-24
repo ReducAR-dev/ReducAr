@@ -145,18 +145,24 @@ export const getOAuthUrl = async (
     return { success: false, error: "Configuración de OAuth incompleta." };
   }
 
-  const state = generateState();
+  // Usamos generateState() como un simple generador de ID aleatorio
+  const sessionId = generateState();
   const codeVerifier = generateCodeVerifier();
   const codeChallenge = generateCodeChallenge(codeVerifier);
 
-  savePkce(state, codeVerifier, provider);
+  // Guardamos el codeVerifier asociado a este sessionId
+  savePkce(sessionId, codeVerifier, provider);
 
   const url = new URL(`${supabaseUrl}/auth/v1/authorize`);
   url.searchParams.set("provider", provider);
-  url.searchParams.set("redirect_to", `${backendUrl}/api/auth/oauth/callback`);
+
+  // 👇 AQUÍ ESTÁ EL TRUCO: Inyectamos el session_id en la URL de retorno
+  url.searchParams.set("redirect_to", `${backendUrl}/api/auth/oauth/callback?session_id=${sessionId}`);
   url.searchParams.set("code_challenge", codeChallenge);
   url.searchParams.set("code_challenge_method", "S256");
-  url.searchParams.set("state", state);
+
+  // Eliminamos el state de aquí
+  // url.searchParams.set("state", state);
 
   return { success: true, data: { url: url.toString() } };
 };
