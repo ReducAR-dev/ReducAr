@@ -81,7 +81,7 @@ export const crearPerfil = async (
 export const obtenerPerfilPropio = async (
   usuarioId: UUID,
 ): Promise<Result<Usuario>> => {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin 
     .from("usuario")
     .select("*")
     .eq("id", usuarioId)
@@ -111,7 +111,7 @@ export const actualizarPerfilPropio = async (
   usuarioId: UUID,
   payload: ActualizarPerfilPayload,
 ): Promise<Result<Usuario>> => {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin 
     .from("usuario")
     .update({
       ...payload,
@@ -140,7 +140,7 @@ export const actualizarPerfilPropio = async (
 export const bloquearCuentaPropia = async (
   usuarioId: UUID,
 ): Promise<Result<null>> => {
-  const { error } = await supabase
+  const { error } = await supabaseAdmin 
     .from("usuario")
     .update({
       esta_activo: false,
