@@ -4,7 +4,7 @@ import {
   SectionHeading,
   primaryActionClass,
   secondaryActionClass,
-} from "../components/common/StaticPageLayout";
+} from "../../layouts/StaticPageLayout";
 
 const resources = [
   { icon: "📚", label: "Cursos", path: "/cursos" },
@@ -43,11 +43,11 @@ export default function NosotrosPage() {
           </div>
 
           <div className="relative">
-            <div className="absolute -inset-3 rounded-[2rem] bg-linear-to-r from-reducar-primary/20 to-reducar-turquoise/20 blur-2xl" aria-hidden="true" />
+            <div className="absolute -inset-3 rounded-4xl bg-linear-to-r from-reducar-primary/20 to-reducar-turquoise/20 blur-2xl" aria-hidden="true" />
             <img
               src="/foto-grupo.jpg"
               alt="Equipo de ReducAR"
-              className="relative aspect-[4/3] w-full rounded-3xl border border-reducar-primary/25 object-cover shadow-2xl"
+              className="relative aspect-4/3 w-full rounded-3xl border border-reducar-primary/25 object-cover shadow-2xl"
             />
           </div>
         </div>

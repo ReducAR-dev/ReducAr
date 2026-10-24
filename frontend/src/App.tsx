@@ -27,14 +27,14 @@ import TestPage from "./pages/TestPage";
 import OrganizacionesPage from "./pages/InstitucionesPage";
 import NovedadesPage from "./pages/NovedadesPage";
 import RutasPage from "./pages/RutasPage";
-import NosotrosPage from "./pages/NosotrosPage";
-import AyudaPage from "./pages/AyudaPage";
-import ContactoPage from "./pages/ContactoPage";
+import NosotrosPage from "./pages/mas/NosotrosPage";
+import AyudaPage from "./pages/mas/AyudaPage";
+import ContactoPage from "./pages/mas/ContactoPage";
 import PreguntasFrecuentesPage from "./pages/PreguntasFrecuentesPage";
 import PoliticasPrivacidadPage from "./pages/PoliticasPrivacidadPage";
 import TerminosCondicionesPage from "./pages/TerminosCondicionesPage";
-import ComoFuncionaPage from "./pages/ComoFuncionaPage";
-import TestimoniosPage from "./pages/TestimoniosPage";
+import ComoFuncionaPage from "./pages/mas/ComoFuncionaPage";
+import TestimoniosPage from "./pages/mas/TestimoniosPage";
 import CarritoPage from "./pages/CarritoPage";
 import OportunidadCursoPage from "./pages/OportunidadCursoPage";
 
@@ -104,6 +104,7 @@ function App() {
             <Route path="/terminos-condiciones" element={<TerminosCondicionesPage />} />
             <Route path="/como-funciona" element={<ComoFuncionaPage />} />
             <Route path="/testimonios" element={<TestimoniosPage />} />
+            <Route path="/oportunidad-curso" element={<OportunidadCursoPage />} />
 
             {/* --- Usuario logueado --- */}
             <Route element={<UserRoute />}>
@@ -112,7 +113,6 @@ function App() {
               <Route path="/mi-cuenta/cursos" element={<MisCursosPage />} />
               <Route path="/mi-cuenta/reportes" element={<MisReportesPage />} />
               <Route path="/carrito" element={<CarritoPage />} />
-              <Route path="/oportunidad-curso" element={<OportunidadCursoPage />} />
               <Route path="/perfil" element={<MisDatosPage />} />
               <Route path="/configuracion" element={<ConfiguracionPage />} />
             </Route>

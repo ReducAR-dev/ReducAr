@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { primaryActionClass, secondaryActionClass } from "../../components/common/StaticPageLayout";
+import { primaryActionClass, secondaryActionClass } from "../../layouts/StaticPageLayout";
 
 export default function Error500Page() {
   return (

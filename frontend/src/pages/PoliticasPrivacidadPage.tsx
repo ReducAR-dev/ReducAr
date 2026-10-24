@@ -1,4 +1,4 @@
-import { InfoCard, StaticPageLayout } from "../components/common/StaticPageLayout";
+import { InfoCard, StaticPageLayout } from "../layouts/StaticPageLayout";
 
 export default function PoliticasPrivacidadPage() {
   return (

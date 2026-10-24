@@ -65,7 +65,7 @@ export const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileUserMenuOpen, setIsMobileUserMenuOpen] = useState(false);
   const [isLoggingOutMobile, setIsLoggingOutMobile] = useState(false);
-  
+
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const queryClient = useQueryClient();
@@ -74,7 +74,7 @@ export const Header = () => {
   const perfil = useAuthStore((s) => s.perfil);
   const rol_id = useAuthStore((s) => s.perfil?.rol_id);
   const logout = useAuthStore((s) => s.logout);
-  
+
   const estaLogueado = !!accessToken;
   const esAdmin = rol_id === 1;
 
@@ -136,7 +136,7 @@ export const Header = () => {
     : (perfil?.email ?? "Usuario");
 
   return (
-    <header className="bg-reducar-shell-bg/95 backdrop-blur-md border-b border-reducar-shell-border sticky top-0 z-50 text-reducar-shell-text shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
+    <header className="bg-reducar-shell-bg/95 backdrop-blur-md border-b border-reducar-shell-border sticky top-0 z-50 text-reducar-shell-text shadow-sm">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4 h-13.5 lg:h-15">
 
         {/* LOGO */}
@@ -156,7 +156,7 @@ export const Header = () => {
 
         {/* ACCIONES DERECHA */}
         <div className="flex-1 flex justify-end items-center gap-2.5 sm:gap-2">
-          
+
           <button
             className="w-10 h-10 shrink-0 aspect-square grid place-items-center rounded-xl bg-reducar-shell-surface border border-reducar-shell-border text-reducar-shell-text hover:bg-reducar-shell-hover hover:border-reducar-primary transition-colors"
             type="button"
@@ -229,7 +229,7 @@ export const Header = () => {
       {isMobileMenuOpen && (
         <div className="lg:hidden absolute top-full left-4 right-4 mt-2 bg-reducar-shell-bg border border-reducar-shell-border rounded-2xl shadow-2xl overflow-hidden animate-[slideDown_0.2s_ease-out] z-50 flex flex-col max-h-[calc(100dvh-80px)]">
           <div className="overflow-y-auto overscroll-contain p-4">
-            
+
             {/* SECCIÓN DE USUARIO (Solo si está logueado) */}
             {estaLogueado && (
               <div className="mb-4">
@@ -263,7 +263,7 @@ export const Header = () => {
                     <button onClick={() => handleNavigate("/mi-cuenta/favoritos")} className="w-full text-left px-3 py-2.5 rounded-xl text-sm text-reducar-shell-text hover:bg-reducar-shell-hover transition-colors">Mis favoritos</button>
                     <button onClick={() => handleNavigate("/mi-cuenta/cursos")} className="w-full text-left px-3 py-2.5 rounded-xl text-sm text-reducar-shell-text hover:bg-reducar-shell-hover transition-colors">Mis cursos</button>
                     <button onClick={() => handleNavigate("/mi-cuenta/reportes")} className="w-full text-left px-3 py-2.5 rounded-xl text-sm text-reducar-shell-text hover:bg-reducar-shell-hover transition-colors">Mis reportes</button>
-                    
+
                     {esAdmin && (
                       <>
                         <div className="my-1 h-px bg-reducar-shell-border" />

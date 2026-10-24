@@ -33,12 +33,12 @@ function PromoBar() {
         {/* Mobile */}
         <div className="flex md:hidden items-center gap-2 text-white text-[11px]">
           <GraduationIcon className="w-4 h-4 shrink-0" />
-          <strong className="whitespace-nowrap">Cursos gratis:</strong>
+          <strong className="whitespace-nowrap">Explora cursos destacados: </strong>
           <a
             href="/oportunidad-curso"
             className="font-bold underline decoration-white/30 underline-offset-2 hover:opacity-80 whitespace-nowrap"
           >
-            Ver más
+          Ver más
           </a>
         </div>
 
