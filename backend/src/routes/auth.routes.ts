@@ -38,10 +38,11 @@ router.post(
 );
 
 // OAuth
-router.get("/oauth/:provider", oauthStartHandler);
-
 router.get("/oauth/callback", oauthCallbackHandler);
+
 router.post("/oauth/exchange", validateBody(oauthExchangeSchema), oauthExchangeHandler);
+
+router.get("/oauth/:provider", oauthStartHandler);
 
 // ============================================
 // Rutas protegidas
