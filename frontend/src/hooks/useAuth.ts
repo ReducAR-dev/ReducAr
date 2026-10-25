@@ -1,9 +1,13 @@
-// src/hooks/useAuth.ts
 import { useCallback } from "react";
 import { useAuthStore } from "../stores/auth.store";
 import { authService } from "../services/auth.service";
 import { userService } from "../services/user.service";
-import type { LoginPayload, SignupPayload } from "../types/auth.types";
+import type {
+  LoginPayload,
+  SignupPayload,
+  OAuthProvider,
+  ForgotPasswordPayload,
+} from "../types/auth.types";
 import type { ActualizarPerfilPayload } from "../types/user.types";
 
 export const useAuth = () => {
@@ -17,7 +21,6 @@ export const useAuth = () => {
 
   const isAuthenticated = !!accessToken;
 
-  /** Login regular: trae tokens + perfil completo en una sola pasada. */
   const login = useCallback(
     async (payload: LoginPayload) => {
       const result = await authService.loginConPerfil(payload);
@@ -31,6 +34,39 @@ export const useAuth = () => {
     [setSession],
   );
 
+  const loginConOAuth = useCallback(async (provider: OAuthProvider) => {
+    const url = await authService.getOAuthUrl(provider);
+    window.location.href = url;
+  }, []);
+
+  const completeOAuthLogin = useCallback(
+    async (code: string) => {
+      const session = await authService.exchangeOAuthCode(code);
+
+      useAuthStore
+        .getState()
+        .setSession(session.access_token, session.refresh_token, null);
+
+      try {
+        const data = await userService.obtenerMiPerfil();
+        setSession(session.access_token, session.refresh_token, data);
+        return data;
+      } catch (err) {
+        clearSession();
+        throw err;
+      }
+    },
+    [setSession, clearSession],
+  );
+
+  // ⬇️ NUEVO: dispara el mail de recuperación. El back habla con Supabase.
+  const forgotPassword = useCallback(
+    async (payload: ForgotPasswordPayload) => {
+      return authService.forgotPassword(payload);
+    },
+    [],
+  );
+
   const uploadFoto = useCallback(
     async (file: File) => {
       const data = await userService.subirFotoPerfil(file);
@@ -40,11 +76,6 @@ export const useAuth = () => {
     [setPerfil],
   );
 
-  /**
-   * Registro + auto-login.
-   * El perfil se completa automáticamente porque loginConPerfil
-   * hace la segunda llamada a /api/usuarios/yo.
-   */
   const register = useCallback(
     async (payload: SignupPayload) => {
       await authService.signup(payload);
@@ -67,10 +98,6 @@ export const useAuth = () => {
     clearSession();
   }, [clearSession]);
 
-  /**
-   * Fetches el perfil completo desde el backend.
-   * Útil al recargar, después de un cambio, o para refrescar datos.
-   */
   const fetchPerfil = useCallback(async () => {
     setLoading(true);
     try {
@@ -82,7 +109,6 @@ export const useAuth = () => {
     }
   }, [setPerfil, setLoading]);
 
-  /** PATCH del perfil. Actualiza el store con la respuesta del back. */
   const updatePerfil = useCallback(
     async (payload: ActualizarPerfilPayload) => {
       const data = await userService.actualizarMiPerfil(payload);
@@ -97,6 +123,9 @@ export const useAuth = () => {
     isAuthenticated,
     isLoading,
     login,
+    loginConOAuth,
+    completeOAuthLogin,
+    forgotPassword, // ⬅️ NUEVO
     register,
     logout,
     fetchPerfil,

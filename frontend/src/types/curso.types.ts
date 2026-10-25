@@ -43,6 +43,7 @@ export interface CursoResumen {
  * El objeto para la vista de detalle (incluye más campos de la tabla).
  */
 export interface CursoDetalle {
+  imagen_url: string;
   id: number;
   institucion: string;
   categoria: string;

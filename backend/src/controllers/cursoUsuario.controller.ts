@@ -1,25 +1,18 @@
-// src/controllers/cursoUsuario.controller.ts
 import type { Request, Response } from "express";
 import {
   obtenerCursosUsuario,
   adquirirCursoUsuario,
   eliminarCursoUsuario,
 } from "../services/cursoUsuario.service.js";
+import { listarCursosUsuarioQuerySchema } from "../schema/cursoUsuario.schema.js";
 import type { AuthenticatedRequest } from "../types/auth.types.js";
 
-// ============================================
-// HELPERS
-// ============================================
-
-const requireUser = (
-  req: AuthenticatedRequest,
-  res: Response,
-): string | null => {
-  if (!req.user) {
+const requireUser = (req: AuthenticatedRequest, res: Response): { id: string, token: string } | null => {
+  if (!req.user || !req.accessToken) {
     res.status(401).json({ success: false, error: "No autenticado." });
     return null;
   }
-  return req.user.id;
+  return { id: req.user.id, token: req.accessToken };
 };
 
 const getIdParam = (req: Request): number | null => {
@@ -31,17 +24,23 @@ const getIdParam = (req: Request): number | null => {
 };
 
 // ============================================
-// GET /api/curso-usuario — Requiere JWT
+// GET /api/curso-usuario
 // ============================================
-
 export const getMisCursosHandler = async (
   req: AuthenticatedRequest,
   res: Response,
 ): Promise<void> => {
-  const usuarioId = requireUser(req, res);
-  if (!usuarioId) return;
+  const auth = requireUser(req, res);
+  if (!auth) return;
 
-  const resultado = await obtenerCursosUsuario(usuarioId);
+  const parsedQuery = listarCursosUsuarioQuerySchema.safeParse(req.query);
+  if (!parsedQuery.success) {
+    res.status(400).json({ success: false, error: "Parámetros de paginación inválidos." });
+    return;
+  }
+
+  // ✅ Pasamos el token de autenticación
+  const resultado = await obtenerCursosUsuario(auth.id, auth.token, parsedQuery.data);
 
   if (!resultado.success) {
     res.status(500).json({ success: false, error: resultado.error });
@@ -50,52 +49,48 @@ export const getMisCursosHandler = async (
 
   res.status(200).json({
     success: true,
-    data: resultado.data,
+    data: resultado.data.items,
+    meta: resultado.data.meta,
   });
 };
 
 // ============================================
-// POST /api/curso-usuario — Requiere JWT
+// POST /api/curso-usuario
 // ============================================
-
 export const postCursoUsuarioHandler = async (
   req: AuthenticatedRequest,
   res: Response,
 ): Promise<void> => {
-  const usuarioId = requireUser(req, res);
-  if (!usuarioId) return;
+  const auth = requireUser(req, res);
+  if (!auth) return;
 
-  const cursoId = Number(req.body?.curso_id);
-  if (!Number.isInteger(cursoId) || cursoId <= 0) {
-    res.status(400).json({ success: false, error: "ID de curso inválido." });
-    return;
-  }
+  const cursoId = req.body.curso_id; // Ya validado por Zod
 
-  const resultado = await adquirirCursoUsuario(usuarioId, cursoId);
+  // ✅ Pasamos el token de autenticación
+  const resultado = await adquirirCursoUsuario(auth.id, cursoId, auth.token);
 
   if (!resultado.success) {
-    const status = resultado.error.includes("no existe") ? 404 : 400;
+    const status = resultado.error.includes("pago") ? 403 : 400;
     res.status(status).json({ success: false, error: resultado.error });
     return;
   }
 
   res.status(201).json({
     success: true,
-    message: "Curso adquirido exitosamente.",
+    message: "Curso agregado a tu lista.",
     data: resultado.data,
   });
 };
 
 // ============================================
-// DELETE /api/curso-usuario/:id — Requiere JWT
+// DELETE /api/curso-usuario/:id
 // ============================================
-
 export const deleteCursoUsuarioHandler = async (
   req: AuthenticatedRequest,
   res: Response,
 ): Promise<void> => {
-  const usuarioId = requireUser(req, res);
-  if (!usuarioId) return;
+  const auth = requireUser(req, res);
+  if (!auth) return;
 
   const cursoId = getIdParam(req);
   if (!cursoId) {
@@ -103,10 +98,12 @@ export const deleteCursoUsuarioHandler = async (
     return;
   }
 
-  const resultado = await eliminarCursoUsuario(usuarioId, cursoId);
+  const resultado = await eliminarCursoUsuario(auth.id, cursoId, auth.token);
 
   if (!resultado.success) {
-    res.status(404).json({ success: false, error: resultado.error });
+    // Si el error menciona "pago", es un 403. Si es "no está en tu lista", es 404.
+    const status = resultado.error.includes("pago") ? 403 : 404;
+    res.status(status).json({ success: false, error: resultado.error });
     return;
   }
 

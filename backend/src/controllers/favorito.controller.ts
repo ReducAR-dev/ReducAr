@@ -1,4 +1,3 @@
-// src/controllers/favorito.controller.ts
 import type { Request, Response } from "express";
 import {
   obtenerFavoritosUsuario,
@@ -14,12 +13,12 @@ import type { AuthenticatedRequest } from "../types/auth.types.js";
 const requireUser = (
   req: AuthenticatedRequest,
   res: Response,
-): string | null => {
-  if (!req.user) {
+): { id: string; token: string } | null => {
+  if (!req.user || !req.accessToken) {
     res.status(401).json({ success: false, error: "No autenticado." });
     return null;
   }
-  return req.user.id;
+  return { id: req.user.id, token: req.accessToken };
 };
 
 const getIdParam = (req: Request): number | null => {
@@ -31,17 +30,17 @@ const getIdParam = (req: Request): number | null => {
 };
 
 // ============================================
-// GET /api/favoritos — Requiere JWT
+// GET /api/favoritos
 // ============================================
 
 export const getMisFavoritosHandler = async (
   req: AuthenticatedRequest,
   res: Response,
 ): Promise<void> => {
-  const usuarioId = requireUser(req, res);
-  if (!usuarioId) return;
+  const auth = requireUser(req, res);
+  if (!auth) return;
 
-  const resultado = await obtenerFavoritosUsuario(usuarioId);
+  const resultado = await obtenerFavoritosUsuario(auth.id, auth.token);
 
   if (!resultado.success) {
     res.status(500).json({ success: false, error: resultado.error });
@@ -55,23 +54,20 @@ export const getMisFavoritosHandler = async (
 };
 
 // ============================================
-// POST /api/favoritos — Requiere JWT
+// POST /api/favoritos
 // ============================================
 
 export const postFavoritoHandler = async (
   req: AuthenticatedRequest,
   res: Response,
 ): Promise<void> => {
-  const usuarioId = requireUser(req, res);
-  if (!usuarioId) return;
+  const auth = requireUser(req, res);
+  if (!auth) return;
 
-  const cursoId = Number(req.body?.curso_id);
-  if (!Number.isInteger(cursoId) || cursoId <= 0) {
-    res.status(400).json({ success: false, error: "ID de curso inválido." });
-    return;
-  }
+  const cursoId = req.body.curso_id; // Ya validado por Zod en las rutas
 
-  const resultado = await agregarFavorito(usuarioId, cursoId);
+  // ✅ Pasamos el token
+  const resultado = await agregarFavorito(auth.id, cursoId, auth.token);
 
   if (!resultado.success) {
     const status = resultado.error.includes("no existe") ? 404 : 400;
@@ -87,15 +83,15 @@ export const postFavoritoHandler = async (
 };
 
 // ============================================
-// DELETE /api/favoritos/:id — Requiere JWT
+// DELETE /api/favoritos/:id
 // ============================================
 
 export const deleteFavoritoHandler = async (
   req: AuthenticatedRequest,
   res: Response,
 ): Promise<void> => {
-  const usuarioId = requireUser(req, res);
-  if (!usuarioId) return;
+  const auth = requireUser(req, res);
+  if (!auth) return;
 
   const cursoId = getIdParam(req);
   if (!cursoId) {
@@ -103,7 +99,7 @@ export const deleteFavoritoHandler = async (
     return;
   }
 
-  const resultado = await eliminarFavorito(usuarioId, cursoId);
+  const resultado = await eliminarFavorito(auth.id, cursoId, auth.token);
 
   if (!resultado.success) {
     res.status(404).json({ success: false, error: resultado.error });

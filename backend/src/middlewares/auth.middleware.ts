@@ -78,8 +78,9 @@ export const requireAuth = async (
       id: resultado.data.id,
       email: resultado.data.email,
     };
-
+    req.accessToken = token;
     next();
+
   } catch (err) {
     const mensaje = err instanceof Error ? err.message : String(err);
     console.error("❌ requireAuth:", mensaje);

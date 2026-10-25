@@ -1,4 +1,3 @@
-// src/routes/curso.routes.ts
 import { Router } from "express";
 
 import {

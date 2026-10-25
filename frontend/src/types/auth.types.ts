@@ -1,17 +1,3 @@
-// src/types/auth.types.ts
-
-export interface ApiSuccess<T> {
-  success: true;
-  message?: string;
-  data: T;
-}
-
-export interface ApiErrorBody {
-  success: false;
-  error: string;
-  details?: { path: string; message: string }[];
-}
-
 export interface SignupPayload {
   nombre: string;
   apellido: string;
@@ -35,4 +21,28 @@ export interface LoginResult {
   refresh_token: string;
   expires_at?: number;
   user: { id: string; email: string };
+}
+
+/** Proveedores OAuth que soporta el proyecto. */
+export type OAuthProvider = "google" | "github";
+
+/** Respuesta del backend al pedir la URL de autorización. */
+export interface OAuthUrlResult {
+  url: string;
+}
+
+/** Payload para pedir el mail de recuperación. */
+export interface ForgotPasswordPayload {
+  email: string;
+}
+
+/** Payload para cambiar la contraseña una vez que el usuario tiene el token de recuperación. */
+export interface ResetPasswordPayload {
+  access_token: string;
+  new_password: string;
+}
+
+/** Respuesta genérica de operaciones de recuperación. */
+export interface ForgotPasswordResult {
+  message: string;
 }
