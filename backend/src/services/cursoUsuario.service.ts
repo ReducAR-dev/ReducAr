@@ -15,7 +15,7 @@ import type { Result } from "../types/common.types.js";
 export const obtenerCursosUsuario = async (
   usuarioId: UUID,
 ): Promise<Result<CursoUsuario[]>> => {
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await supabaseAdmin  
     .from("curso_usuario")
     .select("*")
     .eq("usuario_id", usuarioId)
