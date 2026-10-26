@@ -30,6 +30,7 @@ import {
   favoritoRoutes,
   cursoUsuarioRoutes,
   reporteRoutes,
+  colaboracionRoutes,
 } from "./routes/index.js";
 
 // Cargar variables de entorno antes de inicializar la app
@@ -92,6 +93,7 @@ app.use("/api/novedades", novedadRoutes);
 app.use("/api/favoritos", favoritoRoutes);
 app.use("/api/curso-usuario", cursoUsuarioRoutes);
 app.use("/api/reportes", reporteRoutes);
+app.use("/api/colaboraciones", colaboracionRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api", testRoutes);           // Endpoints de test/healthcheck
 

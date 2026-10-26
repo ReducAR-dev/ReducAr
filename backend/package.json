@@ -15,13 +15,14 @@
   "type": "commonjs",
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",
+    "@types/node": "^26.1.1",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "mercadopago": "^3.6.1",
     "multer": "^2.4.0",
-    "zod": "^4.6.5",
-    "typescript": "^7.0.2", 
-    "@types/node": "^26.1.1" 
+    "typescript": "^7.0.2",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",

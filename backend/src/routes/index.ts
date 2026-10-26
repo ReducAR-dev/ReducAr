@@ -7,3 +7,4 @@ export { default as novedadRoutes } from "./novedad.routes.js";
 export { default as favoritoRoutes } from "./favorito.routes.js";
 export { default as cursoUsuarioRoutes } from "./cursoUsuario.routes.js";
 export { default as reporteRoutes } from "./reporte.routes.js";
+export { default as colaboracionRoutes } from "./colaboracion.routes.js";

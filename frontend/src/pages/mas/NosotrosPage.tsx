@@ -1,10 +1,12 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   InfoCard,
   SectionHeading,
   primaryActionClass,
   secondaryActionClass,
 } from "../../layouts/StaticPageLayout";
+import { colaboracionService } from "../../services/colaboracion.service";
 
 const resources = [
   { icon: "📚", label: "Cursos", path: "/cursos" },
@@ -14,7 +16,45 @@ const resources = [
   { icon: "📅", label: "Novedades", path: "/novedades" },
 ];
 
+const MONTOS_SUGERIDOS = [500, 1000, 2000, 5000];
+
 export default function NosotrosPage() {
+  const [searchParams] = useSearchParams();
+  const estadoAporte = searchParams.get("aporte");
+
+  const [monto, setMonto] = useState<number>(1000);
+  const [cargandoPago, setCargandoPago] = useState<boolean>(false);
+  const [errorPago, setErrorPago] = useState<string | null>(null);
+
+  const handleColaborar = async () => {
+    setErrorPago(null);
+
+    if (!Number.isInteger(monto) || monto < 100 || monto > 10000) {
+      setErrorPago("Elegí un monto entero entre $100 y $10.000 ARS.");
+      return;
+    }
+
+    try {
+      setCargandoPago(true);
+      const respuesta = await colaboracionService.crearPreferencia(monto);
+      const urlDestino = respuesta.data.init_point;
+
+      if (urlDestino) {
+        window.location.href = urlDestino;
+      } else {
+        setErrorPago("No se pudo obtener el enlace de Mercado Pago.");
+      }
+    } catch (err) {
+      const msg =
+        err instanceof Error
+          ? err.message
+          : "No se pudo conectar con la pasarela de pago.";
+      setErrorPago(msg);
+    } finally {
+      setCargandoPago(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-reducar-bg text-reducar-text">
       <section className="relative overflow-hidden border-b border-reducar-border">
@@ -85,6 +125,110 @@ export default function NosotrosPage() {
             </div>
             <p className="border-t border-white/25 pt-6 text-2xl font-semibold italic leading-snug text-white/90 sm:text-3xl lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
               “Aprender también es una oportunidad.”
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* SECCIÓN DE APOYO / COLABORACIÓN CON MERCADO PAGO */}
+      <section id="apoyar" className="px-4 pb-14 sm:px-6 sm:pb-18 lg:px-8">
+        <div className="mx-auto max-w-4xl rounded-3xl border border-reducar-primary/30 bg-reducar-surface p-6 shadow-xl sm:p-10">
+          <div className="text-center max-w-2xl mx-auto">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-reducar-primary/15 px-3.5 py-1.5 text-xs font-extrabold uppercase tracking-wider text-reducar-primary">
+              💜 Apoyá el proyecto
+            </span>
+            <h2 className="mt-4 text-2xl font-extrabold sm:text-3xl text-reducar-text">
+              Colaborá con el crecimiento de ReducAR
+            </h2>
+            <p className="mt-2 text-sm sm:text-base text-reducar-text-secondary">
+              Tu aporte voluntario nos ayuda a mantener los servidores activos y seguir acercando oportunidades educativas gratuitas a más personas.
+            </p>
+          </div>
+
+          {estadoAporte === "exito" && (
+            <div className="mt-6 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-4 text-center text-sm font-semibold text-emerald-600 dark:text-emerald-300">
+              🎉 ¡Muchas gracias por tu aporte! Tu colaboración impulsa a la comunidad de ReducAR.
+            </div>
+          )}
+
+          {estadoAporte === "error" && (
+            <div className="mt-6 rounded-2xl border border-red-500/40 bg-red-500/10 p-4 text-center text-sm font-semibold text-red-600 dark:text-red-400">
+              El pago fue cancelado o no pudo completarse. Podés intentarlo nuevamente cuando quieras.
+            </div>
+          )}
+
+          <div className="mt-8 space-y-6">
+            {/* Botones rápidos de monto */}
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-reducar-text-secondary text-center mb-3">
+                Elegí un monto o ingresá el tuyo ($100 a $10.000 ARS)
+              </label>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {MONTOS_SUGERIDOS.map((sugerido) => {
+                  const activo = monto === sugerido;
+                  return (
+                    <button
+                      key={sugerido}
+                      type="button"
+                      onClick={() => {
+                        setMonto(sugerido);
+                        setErrorPago(null);
+                      }}
+                      className={`rounded-2xl py-3 px-4 text-sm font-extrabold transition border ${
+                        activo
+                          ? "bg-reducar-primary text-white border-reducar-primary shadow-lg scale-[1.02]"
+                          : "bg-reducar-bg text-reducar-text border-reducar-border hover:border-reducar-primary/50"
+                      }`}
+                    >
+                      ${sugerido.toLocaleString("es-AR")} ARS
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Input de monto personalizado + Botón Mercado Pago */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 max-w-xl mx-auto">
+              <div className="relative flex-1">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-extrabold text-reducar-text-secondary">
+                  $
+                </span>
+                <input
+                  type="number"
+                  min={100}
+                  max={10000}
+                  step={100}
+                  value={monto || ""}
+                  onChange={(e) => {
+                    setMonto(Number(e.target.value));
+                    setErrorPago(null);
+                  }}
+                  placeholder="Otro monto (ej. 1500)"
+                  className="w-full rounded-2xl border border-reducar-border bg-reducar-bg pl-8 pr-14 py-3.5 text-sm font-bold text-reducar-text outline-none focus:border-reducar-primary transition"
+                />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-reducar-text-secondary">
+                  ARS
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleColaborar}
+                disabled={cargandoPago}
+                className="rounded-2xl bg-linear-to-r from-reducar-primary to-reducar-turquoise px-7 py-3.5 text-sm font-extrabold text-white shadow-lg transition hover:scale-[1.02] disabled:opacity-60 disabled:pointer-events-none shrink-0"
+              >
+                {cargandoPago ? "Redirigiendo..." : "Colaborar con Mercado Pago →"}
+              </button>
+            </div>
+
+            {errorPago && (
+              <p className="text-center text-xs font-semibold text-red-500">
+                ⚠️ {errorPago}
+              </p>
+            )}
+
+            <p className="text-center text-[11px] text-reducar-text-secondary">
+              🔒 Aporte voluntario y no reembolsable procesado de forma segura mediante Mercado Pago Checkout Pro.
             </p>
           </div>
         </div>

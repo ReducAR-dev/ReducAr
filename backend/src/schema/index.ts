@@ -8,4 +8,5 @@ export * from "./tipo_accion.schema.js";
 export * from "./usuario.schema.js";
 export * from "./valoracion.schema.js";
 export * from "./favorito.schema.js";
-export * from "./cursoUsuario.schema.js"
+export * from "./cursoUsuario.schema.js";
+export * from "./colaboracion.schema.js";
