@@ -16,6 +16,130 @@ const resources = [
   { icon: "📅", label: "Novedades", path: "/novedades" },
 ];
 
+type TeamPhoto =
+  | { kind: "sprite"; x: number; y: number; size: number }
+  | {
+      kind: "image";
+      src: string;
+      zoom: number;
+      focusX: number;
+      focusY: number;
+    };
+
+type TeamMember = {
+  name: string;
+  role: string;
+  linkedin: string | null;
+  photo: TeamPhoto;
+};
+
+const team: TeamMember[] = [
+  {
+    name: "Gabriela",
+    role: "QA",
+    linkedin: "https://www.linkedin.com/in/gabriela-galarza-51954b234/",
+    photo: { kind: "sprite", x: 80, y: 86, size: 136 },
+  },
+  {
+    name: "Erika",
+    role: "QA",
+    linkedin: "https://www.linkedin.com/in/erika-llanos-buezo/",
+    photo: { kind: "sprite", x: 289, y: 85, size: 136 },
+  },
+  {
+    name: "Jonathan",
+    role: "Líder Técnico",
+    linkedin: "https://www.linkedin.com/in/jonathanfullstack/",
+    photo: { kind: "sprite", x: 737, y: 82, size: 128 },
+  },
+  {
+    name: "Gabriel",
+    role: "Full Stack",
+    linkedin: "https://www.linkedin.com/in/gabriel-m-baldessari-b94a36205/",
+    photo: { kind: "sprite", x: 932, y: 78, size: 128 },
+  },
+  {
+    name: "Maximiliano",
+    role: "Back End",
+    linkedin: "https://www.linkedin.com/in/maximiliano-lionel-ramirez-b22431377/",
+    photo: {
+      kind: "image",
+      src: "/equipo/maximiliano.png",
+      zoom: 1.65,
+      focusX: 0.5,
+      focusY: 0.32,
+    },
+  },
+  {
+    name: "Jasmín",
+    role: "Back End",
+    linkedin: "https://www.linkedin.com/in/jasmin-cantero-it/",
+    photo: {
+      kind: "image",
+      src: "/equipo/jasmin.png",
+      zoom: 1.7,
+      focusX: 0.49,
+      focusY: 0.31,
+    },
+  },
+  {
+    name: "Patricio",
+    role: "Back End",
+    linkedin: "https://www.linkedin.com/in/patricio-martinez-134273200/",
+    photo: {
+      kind: "image",
+      src: "/equipo/patricio.png",
+      zoom: 1.55,
+      focusX: 0.5,
+      focusY: 0.36,
+    },
+  },
+  {
+    name: "Milagros",
+    role: "Front End",
+    linkedin: "https://www.linkedin.com/in/milagros-toledo-994728357/",
+    photo: {
+      kind: "image",
+      src: "/equipo/milagros.png",
+      zoom: 1.5,
+      focusX: 0.56,
+      focusY: 0.37,
+    },
+  },
+  {
+    name: "Florencia",
+    role: "Front End",
+    linkedin: "https://www.linkedin.com/in/florencia-vilacahua/",
+    photo: {
+      kind: "image",
+      src: "/equipo/florencia.png",
+      zoom: 1.45,
+      focusX: 0.52,
+      focusY: 0.4,
+    },
+  },
+  {
+    name: "Gonzalo",
+    role: "Front End",
+    linkedin: "https://www.linkedin.com/in/gonzalo-pulguer-436b05227/",
+    photo: {
+      kind: "image",
+      src: "/equipo/gonzalo.png",
+      zoom: 1.65,
+      focusX: 0.52,
+      focusY: 0.32,
+    },
+  },
+];
+
+function LinkedInIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
+      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V8.98h3.42v1.57h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.29ZM5.32 7.41a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13Zm1.78 13.04H3.54V8.98H7.1v11.47Z" />
+    </svg>
+  );
+}
+
 const MONTOS_SUGERIDOS = [500, 1000, 2000, 5000];
 
 export default function NosotrosPage() {
@@ -62,8 +186,8 @@ export default function NosotrosPage() {
           className="absolute inset-0 bg-[radial-gradient(circle_at_12%_20%,rgba(123,108,246,0.2),transparent_34%),radial-gradient(circle_at_86%_80%,rgba(63,217,201,0.16),transparent_28%)]"
           aria-hidden="true"
         />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 sm:py-18 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:py-22">
-          <div>
+        <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-18 lg:px-8 lg:py-22">
+          <div className="mx-auto max-w-3xl text-center">
             <span className="inline-flex rounded-full border border-reducar-primary/25 bg-reducar-primary-light px-3.5 py-2 text-xs font-extrabold uppercase tracking-[0.14em] text-reducar-primary">
               Nosotros
             </span>
@@ -73,22 +197,71 @@ export default function NosotrosPage() {
                 ReducAR
               </span>
             </h1>
-            <p className="mt-5 max-w-xl text-base leading-7 text-reducar-text-secondary sm:text-lg sm:leading-8">
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-reducar-text-secondary sm:text-lg sm:leading-8">
               Creamos esta plataforma para conectar personas con oportunidades de formación y ayudar a construir un futuro con más acceso al aprendizaje.
             </p>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
               <Link to="/cursos" className={primaryActionClass}>Explorar oportunidades</Link>
               <Link to="/contacto" className={secondaryActionClass}>Contactarnos</Link>
             </div>
           </div>
 
-          <div className="relative">
-            <div className="absolute -inset-3 rounded-4xl bg-linear-to-r from-reducar-primary/20 to-reducar-turquoise/20 blur-2xl" aria-hidden="true" />
-            <img
-              src="/foto-grupo.jpg"
-              alt="Equipo de ReducAR"
-              className="relative aspect-4/3 w-full rounded-3xl border border-reducar-primary/25 object-cover shadow-2xl"
-            />
+          <div className="mt-12">
+            <p className="text-center text-xs font-extrabold uppercase tracking-[0.18em] text-reducar-primary">
+              Nuestro equipo
+            </p>
+            <div className="mx-auto mt-7 grid max-w-6xl grid-cols-2 justify-items-center gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-5">
+              {team.map((member) => (
+                <article key={member.name} className="group flex w-full max-w-48 flex-col items-center text-center">
+                  <div className="relative h-32 w-32 overflow-hidden rounded-full border-2 border-reducar-primary bg-reducar-surface shadow-[0_12px_36px_rgba(18,12,56,0.28)] ring-4 ring-reducar-primary/10 transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_16px_42px_rgba(123,108,246,0.32)] sm:h-36 sm:w-36">
+                    <div
+                      className="absolute inset-0 rounded-full"
+                      role="img"
+                      aria-label={`Foto de ${member.name}`}
+                    >
+                      {member.photo.kind === "image" ? (
+                        <img
+                          src={member.photo.src}
+                          alt=""
+                          aria-hidden="true"
+                          className="absolute max-w-none object-cover"
+                          style={{
+                            width: `${member.photo.zoom * 100}%`,
+                            height: `${member.photo.zoom * 100}%`,
+                            left: `${50 - member.photo.focusX * member.photo.zoom * 100}%`,
+                            top: `${50 - member.photo.focusY * member.photo.zoom * 100}%`,
+                          }}
+                        />
+                      ) : (
+                        <div
+                          className="absolute inset-0"
+                          style={{
+                            backgroundImage: "url('/equipo-reducar.png')",
+                            backgroundRepeat: "no-repeat",
+                            backgroundSize: `${(1172 / member.photo.size) * 100}% ${(575 / member.photo.size) * 100}%`,
+                            backgroundPosition: `${(member.photo.x / (1172 - member.photo.size)) * 100}% ${(member.photo.y / (575 - member.photo.size)) * 100}%`,
+                          }}
+                        />
+                      )}
+                    </div>
+                  </div>
+                  <h2 className="mt-4 text-lg font-extrabold text-reducar-text">{member.name}</h2>
+                  <p className="mt-1 text-sm font-semibold text-reducar-text-secondary">{member.role}</p>
+                  {member.linkedin ? (
+                    <a
+                      href={member.linkedin}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`Ver el perfil de LinkedIn de ${member.name}`}
+                      className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-full border border-reducar-primary/25 bg-reducar-primary-light px-4 py-2 text-sm font-extrabold text-reducar-primary transition hover:-translate-y-0.5 hover:border-reducar-primary/45 hover:bg-reducar-primary hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-reducar-primary"
+                    >
+                      <LinkedInIcon />
+                      LinkedIn
+                    </a>
+                  ) : null}
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </section>
